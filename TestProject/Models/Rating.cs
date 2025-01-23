@@ -1,11 +1,13 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
+using System.ComponentModel.DataAnnotations;
 
 namespace TestProject.Models
 {
     public class Rating
     {
+        [Key]
         public int Id { get; set; }
-        public required string TripId { get; set; }
+        public required int TripId { get; set; }
         [ForeignKey(nameof(TripId))]
         public Trips Trip { get; set; } = null!;
         public required string ReviewerId { get; set; }
