@@ -1,7 +1,14 @@
-﻿namespace TestProject.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace TestProject.Models
 {
     public enum Status
     {
-        Pending, Accepted ,Rejected
+        [Display(Name = "Обработва се")]
+        Pending,
+        [Display(Name = "Прието")]
+        Accepted,
+        [Display(Name = "Отказано")]
+        Rejected
     }
 }
