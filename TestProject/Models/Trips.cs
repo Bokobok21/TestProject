@@ -8,17 +8,44 @@ namespace TestProject.Models
     {
         [Key]
         public int Id { get; set; }
-        public string DriversId { get; set; } = string.Empty;
+
+        [Required]
+        public string DriversId { get; set; } = null!;
         [ForeignKey(nameof(DriversId))]
-        public Users Driver { get; set; } = null!;
-        public required string StartPosition { get; set; } 
-        public required string EndPosition { get; set; }
-        public DateTime DateAndTime { get; set; }
+        public ApplicationUser Driver { get; set; } = null!;
+
+        [Required]
+        public string StartPosition { get; set; } = null!;
+
+        [Required]
+        public string Destination { get; set; } = null!;
+
+        [Required]
+        public DateTime DepartureTime { get; set; }
+
+        [Required]
+        public DateTime ReturnTime { get; set; }
+
+        [Required]
         public int Price { get; set; }
 
-        public int RatingId { get; set; }
-        [ForeignKey(nameof(RatingId))]
-        public Rating? Rating { get; set; }
+        [Required]
         public int FreeSeats { get; set; }
+
+        [Required]
+        public string CarModel { get; set; } = null!;
+
+        [Required]
+        public string PlateNumber { get; set; } = null!;
+
+        public TripStatus StatusTrip { get; set; } 
+
+        public int? RatingId { get; set; } 
+        [ForeignKey(nameof(RatingId))]
+
+        public Rating? Rating { get; set; }
+
+        public ICollection<Requests>? Requests { get; set; }
+        public ICollection<Rating>? Ratings { get; set; }
     }
 }

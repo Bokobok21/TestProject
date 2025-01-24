@@ -12,7 +12,7 @@ namespace TestProject.Data
 
         }
 
-        public DbSet<Users> Users { get; set; } 
+        public DbSet<ApplicationUser> ApplicationUsers { get; set; } 
         public DbSet<Trips> Trips { get; set; } 
         public DbSet<Requests> Requests { get; set; } 
         public DbSet<Rating> Ratings { get; set; } 

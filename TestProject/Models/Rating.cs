@@ -7,14 +7,23 @@ namespace TestProject.Models
     {
         [Key]
         public int Id { get; set; }
-        public required int TripId { get; set; }
+
+        [Required]
+        public int TripId { get; set; }
         [ForeignKey(nameof(TripId))]
         public Trips Trip { get; set; } = null!;
-        public required string ReviewerId { get; set; }
+
+        [Required]
+        public string ReviewerId { get; set; } = null!;
         [ForeignKey(nameof(ReviewerId))]
-        public Users Reviewer { get; set; } = null!;
+        public ApplicationUser Reviewer { get; set; } = null!;
+
+        [Required]
         public double Score { get; set; }
-        public required string Comment { get; set; }
+
+        [MaxLength(1000)]
+        public string Comment { get; set; } = string.Empty;
+
         public DateTime Date { get; set; }
     }
 }

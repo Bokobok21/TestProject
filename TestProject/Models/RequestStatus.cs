@@ -2,7 +2,7 @@
 
 namespace TestProject.Models
 {
-    public enum Status
+    public enum RequestStatus
     {
         [Display(Name = "Обработва се")]
         Pending,
