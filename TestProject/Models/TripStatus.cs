@@ -6,6 +6,8 @@ namespace TestProject.Models
     {
         [Display(Name = "Предстоящо")]
         Upcoming,
+        [Display(Name = "Резервирано")]
+        Booked,
         [Display(Name = "В процес")]
         Ongoing,
         [Display(Name = "Завършено")]

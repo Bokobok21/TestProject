@@ -11,7 +11,7 @@ namespace TestProject.Models
         [Required]
         public int TripId { get; set; }
         [ForeignKey(nameof(TripId))]
-        public Trips Trip { get; set; } = null!;
+        public Trip Trip { get; set; } = null!;
 
         [Required]
         public string ReviewerId { get; set; } = null!;

@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace TestProject.Models
 {
-    public class Requests
+    public class Request
     {
         [Key]
         public int Id { get; set; }
@@ -12,7 +12,7 @@ namespace TestProject.Models
         [Required]
         public int TripId { get; set; }
         [ForeignKey(nameof(TripId))]
-        public Trips Trip { get; set; } = null!;
+        public Trip Trip { get; set; } = null!;
 
         [Required]
         public string RequesterId { get; set; } = null!;

@@ -4,7 +4,7 @@ using TestProject.Models;
 
 namespace TestProject.Data
 {
-    public class ApplicationDbContext : IdentityDbContext
+    public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
@@ -13,8 +13,8 @@ namespace TestProject.Data
         }
 
         public DbSet<ApplicationUser> ApplicationUsers { get; set; } 
-        public DbSet<Trips> Trips { get; set; } 
-        public DbSet<Requests> Requests { get; set; } 
+        public DbSet<Trip> Trips { get; set; } 
+        public DbSet<Request> Requests { get; set; } 
         public DbSet<Rating> Ratings { get; set; } 
 
     }

@@ -13,8 +13,8 @@ namespace TestProject.Models
         public string LastName { get; set; } = null!;
         public string Position { get; set; } = string.Empty;
 
-        public ICollection<Trips>? Trips { get; set; }
-        public ICollection<Requests>? Requests { get; set; }
+        public ICollection<Trip>? Trips { get; set; }
+        public ICollection<Request>? Requests { get; set; }
         public ICollection<Rating>? Ratings { get; set; } 
     }
 }

@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace TestProject.Models
 {
-    public class Trips
+    public class Trip
     {
         [Key]
         public int Id { get; set; }
@@ -30,6 +30,8 @@ namespace TestProject.Models
         public int Price { get; set; }
 
         [Required]
+        public int TotalSeats { get; set; }
+
         public int FreeSeats { get; set; }
 
         [Required]
@@ -45,7 +47,8 @@ namespace TestProject.Models
 
         public Rating? Rating { get; set; }
 
-        public ICollection<Requests>? Requests { get; set; }
+        public ICollection<ApplicationUser>? ApplicationUsers { get; set; }
+        public ICollection<Request>? Requests { get; set; }
         public ICollection<Rating>? Ratings { get; set; }
     }
 }
