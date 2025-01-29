@@ -23,7 +23,7 @@ namespace TestProject.Models
         [Required]
         public DateTime DepartureTime { get; set; }
 
-        [Required]
+       // [Required(ErrorMessage = "zaduljitelno pole")]
         public DateTime ReturnTime { get; set; }
 
         [Required]
@@ -47,7 +47,7 @@ namespace TestProject.Models
 
         public Rating? Rating { get; set; }
 
-        public ICollection<ApplicationUser>? ApplicationUsers { get; set; }
+      //  public ICollection<ApplicationUser>? ApplicationUsers { get; set; }
         public ICollection<Request>? Requests { get; set; }
         public ICollection<Rating>? Ratings { get; set; }
     }

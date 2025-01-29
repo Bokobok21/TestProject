@@ -19,11 +19,13 @@ namespace TestProject.Models
         public ApplicationUser Reviewer { get; set; } = null!;
 
         [Required]
-        public double Score { get; set; }
+        public int Score { get; set; }
 
         [MaxLength(1000)]
         public string Comment { get; set; } = string.Empty;
 
         public DateTime Date { get; set; }
+
+      //  public ICollection<Request>? Requests { get; set; }
     }
 }

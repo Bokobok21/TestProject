@@ -1,19 +1,12 @@
-﻿using Microsoft.EntityFrameworkCore.Metadata.Internal;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.ComponentModel.DataAnnotations;
-using Microsoft.Identity.Client;
 
 namespace TestProject.Models
 {
-    public class Request
+    public class RequestDriver
     {
         [Key]
         public int Id { get; set; }
-
-        [Required]
-        public int TripId { get; set; }
-        [ForeignKey(nameof(TripId))]
-        public Trip Trip { get; set; } = null!;
 
         [Required]
         public string RequesterId { get; set; } = null!;
@@ -23,8 +16,5 @@ namespace TestProject.Models
         public RequestStatus StatusRequest { get; set; }
 
         public DateTime Date { get; set; }
-    //    public string Type { get; set; }
-
-
     }
 }
