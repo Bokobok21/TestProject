@@ -10,12 +10,12 @@ namespace TestProject.Models
         [Key]
         public int Id { get; set; }
 
-        [Required]
+       // [Required]
         public int TripId { get; set; }
         [ForeignKey(nameof(TripId))]
         public Trip Trip { get; set; } = null!;
 
-        [Required]
+     //   [Required]
         public string RequesterId { get; set; } = null!;
         [ForeignKey(nameof(RequesterId))]
         public ApplicationUser Requester { get; set; } = null!;

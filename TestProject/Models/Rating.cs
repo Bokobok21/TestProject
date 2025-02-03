@@ -8,17 +8,17 @@ namespace TestProject.Models
         [Key]
         public int Id { get; set; }
 
-        [Required]
+     //   [Required]
         public int TripId { get; set; }
         [ForeignKey(nameof(TripId))]
         public Trip Trip { get; set; } = null!;
 
-        [Required]
+       // [Required]
         public string ReviewerId { get; set; } = null!;
         [ForeignKey(nameof(ReviewerId))]
         public ApplicationUser Reviewer { get; set; } = null!;
 
-        [Required]
+       // [Required]
         public int Score { get; set; }
 
         [MaxLength(1000)]

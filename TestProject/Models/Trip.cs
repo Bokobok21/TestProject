@@ -9,35 +9,35 @@ namespace TestProject.Models
         [Key]
         public int Id { get; set; }
 
-        [Required]
+       // [Required]
         public string DriversId { get; set; } = null!;
         [ForeignKey(nameof(DriversId))]
         public ApplicationUser Driver { get; set; } = null!;
 
-        [Required]
+       // [Required]
         public string StartPosition { get; set; } = null!;
 
-        [Required]
+      //  [Required]
         public string Destination { get; set; } = null!;
 
-        [Required]
+      //  [Required]
         public DateTime DepartureTime { get; set; }
 
        // [Required(ErrorMessage = "zaduljitelno pole")]
         public DateTime ReturnTime { get; set; }
 
-        [Required]
+       // [Required]
         public int Price { get; set; }
 
-        [Required]
+       // [Required]
         public int TotalSeats { get; set; }
 
         public int FreeSeats { get; set; }
 
-        [Required]
+     //   [Required]
         public string CarModel { get; set; } = null!;
 
-        [Required]
+      //  [Required]
         public string PlateNumber { get; set; } = null!;
 
         public TripStatus StatusTrip { get; set; } 

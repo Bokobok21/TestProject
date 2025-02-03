@@ -8,7 +8,7 @@ namespace TestProject.Models
         [Key]
         public int Id { get; set; }
 
-        [Required]
+       // [Required]
         public string RequesterId { get; set; } = null!;
         [ForeignKey(nameof(RequesterId))]
         public ApplicationUser Requester { get; set; } = null!;

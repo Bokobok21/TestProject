@@ -21,6 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Models\ViewModels\" />
     <Folder Include="Seed\" />
     <Folder Include="Services\" />
   </ItemGroup>
