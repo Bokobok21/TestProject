@@ -13,9 +13,11 @@ namespace TestProject.Models
         public string LastName { get; set; } = null!;
         public string Position { get; set; } = string.Empty;
 
-        public ICollection<Trip>? Trips { get; set; }
+        public string ImagePath { get; set; }
+
+        public ICollection<TripParticipant>? TripParticipants { get; set; }
         public ICollection<Request>? Requests { get; set; } 
-       // public ICollection<RequestDriver>? RequestDrivers { get; set; } 
+        public ICollection<RequestDriver>? RequestDrivers { get; set; } 
         public ICollection<Rating>? Ratings { get; set; } 
     }
 }
@@ -24,3 +26,4 @@ namespace TestProject.Models
 // izpolzvai DisplayFor and EditFor
 // v0 i codepen
 // cursor ai,
+// fix model connection - viewmodels - views(forumpage) - controllers - services - repository 

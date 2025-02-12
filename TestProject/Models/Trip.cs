@@ -40,6 +40,8 @@ namespace TestProject.Models
       //  [Required]
         public string PlateNumber { get; set; } = null!;
 
+        public string ImagePath { get; set; }
+
         public TripStatus StatusTrip { get; set; } 
 
         public int? RatingId { get; set; } 
@@ -47,7 +49,7 @@ namespace TestProject.Models
 
         public Rating? Rating { get; set; }
 
-      //  public ICollection<ApplicationUser>? ApplicationUsers { get; set; }
+        public ICollection<TripParticipant>? TripParticipants { get; set; }
         public ICollection<Request>? Requests { get; set; }
         public ICollection<Rating>? Ratings { get; set; }
     }

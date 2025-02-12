@@ -16,6 +16,8 @@ namespace TestProject.Data
         public DbSet<Trip> Trips { get; set; } 
         public DbSet<Request> Requests { get; set; } 
         public DbSet<Rating> Ratings { get; set; } 
+        public DbSet<RequestDriver> RequestDrivers { get; set; }
+        public DbSet<TripParticipant> TripParticipants { get; set; }
 
     }
 }

@@ -26,6 +26,5 @@ namespace TestProject.Models
 
         public DateTime Date { get; set; }
 
-      //  public ICollection<Request>? Requests { get; set; }
     }
 }

@@ -13,8 +13,10 @@ namespace TestProject.Models
         [ForeignKey(nameof(RequesterId))]
         public ApplicationUser Requester { get; set; } = null!;
 
+        public string ImagePath { get; set; }
+
         public RequestStatus StatusRequest { get; set; }
 
-        public DateTime Date { get; set; }
+        public DateTime? DateOfAcceptance { get; set; }
     }
 }
