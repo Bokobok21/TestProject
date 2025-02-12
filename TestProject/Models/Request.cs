@@ -16,9 +16,9 @@ namespace TestProject.Models
         public Trip Trip { get; set; } 
 
      //   [Required]
-        public string RequesterId { get; set; }
-        [ForeignKey(nameof(RequesterId))]
-        public ApplicationUser Requester { get; set; } 
+        public string UserId { get; set; }
+        [ForeignKey(nameof(UserId))]
+        public ApplicationUser User { get; set; } 
 
         public RequestStatus StatusRequest { get; set; }
 

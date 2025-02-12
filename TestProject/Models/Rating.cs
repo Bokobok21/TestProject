@@ -14,9 +14,9 @@ namespace TestProject.Models
         public Trip Trip { get; set; } 
 
        // [Required]
-        public string ReviewerId { get; set; } 
-        [ForeignKey(nameof(ReviewerId))]
-        public ApplicationUser Reviewer { get; set; } 
+        public string UserId { get; set; } 
+        [ForeignKey(nameof(UserId))]
+        public ApplicationUser User { get; set; } 
 
        // [Required]
         public int Score { get; set; }
