@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore.ValueGeneration.Internal;
+using Microsoft.VisualBasic;
 using System.ComponentModel.DataAnnotations;
 
 namespace TestProject.Models
@@ -7,13 +8,14 @@ namespace TestProject.Models
     public class ApplicationUser : IdentityUser
     {
         //[Required]
-        public string FirstName { get; set; } = null!;
+        public string FirstName { get; set; } 
 
       //  [Required]
-        public string LastName { get; set; } = null!;
-        public string Position { get; set; } = string.Empty;
+        public string LastName { get; set; }
+        public string Position { get; set; }
 
-        public string ImagePath { get; set; }
+        public string? ImagePath { get; set; }
+        public DateTime? DateOfDriverAcceptance { get; set; }
 
         public ICollection<TripParticipant>? TripParticipants { get; set; }
         public ICollection<Request>? Requests { get; set; } 

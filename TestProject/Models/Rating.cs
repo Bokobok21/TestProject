@@ -11,18 +11,18 @@ namespace TestProject.Models
      //   [Required]
         public int TripId { get; set; }
         [ForeignKey(nameof(TripId))]
-        public Trip Trip { get; set; } = null!;
+        public Trip Trip { get; set; } 
 
        // [Required]
-        public string ReviewerId { get; set; } = null!;
+        public string ReviewerId { get; set; } 
         [ForeignKey(nameof(ReviewerId))]
-        public ApplicationUser Reviewer { get; set; } = null!;
+        public ApplicationUser Reviewer { get; set; } 
 
        // [Required]
         public int Score { get; set; }
 
-        [MaxLength(1000)]
-        public string Comment { get; set; } = string.Empty;
+       // [MaxLength(1000)]
+        public string? Comment { get; set; }
 
         public DateTime Date { get; set; }
 

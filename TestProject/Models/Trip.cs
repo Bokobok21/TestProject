@@ -10,15 +10,15 @@ namespace TestProject.Models
         public int Id { get; set; }
 
        // [Required]
-        public string DriversId { get; set; } = null!;
+        public string DriversId { get; set; } 
         [ForeignKey(nameof(DriversId))]
-        public ApplicationUser Driver { get; set; } = null!;
+        public ApplicationUser Driver { get; set; } 
 
        // [Required]
-        public string StartPosition { get; set; } = null!;
+        public string StartPosition { get; set; } 
 
       //  [Required]
-        public string Destination { get; set; } = null!;
+        public string Destination { get; set; } 
 
       //  [Required]
         public DateTime DepartureTime { get; set; }
@@ -32,22 +32,22 @@ namespace TestProject.Models
        // [Required]
         public int TotalSeats { get; set; }
 
-        public int FreeSeats { get; set; }
+        public int FreeSeats { get; set; } 
 
      //   [Required]
-        public string CarModel { get; set; } = null!;
+        public string CarModel { get; set; } 
 
-      //  [Required]
-        public string PlateNumber { get; set; } = null!;
+        //  [Required]
+        public string PlateNumber { get; set; } 
 
         public string ImagePath { get; set; }
 
         public TripStatus StatusTrip { get; set; } 
 
-        public int? RatingId { get; set; } 
-        [ForeignKey(nameof(RatingId))]
+        //public int? RatingId { get; set; } 
+        //[ForeignKey(nameof(RatingId))]
 
-        public Rating? Rating { get; set; }
+        //public Rating? Rating { get; set; }
 
         public ICollection<TripParticipant>? TripParticipants { get; set; }
         public ICollection<Request>? Requests { get; set; }
