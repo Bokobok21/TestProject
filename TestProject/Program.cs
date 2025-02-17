@@ -4,7 +4,7 @@ using TestProject.Data;
 using TestProject.Data.SeedDb;
 using TestProject.Models;
 using Microsoft.Extensions.DependencyInjection;
-using TestProject.Data.SeedDb;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -21,28 +21,16 @@ builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
 
-//-------------------------------------------------------------
 
-//// thats done - commented for working purposes
-//using (var scope = app.Services.CreateScope())
-//{
-//    var services = scope.ServiceProvider;
-
-//    try
-//    {
-//        await SeedRoles.Initialize(services);
-//    }
-//    catch (Exception ex)
-//    {
-//        var logger = services.GetRequiredService<ILogger<Program>>();
-//        logger.LogError(ex, "An error occurred while seeding roles.");
-//    }
-//}
-
+using (var scope = app.Services.CreateScope())
+{
+    var serviceProvider = scope.ServiceProvider;
+    await SeedRoles.Initialize(serviceProvider);
+}
 
 //// @if(User.IsInRole("Admin")) {...} for view pages
 
-//------------------------------------------------------------
+
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
