@@ -10,9 +10,9 @@ namespace TestProject.Models
         public int Id { get; set; }
 
        // [Required]
-        public string DriversId { get; set; } 
+        public string? DriversId { get; set; } 
         [ForeignKey(nameof(DriversId))]
-        public ApplicationUser Driver { get; set; } 
+        public ApplicationUser? Driver { get; set; } 
 
        // [Required]
         public string StartPosition { get; set; } 
