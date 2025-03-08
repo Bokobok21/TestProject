@@ -1,8 +1,10 @@
-﻿@model TestProject.Models.Trip
+﻿@model TestProject.Models.ViewModels.TripViewModel
 
 @{
     ViewData["Title"] = "Details";
 }
+
+<div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
 <h1>Details</h1>
 
@@ -14,7 +16,7 @@
             @Html.DisplayNameFor(model => model.Driver)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Driver.Id)
+            @Html.DisplayFor(model => model.DriverName)
         </dd>
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.StartPosition)
@@ -85,6 +87,17 @@
     </dl>
 </div>
 <div>
+    @if (Model.FreeSeats > 0)
+    {
+        <form asp-controller="Requests" asp-action="SendJoinRequest" method="post">
+            <input type="hidden" name="tripId" value="@Model.Id" />
+            <button type="submit" class="btn btn-primary">Join Trip</button>
+        </form>
+    }
+    else
+    {
+        <p>No free seats available.</p>
+    }
     <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
     <a asp-action="Index">Back to List</a>
 </div>

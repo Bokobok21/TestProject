@@ -20,7 +20,7 @@ namespace TestProject.Models
         [ForeignKey(nameof(UserId))]
         public ApplicationUser User { get; set; } 
 
-        public RequestStatus StatusRequest { get; set; }
+        public RequestStatus StatusRequest { get; set; } 
 
         public DateTime Date { get; set; }
   

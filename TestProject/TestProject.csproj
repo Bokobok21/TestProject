@@ -21,11 +21,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Models\ViewModels\" />
     <Folder Include="Seed\" />
     <Folder Include="Services\" />
     <Folder Include="wwwroot\images\drivers\" />
-    <Folder Include="wwwroot\images\trips\" />
   </ItemGroup>
 
 </Project>

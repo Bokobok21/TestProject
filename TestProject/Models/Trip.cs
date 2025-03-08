@@ -9,8 +9,8 @@ namespace TestProject.Models
         [Key]
         public int Id { get; set; }
 
-       // [Required]
-        public string? DriversId { get; set; } 
+        // [Required]
+        public string DriversId { get; set; } = string.Empty;
         [ForeignKey(nameof(DriversId))]
         public ApplicationUser? Driver { get; set; } 
 
@@ -40,14 +40,12 @@ namespace TestProject.Models
         //  [Required]
         public string PlateNumber { get; set; } 
 
-        public string ImagePath { get; set; }
+        public string? ImagePath { get; set; }
 
         public TripStatus StatusTrip { get; set; } 
 
-        //public int? RatingId { get; set; } 
-        //[ForeignKey(nameof(RatingId))]
+        public DateTime CreatedDate { get; set; } = DateTime.Now;
 
-        //public Rating? Rating { get; set; }
 
         public ICollection<TripParticipant>? TripParticipants { get; set; }
         public ICollection<Request>? Requests { get; set; }

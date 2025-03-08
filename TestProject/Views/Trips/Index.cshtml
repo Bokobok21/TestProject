@@ -1,61 +1,54 @@
-﻿@model IEnumerable<TestProject.Models.Trip>
+﻿@using TestProject.Extentions
+@model PaginatedList<TestProject.Models.ViewModels.TripViewModel>
 
 @{
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+<h1>Trip list</h1>
 
 <p>
     <a asp-action="Create">Create New</a>
 </p>
+
+
+<!-- Sorting Dropdown -->
+<form asp-action="Index" method="get">
+    <div class="form-actions no-color">
+        <p>
+            Sort by:
+            <select name="sortOrder"
+                    asp-items="@(new SelectList(ViewBag.SortOptions as IEnumerable<SelectListItem>, "Value", "Text", ViewBag.CurrentSortOrder))"
+                    onchange="this.form.submit()">
+            </select>
+        </p>
+    </div>
+</form>
+
+
 <table class="table">
     <thead>
         <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Driver)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.StartPosition)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Destination)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.DepartureTime)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ReturnTime)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Price)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.TotalSeats)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.FreeSeats)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CarModel)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.PlateNumber)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ImagePath)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.StatusTrip)
-            </th>
-            <th></th>
+            <th>Driver</th>
+            <th>Start Position</th>
+            <th>Destination</th>
+            <th>Departure Time</th>
+            <th>Return Time</th>
+            <th>Price</th>
+            <th>Total Seats</th>
+            <th>Free Seats</th>
+            <th>Car Model</th>
+            <th>Plate Number</th>
+            <th>Picture</th>
+            <th>Status</th>
+            <th>Actions</th>
         </tr>
     </thead>
     <tbody>
 @foreach (var item in Model) {
-        <tr>
+        <tr>    
             <td>
-                @Html.DisplayFor(modelItem => item.Driver.UserName)
+                @Html.DisplayFor(modelItem => item.DriverName)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.StartPosition)
@@ -99,3 +92,44 @@
 }
     </tbody>
 </table>
+
+<!-- Previous Button -->
+@if (Model.HasPreviousPage)
+{
+    <a asp-action="Index"
+       asp-route-pageNumber="@(Model.PageIndex - 1)"
+       asp-route-sortOrder="@ViewBag.CurrentSortOrder"
+       class="btn btn-default">
+        Previous
+    </a>
+}
+else
+{
+    <button disabled class="btn btn-default">Previous</button>
+}
+
+<!-- Page Numbers -->
+@for (var i = 1; i <= Model.TotalPages; i++)
+{
+    <a asp-action="Index"
+       asp-route-pageNumber="@i"
+       asp-route-sortOrder="@ViewBag.CurrentSortOrder"
+       class="btn @(i == Model.PageIndex ? "btn-primary" : "btn-default")">
+        @i
+    </a>
+}
+
+<!-- Next Button -->
+@if (Model.HasNextPage)
+{
+    <a asp-action="Index"
+       asp-route-pageNumber="@(Model.PageIndex + 1)"
+       asp-route-sortOrder="@ViewBag.CurrentSortOrder"
+       class="btn btn-default">
+        Next
+    </a>
+}
+else
+{
+    <button disabled class="btn btn-default">Next</button>
+}

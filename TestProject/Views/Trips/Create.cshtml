@@ -1,4 +1,4 @@
-﻿@model TestProject.Models.Trip
+﻿@model TestProject.Models.ViewModels.TripViewModel
 
 @{
     ViewData["Title"] = "Create";
@@ -10,12 +10,9 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-           @*  <div class="form-group">
-                <label asp-for="DriversId" class="control-label"></label>
-                <select asp-for="DriversId" class ="form-control" asp-items="ViewBag.DriversId"></select>
-            </div> *@
+        <form asp-action="Create" enctype="multipart/form-data">
+            <div asp-validation-summary="All" class="text-danger"></div>
+
             <div class="form-group">
                 <label asp-for="StartPosition" class="control-label"></label>
                 <input asp-for="StartPosition" class="form-control" />
@@ -46,11 +43,7 @@
                 <input asp-for="TotalSeats" class="form-control" />
                 <span asp-validation-for="TotalSeats" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="FreeSeats" class="control-label"></label>
-                <input asp-for="FreeSeats" class="form-control" />
-                <span asp-validation-for="FreeSeats" class="text-danger"></span>
-            </div>
+          
             <div class="form-group">
                 <label asp-for="CarModel" class="control-label"></label>
                 <input asp-for="CarModel" class="form-control" />
@@ -61,16 +54,13 @@
                 <input asp-for="PlateNumber" class="form-control" />
                 <span asp-validation-for="PlateNumber" class="text-danger"></span>
             </div>
+
             <div class="form-group">
-                <label asp-for="ImagePath" class="control-label"></label>
-                <input asp-for="ImagePath" class="form-control" />
-                <span asp-validation-for="ImagePath" class="text-danger"></span>
+                <label asp-for="ImageFile" class="control-label"></label>
+                <input asp-for="ImageFile" type="file" class="form-control" accept="image/*" />
+                <span asp-validation-for="ImageFile" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                @* <label asp-for="StatusTrip" class="control-label"></label>
-                <select asp-for="StatusTrip" class="form-control"></select>
-                <span asp-validation-for="StatusTrip" class="text-danger"></span> *@
-            </div>
+
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
             </div>
