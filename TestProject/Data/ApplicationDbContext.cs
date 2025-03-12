@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Hosting;
 using TestProject.Models;
 
 namespace TestProject.Data
@@ -37,26 +38,26 @@ namespace TestProject.Data
             //fixes the multiple cascade paths for request
             modelBuilder.Entity<Request>()
                .HasOne(r => r.Trip)
-               .WithMany()  
+               .WithMany()
                .HasForeignKey(r => r.TripId)
-               .OnDelete(DeleteBehavior.Cascade);  
-           
+               .OnDelete(DeleteBehavior.Cascade);
+
             modelBuilder.Entity<Request>()
                 .HasOne(r => r.User)
-                .WithMany()  
+                .WithMany()
                 .HasForeignKey(r => r.UserId)
                 .OnDelete(DeleteBehavior.NoAction);
 
-            //fixes the multiple cascade paths for tripParticipant
+           // fixes the multiple cascade paths for tripParticipant
             modelBuilder.Entity<TripParticipant>()
                  .HasOne(tp => tp.Trip)
-                 .WithMany()
+                 .WithMany(x => x.TripParticipants) 
                  .HasForeignKey(tp => tp.TripId)
                  .OnDelete(DeleteBehavior.Cascade);
-           
+
             modelBuilder.Entity<TripParticipant>()
                 .HasOne(tp => tp.User)
-                .WithMany()
+                .WithMany(x => x.TripParticipants) 
                 .HasForeignKey(tp => tp.UserId)
                 .OnDelete(DeleteBehavior.NoAction);
         }

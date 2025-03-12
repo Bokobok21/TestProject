@@ -4,6 +4,8 @@ using System.Diagnostics;
 using TestProject.Models;
 using TestProject.Data;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
+using TestProject.Extentions;
 
 namespace TestProject.Controllers
 {
@@ -11,9 +13,11 @@ namespace TestProject.Controllers
     public class AdminController : Controller
     {
         private readonly ApplicationDbContext _context;
-        public AdminController(ApplicationDbContext context)
+        private readonly UserManager<ApplicationUser> _userManager;
+        public AdminController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         // GET: Admin/PendingRequests
@@ -28,5 +32,8 @@ namespace TestProject.Controllers
 
             return View(pendingRequests);
         }
+
+
+
     }
 }

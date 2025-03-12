@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TestProject.Data;
 
@@ -11,9 +12,11 @@ using TestProject.Data;
 namespace TestProject.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250311074440_RequestDriverChange")]
+    partial class RequestDriverChange
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -417,7 +420,13 @@ namespace TestProject.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("ApplicationUserId")
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<int>("TripId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("TripId1")
                         .HasColumnType("int");
 
                     b.Property<string>("UserId")
@@ -426,7 +435,11 @@ namespace TestProject.Data.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("ApplicationUserId");
+
                     b.HasIndex("TripId");
+
+                    b.HasIndex("TripId1");
 
                     b.HasIndex("UserId", "TripId")
                         .IsUnique();
@@ -563,14 +576,22 @@ namespace TestProject.Data.Migrations
 
             modelBuilder.Entity("TestProject.Models.TripParticipant", b =>
                 {
-                    b.HasOne("TestProject.Models.Trip", "Trip")
+                    b.HasOne("TestProject.Models.ApplicationUser", null)
                         .WithMany("TripParticipants")
+                        .HasForeignKey("ApplicationUserId");
+
+                    b.HasOne("TestProject.Models.Trip", "Trip")
+                        .WithMany()
                         .HasForeignKey("TripId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("TestProject.Models.ApplicationUser", "User")
+                    b.HasOne("TestProject.Models.Trip", null)
                         .WithMany("TripParticipants")
+                        .HasForeignKey("TripId1");
+
+                    b.HasOne("TestProject.Models.ApplicationUser", "User")
+                        .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();

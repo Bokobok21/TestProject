@@ -1,0 +1,47 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Profile";
+    ViewData["ActivePage"] = ManageNavPages.Index;
+}
+
+<h3>@ViewData["Title"]</h3>
+<partial name="_StatusMessage" for="StatusMessage" />
+<div class="row">
+    <div class="col-md-6">
+        <form id="profile-form" method="post" enctype="multipart/form-data">
+            <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
+            <div class="form-floating mb-3">
+                <input asp-for="Username" class="form-control" placeholder="Please choose your username." disabled />
+                <label asp-for="Username" class="form-label"></label>
+            </div>
+            @if (User.IsInRole("Driver"))
+            {
+                <div>
+                    <img src="@Model.CurrentUser.ImagePath" alt="Profile Picture" />
+                    <p>Approved as Driver on: @Model.CurrentUser.DateOfDriverAcceptance?.ToString("yyyy-MM-dd")</p>
+
+                    <!-- Driver profile image upload form -->
+                    <div class="form-group">
+                        <label>Update Profile Picture</label>
+                        <input asp-for="Input.ImageFile" type="file" class="form-control" accept="image/*" />
+                        <span asp-validation-for="Input.ImageFile" class="text-danger"></span>
+                    </div>
+                </div>
+            }
+            else @if (@* User.IsInRole("Tourist") &&  *@!Model.HasDriverRequest)
+            {
+                <a asp-page="/Account/ApplyToBeDriver" class="btn btn-secondary">Apply to Be a Driver</a>
+            }
+            else @if (@* User.IsInRole("Tourist") &&  *@Model.HasDriverRequest)
+            {
+                <p>You have already submitted a driver application.</p>
+            }
+            <button id="update-profile-button" type="submit" class="w-100 btn btn-lg btn-primary">Save</button>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

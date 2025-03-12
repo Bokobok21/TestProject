@@ -1,0 +1,28 @@
+﻿@model IEnumerable<TestProject.Models.RequestDriver>
+
+<h1>Pending Driver Applications</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>User</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var request in Model)
+        {
+            <tr>
+                <td>@request.User.Email - @request.User.FirstName @request.User.LastName</td>
+                <td>
+                    <form asp-action="Approve" asp-route-id="@request.Id" method="post">
+                        <button type="submit" class="btn btn-success">Approve</button>
+                    </form>
+                    <form asp-action="Deny" asp-route-id="@request.Id" method="post">
+                        <button type="submit" class="btn btn-danger">Deny</button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

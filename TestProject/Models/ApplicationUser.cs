@@ -18,6 +18,7 @@ namespace TestProject.Models
         public DateTime? DateOfDriverAcceptance { get; set; }
 
         public ICollection<TripParticipant>? TripParticipants { get; set; }
+
         public ICollection<Request>? Requests { get; set; } 
         public ICollection<RequestDriver>? RequestDrivers { get; set; } 
         public ICollection<Rating>? Ratings { get; set; } 

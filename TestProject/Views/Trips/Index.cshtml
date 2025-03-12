@@ -78,7 +78,8 @@
                 @Html.DisplayFor(modelItem => item.PlateNumber)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.ImagePath)
+          @*       @Html.DisplayFor(modelItem => item.ImagePath) *@
+                    <img src="@item.ImagePath" alt="Trip Picture" />
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.StatusTrip)

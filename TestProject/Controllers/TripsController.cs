@@ -185,11 +185,11 @@ namespace TestProject.Controllers
                         await tripViewModel.ImageFile.CopyToAsync(stream);
                     }
 
-                    tripViewModel.ImagePath = $"images/trips/{uniqueFileName}";
+                    tripViewModel.ImagePath = $"/images/trips/{uniqueFileName}";
                 }
                 else
                 {
-                    tripViewModel.ImagePath = "default-image.jpg"; // Default image path if no file is uploaded
+                    tripViewModel.ImagePath = "/images/trips/default-image.jpg"; // Default image path if no file is uploaded
                 }
 
                 var trip = new Trip
@@ -317,7 +317,7 @@ namespace TestProject.Controllers
                             }
                         }
 
-                        trip.ImagePath = $"images/trips/{uniqueFileName}";
+                        trip.ImagePath = $"/images/trips/{uniqueFileName}";
                     }
 
                     // Update other properties
