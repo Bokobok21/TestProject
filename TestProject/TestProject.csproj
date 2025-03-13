@@ -23,7 +23,6 @@
   <ItemGroup>
     <Folder Include="Seed\" />
     <Folder Include="Services\" />
-    <Folder Include="wwwroot\images\drivers\" />
   </ItemGroup>
 
 </Project>

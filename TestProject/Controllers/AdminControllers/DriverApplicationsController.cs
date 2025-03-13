@@ -59,6 +59,11 @@ public class DriverApplicationsController : Controller
         user.DateOfDriverAcceptance = DateTime.UtcNow;
         user.Position = "Driver";
 
+        if (string.IsNullOrEmpty(user.ImagePath))
+        {
+            user.ImagePath = "/images/drivers/default-image-Driver.jpg"; // Default image path
+        }
+
         //added this not sure 
         await _userManager.UpdateAsync(user);
 

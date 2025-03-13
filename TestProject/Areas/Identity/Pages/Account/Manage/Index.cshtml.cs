@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using SQLitePCL;
+using System.Drawing;
 using System.IO;
 using System.Threading.Tasks;
 using TestProject.Data;
@@ -56,7 +57,13 @@ namespace TestProject.Areas.Identity.Pages.Account.Manage
             {
                 return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
             }
-                
+
+            // Ensure ImagePath is set to default if null
+            if (string.IsNullOrEmpty(CurrentUser.ImagePath))
+            {
+                CurrentUser.ImagePath = "/images/drivers/default-image-Driver.jpg";
+            }
+
             // Check if the user has a pending driver request
             HasDriverRequest = await _context.RequestDrivers
                 .AnyAsync(r => r.UserId == CurrentUser.Id && r.StatusRequest == RequestStatus.Pending); 
@@ -114,6 +121,9 @@ namespace TestProject.Areas.Identity.Pages.Account.Manage
 
                     user.ImagePath = $"/images/drivers/{uniqueFileName}";
                     StatusMessage = "Profile picture updated successfully!";
+                } else if (string.IsNullOrEmpty(user.ImagePath))
+                {
+                    user.ImagePath = "/images/drivers/default-image-Driver.jpg";
                 }
             }
 
