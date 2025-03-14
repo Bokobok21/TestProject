@@ -4,11 +4,6 @@
 @{
     ViewData["Title"] = "Pending Requests";
 
-    if (!User.IsInRole("Admin"))
-    {
-        <h1>You do not have permission to view this page.</h1>
-        return;
-    }
 }
 
 

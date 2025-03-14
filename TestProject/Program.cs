@@ -71,9 +71,13 @@ app.Run();
 // a/an driver/user can't be on two trips at the same time
 // fix registering with the same email and changing password
 // fix sorting of the trips
-
+// for each user display which trips he has entered
+// the driver should accept you for the trip 
 
 
 
 // AIs and other useful info
 // v0 ; codepen ; cursor ai ; saveWeb2Zip + b12 website builder ai ; 
+
+// prompts
+//i have an admin panel. make me everything i need ( controller, view) for visualising every user with their role. Have the option to edit the users role and delete a user. use pagination for the page (you already have the code for that) and have the option to sort the users by their role

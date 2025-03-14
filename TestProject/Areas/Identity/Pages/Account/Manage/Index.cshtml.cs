@@ -89,7 +89,6 @@ namespace TestProject.Areas.Identity.Pages.Account.Manage
                 return Page();
             }
 
-
             if (User.IsInRole("Driver"))
             {
 
