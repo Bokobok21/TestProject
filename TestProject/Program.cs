@@ -62,22 +62,41 @@ app.MapRazorPages();
 
 app.Run();
 
-
 // comments for what i have to work on
 
-// make a method for deleting user and when a user is deleted delete all his requests and trip participants
-// make a method for the admin to see all users with their roles and to be able to change them
+// when changing the user's role, check if the user is a driver and if he is delete all his trips
+
+// admin
+// ???? // redovni marshruti i ednokratni marshruti
+// add a phone number to the user
+// search for the users by their name, surname or username 
+// filter the users by their role not sort them
+// view all the roles with their number of users 
+
+// driver
+// the driver should accept you for the trip not the admin
+
+// passenger
+// make a method for the passenger to see all his requests and to be able to delete them ??????
+// should be able to search for trips 
+// he shoudn't be able to join a trip at the same time of another one 
+
+// make a method for the driver to see all his trips and to be able to delete them
+// make a method for the driver to see all the requests for his trips and to be able to accept them
+
 // keep order of request when free seats are changed to delete the users that have entered last and only keep the first ones
 // a/an driver/user can't be on two trips at the same time
 // fix registering with the same email and changing password
 // fix sorting of the trips
 // for each user display which trips he has entered
-// the driver should accept you for the trip 
 
+
+// fix foulders and files
+// the role should be passenger not tourist
 
 
 // AIs and other useful info
 // v0 ; codepen ; cursor ai ; saveWeb2Zip + b12 website builder ai ; 
 
+
 // prompts
-//i have an admin panel. make me everything i need ( controller, view) for visualising every user with their role. Have the option to edit the users role and delete a user. use pagination for the page (you already have the code for that) and have the option to sort the users by their role

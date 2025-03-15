@@ -1,0 +1,95 @@
+﻿@model PaginatedList<UserViewModel>
+@{
+    ViewData["Title"] = "Users Management";
+}
+@using Microsoft.AspNetCore.Identity
+@using TestProject.Extentions
+@using TestProject.Models.ViewModels
+@inject UserManager<ApplicationUser> UserManager
+
+<!-- Role Filter Dropdown -->
+<form asp-action="Users" method="get">
+    <div class="form-actions no-color">
+        <p>
+            Filter by role:
+            <select name="roleFilter"
+                asp-items="@(new SelectList(ViewBag.Roles as IEnumerable<SelectListItem>, "Value", "Text", ViewBag.CurrentRoleFilter))"
+                    onchange="this.form.submit()" class="form-control">
+                <option value="">All Roles</option>
+            </select>
+        </p>
+    </div>
+</form>
+
+<span>Number of users @Model.Count()</span>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Role</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@($"{item.User.FirstName} {item.User.LastName}")</td>
+                <td>@item.Role</td>
+                <td>
+                    <!-- Role Edit Form -->
+                    <form asp-action="EditRole" method="post">
+                        <input type="hidden" name="userId" value="@item.User.Id" />
+                        <select name="newRole" class="form-control">
+                            @foreach (var role in ViewBag.Roles as SelectList)
+                            {
+                                <option value="@role.Value" selected="@(role.Value == item.Role)">
+                                    @role.Text
+                                </option>
+                            }
+                        </select>
+                        <button type="submit" class="btn btn-sm btn-secondary">Update Role</button>
+                    </form>
+
+                    <!-- Delete User Form -->
+                    <form asp-action="DeleteUser" method="post" style="display:inline">
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" name="id" value="@item.User.Id" />
+                        <button type="submit" class="btn btn-sm btn-danger"
+                                onclick="return confirm('Are you sure you want to delete this user?')">
+                            Delete
+                        </button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<!-- Pagination -->
+@if (Model.HasPreviousPage)
+{
+    <a asp-action="Users"
+       asp-route-pageNumber="@(Model.PageIndex - 1)"
+       asp-route-roleFilter="@ViewBag.CurrentRoleFilter"
+       class="btn btn-default">Previous</a>
+}
+else
+{
+    <button disabled class="btn btn-default">Previous</button>
+}
+
+<span>Page @Model.PageIndex of @Model.TotalPages</span>
+
+@if (Model.HasNextPage)
+{
+    <a asp-action="Users"
+       asp-route-pageNumber="@(Model.PageIndex + 1)"
+       asp-route-roleFilter="@ViewBag.CurrentRoleFilter"
+       class="btn btn-default">Next</a>
+}
+else
+{
+    <button disabled class="btn btn-default">Next</button>
+}
