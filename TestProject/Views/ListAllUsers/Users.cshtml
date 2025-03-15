@@ -7,26 +7,40 @@
 @using TestProject.Models.ViewModels
 @inject UserManager<ApplicationUser> UserManager
 
-<!-- Role Filter Dropdown -->
-<form asp-action="Users" method="get">
-    <div class="form-actions no-color">
-        <p>
-            Filter by role:
+<!-- Combined Search and Filter Form -->
+<form asp-action="Users" method="get" id="searchFilterForm">
+
+        <div class="form-group col-md-3">
+            <label>Filter by Role:</label>
             <select name="roleFilter"
-                asp-items="@(new SelectList(ViewBag.Roles as IEnumerable<SelectListItem>, "Value", "Text", ViewBag.CurrentRoleFilter))"
-                    onchange="this.form.submit()" class="form-control">
+                    asp-items="@(new SelectList(ViewBag.Roles as IEnumerable<SelectListItem>, "Value", "Text", ViewBag.CurrentRoleFilter))"
+                    class="form-control">
                 <option value="">All Roles</option>
             </select>
-        </p>
+        </div>
+
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            <label>Search by Name or Username:</label>
+            <input type="text" name="searchTerm"
+                   value="@ViewContext.HttpContext.Request.Query["searchTerm"]"
+                   class="form-control" placeholder="Enter name/username" />
+        </div>
+
+        <div class="form-group col-md-2">
+            <button type="submit" class="btn btn-sm btn-primary">Search</button>
+            <button type="button" class="btn btn-sm btn-secondary" onclick="clearSearch()">Clear Search</button>
+        </div>
     </div>
 </form>
 
-<span>Number of users @Model.Count()</span>
+<p>@ViewBag.UserCountMessage</p>
 
 <table class="table">
     <thead>
         <tr>
             <th>Name</th>
+            <th>UserName</th>
             <th>Role</th>
             <th>Actions</th>
         </tr>
@@ -36,6 +50,7 @@
         {
             <tr>
                 <td>@($"{item.User.FirstName} {item.User.LastName}")</td>
+                <td>@item.User.UserName</td>
                 <td>@item.Role</td>
                 <td>
                     <!-- Role Edit Form -->
@@ -73,6 +88,7 @@
     <a asp-action="Users"
        asp-route-pageNumber="@(Model.PageIndex - 1)"
        asp-route-roleFilter="@ViewBag.CurrentRoleFilter"
+       asp-route-searchTerm="@ViewContext.HttpContext.Request.Query["searchTerm"]"
        class="btn btn-default">Previous</a>
 }
 else
@@ -87,9 +103,20 @@ else
     <a asp-action="Users"
        asp-route-pageNumber="@(Model.PageIndex + 1)"
        asp-route-roleFilter="@ViewBag.CurrentRoleFilter"
+       asp-route-searchTerm="@ViewContext.HttpContext.Request.Query["searchTerm"]"
        class="btn btn-default">Next</a>
 }
 else
 {
     <button disabled class="btn btn-default">Next</button>
 }
+
+<!-- JavaScript to Clear Search -->
+<script>
+    function clearSearch() {
+        // Clear only the search term input
+        document.querySelector('input[name="searchTerm"]').value = '';
+        // Submit the form to refresh without search term
+        document.getElementById("searchFilterForm").submit();
+    }
+</script>

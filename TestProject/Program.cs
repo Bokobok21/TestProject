@@ -62,9 +62,11 @@ app.MapRazorPages();
 
 app.Run();
 
-// comments for what i have to work on
 
 // when changing the user's role, check if the user is a driver and if he is delete all his trips
+// tripParticipant should be able to be modified by the admin 
+// not sure but delete the user's request when he becomes a driver 
+// not sure but the drivers images aren't being deleted when edited
 
 // admin
 // ???? // redovni marshruti i ednokratni marshruti
@@ -100,3 +102,4 @@ app.Run();
 
 
 // prompts
+

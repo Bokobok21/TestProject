@@ -10,7 +10,7 @@ using TestProject.Extentions;
 using TestProject.Models.ViewModels;
 using TestProject.Models;
 
-[Authorize(Roles = "Admin")]
+//[Authorize(Roles = "Admin")]
 public class ListAllUsersController : Controller
 {
     private readonly UserManager<ApplicationUser> _userManager;
@@ -28,7 +28,7 @@ public class ListAllUsersController : Controller
     }
 
     // GET: Admin/Users
-    public async Task<IActionResult> Users(string roleFilter, int? pageNumber)
+    public async Task<IActionResult> Users(string roleFilter, string searchTerm, int? pageNumber)
     {
         // Fetch all roles for the dropdown
         ViewBag.Roles = new SelectList(await _roleManager.Roles.ToListAsync(), "Name", "Name", roleFilter);
@@ -47,24 +47,44 @@ public class ListAllUsersController : Controller
                              Role = g.Select(x => x.Name).FirstOrDefault() ?? "No Role"
                          };
 
-        // Apply filtering
+        // Calculate total users before applying filters
+        var totalUsers = await usersQuery.CountAsync();
+
+        // Apply role filter (if not "All Roles")
         if (!string.IsNullOrEmpty(roleFilter) && roleFilter != "All Roles")
         {
             usersQuery = usersQuery.Where(u => u.Role == roleFilter);
         }
-        //else
-        //{
-        //    // Reset the filter to display all users
-        //    usersQuery = usersQuery.Where(u => true);
-        //}
 
-            // Pagination
-            int pageSize = 5;
-        var paginatedUsers = await PaginatedList<UserViewModel>.CreateAsync(usersQuery.AsNoTracking(), pageNumber ?? 1, pageSize);
+        // Materialize the query into memory
+        var userList = await usersQuery.ToListAsync();
+
+        // Set count message in ViewBag
+        if (!string.IsNullOrEmpty(roleFilter) && roleFilter != "All Roles")
+        {
+            ViewBag.UserCountMessage = $"Number of users with role '{roleFilter}': {userList.Count}";
+        }
+        else
+        {
+            ViewBag.UserCountMessage = $"Total Users: {totalUsers}";
+        }
+
+
+        if (!string.IsNullOrEmpty(searchTerm))
+        {
+            userList = userList.Where(u =>
+            u.User.UserName.Contains(searchTerm, StringComparison.OrdinalIgnoreCase) || // Search UserName
+            u.User.FirstName.Contains(searchTerm, StringComparison.OrdinalIgnoreCase) || // Search FirstName
+            u.User.LastName.Contains(searchTerm, StringComparison.OrdinalIgnoreCase)).ToList(); // Search LastName
+        }
+
+        // Pagination
+        int pageSize = 5;
+        var paginatedUsers = PaginatedList<UserViewModel>.CreateFromList(userList, pageNumber ?? 1, pageSize);
 
         return View(paginatedUsers);
     }
-
+        
     // POST: Admin/EditRole
     [HttpPost]
     [ValidateAntiForgeryToken]
