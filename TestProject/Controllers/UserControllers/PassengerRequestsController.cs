@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using TestProject.Data;
 using TestProject.Extentions;
+using TestProject.Models;
 
 namespace TestProject.Controllers.UserControllers
 {
@@ -16,12 +17,12 @@ namespace TestProject.Controllers.UserControllers
             _context = context;
         }
 
-        // View all requests made by the logged-in user
+        // View all pending requests made by the logged-in user
         public IActionResult MyRequests()
         {
             var userId = User.Id(); // Get logged-in user ID
             var requests = _context.Requests
-                            .Where(r => r.UserId == userId)
+                            .Where(r => r.UserId == userId && r.StatusRequest == RequestStatus.Pending)
                             .Include(r => r.Trip)
                             .ToList();
 

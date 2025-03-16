@@ -23,6 +23,7 @@ namespace TestProject.Controllers
             _context = context;
         }
 
+
         // GET: Trips
         public async Task<IActionResult> Index(string sortOrder,string startPosition, string destination, int? pageNumber)
         {

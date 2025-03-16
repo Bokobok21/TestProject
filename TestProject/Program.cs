@@ -72,11 +72,6 @@ app.Run();
 // driver
 // the driver should accept you for the trip not the admin
 
-// passenger
-// make a method for the passenger to see all his requests and to be able to delete them ??????
-// for each user display which trips he has entered
-// make a method for the driver to see all his trips and to be able to delete them
-// make a method for the driver to see all the requests for his trips and to be able to accept them
 
 // he shoudn't be able to join a trip at the same time of another one 
 // a/an driver/user can't be on two trips at the same time

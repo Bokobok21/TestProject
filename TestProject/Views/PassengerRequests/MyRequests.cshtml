@@ -1,0 +1,27 @@
+﻿<h2>My Ride Requests</h2>
+<table>
+    <tr>
+        <th>Image</th>
+        <th>Trip Destination</th>
+        <th>Start Position</th>
+        <th>Departure Time</th>
+        <th>Price</th>
+        <th>Action</th>
+    </tr>
+    @foreach (var request in Model)
+    {
+        <tr>
+            <td><img src="@request.Trip.ImagePath" alt="Trip Image" width="300"  /></td>
+            <td>@request.Trip.Destination</td>
+            <td>@request.Trip.StartPosition</td>
+            <td>@request.Trip.DepartureTime.ToString("g")</td>
+            <td>@request.Trip.Price.ToString("C")</td>
+            <td>
+                <form method="post" asp-action="DeleteRequest" asp-controller="PassengerRequests">
+                    <input type="hidden" name="id" value="@request.Id" />
+                    <button type="submit" onclick="return confirm('Are you sure?')">Delete</button>
+                </form>
+            </td>
+        </tr>
+    }
+</table>
