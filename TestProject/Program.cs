@@ -62,11 +62,10 @@ app.MapRazorPages();
 
 app.Run();
 
+// fix the listallusers onclick to sumbit and add count of users with the search filter 
 
-// when changing the user's role, check if the user is a driver and if he is delete all his trips
+// when changing the user's role, check if the user is a driver and if he is delete all his trips/put them in hold
 // tripParticipant should be able to be modified by the admin 
-// not sure but delete the user's request when he becomes a driver 
-// not sure but the drivers images aren't being deleted when edited
 
 // admin
 // ???? // redovni marshruti i ednokratni marshruti
@@ -76,17 +75,15 @@ app.Run();
 
 // passenger
 // make a method for the passenger to see all his requests and to be able to delete them ??????
-// should be able to search for trips 
 // he shoudn't be able to join a trip at the same time of another one 
-
 // make a method for the driver to see all his trips and to be able to delete them
 // make a method for the driver to see all the requests for his trips and to be able to accept them
+// a/an driver/user can't be on two trips at the same time
+// for each user display which trips he has entered
 
 // keep order of request when free seats are changed to delete the users that have entered last and only keep the first ones
-// a/an driver/user can't be on two trips at the same time
+
 // fix registering with the same email and changing password
-// fix sorting of the trips
-// for each user display which trips he has entered
 
 
 // fix foulders and files

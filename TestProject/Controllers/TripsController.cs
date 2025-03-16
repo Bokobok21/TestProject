@@ -24,11 +24,14 @@ namespace TestProject.Controllers
         }
 
         // GET: Trips
-        public async Task<IActionResult> Index(string sortOrder, int? pageNumber)
+        public async Task<IActionResult> Index(string sortOrder,string startPosition, string destination, int? pageNumber)
         {
             sortOrder ??= "created_date_desc"; // Default sorting
 
             ViewBag.CurrentSortOrder = sortOrder;
+            ViewBag.CurrentStartPosition = startPosition;
+            ViewBag.CurrentDestination = destination;
+
             ViewBag.SortOptions = new List<SelectListItem>
             {
                 new SelectListItem { Value = "created_date_desc", Text = "Newest First" },
@@ -50,38 +53,77 @@ namespace TestProject.Controllers
             // Fetch trips from the database
             IQueryable<Trip> trips = _context.Trips.Include(t => t.Driver);
 
-            // Ensure all trips are fetched
-            int totalTrips = await trips.CountAsync();
-            Console.WriteLine($"Total trips in DB: {totalTrips}");
+
+            var tripsList = await trips.ToListAsync();
+
+            // Apply search filters
+            if (!string.IsNullOrEmpty(startPosition))
+            {
+                tripsList = tripsList.Where(t => t.StartPosition.Contains(startPosition, StringComparison.OrdinalIgnoreCase)).ToList();
+            }
+
+            if (!string.IsNullOrEmpty(destination))
+            {
+                tripsList = tripsList.Where(t => t.Destination.Contains(destination, StringComparison.OrdinalIgnoreCase)).ToList();
+            }
 
             // Start with OrderBy()
-            IOrderedQueryable<Trip> orderedTrips = sortOrder switch
-            {
-                "created_date_asc" => trips.OrderBy(t => t.CreatedDate),
-                "created_date_desc" => trips.OrderByDescending(t => t.CreatedDate),
-                "departure_time_asc" => trips.OrderBy(t => t.DepartureTime),
-                "departure_time_desc" => trips.OrderByDescending(t => t.DepartureTime),
-                "return_time_asc" => trips.OrderBy(t => t.ReturnTime),
-                "return_time_desc" => trips.OrderByDescending(t => t.ReturnTime),
-                "price_asc" => trips.OrderBy(t => t.Price),
-                "price_desc" => trips.OrderByDescending(t => t.Price),
-                "free_seats_asc" => trips.OrderBy(t => t.FreeSeats),
-                "free_seats_desc" => trips.OrderByDescending(t => t.FreeSeats),
-                "total_seats_asc" => trips.OrderBy(t => t.TotalSeats),
-                "total_seats_desc" => trips.OrderByDescending(t => t.TotalSeats),
-                "status_asc" => trips.OrderBy(t => t.StatusTrip),
-                "status_desc" => trips.OrderByDescending(t => t.StatusTrip),
-                _ => trips.OrderByDescending(t => t.CreatedDate) // Default sorting
-            };
+            IOrderedEnumerable<Trip> orderedTrips = tripsList.OrderBy(t => t.StatusTrip != TripStatus.Upcoming);
 
-            // Ensure "Upcoming" trips appear first
-            orderedTrips = orderedTrips.ThenBy(t => t.StatusTrip == TripStatus.Upcoming ? 0 : 1);
+            // Apply the selected sort order as secondary sort
+            switch (sortOrder)
+            {
+                case "created_date_asc":
+                    orderedTrips = orderedTrips.ThenBy(t => t.CreatedDate);
+                    break;
+                case "created_date_desc":
+                    orderedTrips = orderedTrips.ThenByDescending(t => t.CreatedDate);
+                    break;
+                case "departure_time_asc":
+                    orderedTrips = orderedTrips.ThenBy(t => t.DepartureTime);
+                    break;
+                case "departure_time_desc":
+                    orderedTrips = orderedTrips.ThenByDescending(t => t.DepartureTime);
+                    break;
+                case "return_time_asc":
+                    orderedTrips = orderedTrips.ThenBy(t => t.ReturnTime);
+                    break;
+                case "return_time_desc":
+                    orderedTrips = orderedTrips.ThenByDescending(t => t.ReturnTime);
+                    break;
+                case "price_asc":
+                    orderedTrips = orderedTrips.ThenBy(t => t.Price);
+                    break;
+                case "price_desc":
+                    orderedTrips = orderedTrips.ThenByDescending(t => t.Price);
+                    break;
+                case "free_seats_asc":
+                    orderedTrips = orderedTrips.ThenBy(t => t.FreeSeats);
+                    break;
+                case "free_seats_desc":
+                    orderedTrips = orderedTrips.ThenByDescending(t => t.FreeSeats);
+                    break;
+                case "total_seats_asc":
+                    orderedTrips = orderedTrips.ThenBy(t => t.TotalSeats);
+                    break;
+                case "total_seats_desc":
+                    orderedTrips = orderedTrips.ThenByDescending(t => t.TotalSeats);
+                    break;
+                case "status_asc":
+                    orderedTrips = orderedTrips.ThenBy(t => t.StatusTrip);
+                    break;
+                case "status_desc":
+                    orderedTrips = orderedTrips.ThenByDescending(t => t.StatusTrip);
+                    break;
+                default:
+                    // Default secondary sort (e.g., Newest First)
+                    orderedTrips = orderedTrips.ThenByDescending(t => t.CreatedDate);
+                    break;
+            }
 
             // Pagination
             int pageSize = 4;
-            var paginatedTrips = await PaginatedList<Trip>.CreateAsync(orderedTrips, pageNumber ?? 1, pageSize);
-
-            Console.WriteLine($"Showing Page {pageNumber ?? 1}, Trips Displayed: {paginatedTrips.Count}");
+            var paginatedTrips = PaginatedList<Trip>.CreateFromList(orderedTrips, pageNumber ?? 1, pageSize);
 
             // Convert to ViewModel
             var tripViewModels = paginatedTrips.Select(trip => new TripViewModel
@@ -104,7 +146,7 @@ namespace TestProject.Controllers
             }).ToList();
 
             // Return view with paginated list
-            return View(new PaginatedList<TripViewModel>(tripViewModels, totalTrips, paginatedTrips.PageIndex, pageSize));
+            return View(new PaginatedList<TripViewModel>(tripViewModels, tripsList.Count, paginatedTrips.PageIndex, pageSize));
         }
 
 

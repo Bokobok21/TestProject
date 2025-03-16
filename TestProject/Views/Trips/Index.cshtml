@@ -11,17 +11,36 @@
     <a asp-action="Create">Create New</a>
 </p>
 
+<!-- Combined Search and Sort Form -->
+<form asp-action="Index" method="get" id="tripSearchForm">
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            <label>Start Position:</label>
+            <input type="text"
+                   name="startPosition"
+                   value="@ViewBag.CurrentStartPosition"
+                   class="form-control" />
+        </div>
+        <div class="form-group col-md-4">
+            <label>Destination:</label>
+            <input type="text"
+                   name="destination"
+                   value="@ViewBag.CurrentDestination"
+                   class="form-control" />
+        </div>
+        <div class="form-group col-md-2">
+            <button type="submit" class="btn btn-sm btn-primary">Search</button>
+            <button type="button" class="btn btn-sm btn-secondary" onclick="clearSearch()">Clear</button>
+        </div>
+    </div>
 
-<!-- Sorting Dropdown -->
-<form asp-action="Index" method="get">
-    <div class="form-actions no-color">
-        <p>
-            Sort by:
-            <select name="sortOrder"
-                    asp-items="@(new SelectList(ViewBag.SortOptions as IEnumerable<SelectListItem>, "Value", "Text", ViewBag.CurrentSortOrder))"
-                    onchange="this.form.submit()">
-            </select>
-        </p>
+    <!-- Sorting Dropdown -->
+    <div class="form-group">
+        <select name="sortOrder"
+                asp-items="@(new SelectList(ViewBag.SortOptions as IEnumerable<SelectListItem>, "Value", "Text", ViewBag.CurrentSortOrder))"
+                onchange="this.form.submit()"
+                class="form-control">
+        </select>
     </div>
 </form>
 
@@ -78,8 +97,8 @@
                 @Html.DisplayFor(modelItem => item.PlateNumber)
             </td>
             <td>
-          @*       @Html.DisplayFor(modelItem => item.ImagePath) *@
-                    <img src="@item.ImagePath" alt="Trip Picture" />
+                @Html.DisplayFor(modelItem => item.ImagePath)
+               @*      <img src="@item.ImagePath" alt="Trip Picture" /> *@
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.StatusTrip)
@@ -98,8 +117,10 @@
 @if (Model.HasPreviousPage)
 {
     <a asp-action="Index"
-       asp-route-pageNumber="@(Model.PageIndex - 1)"
+       asp-route-startPosition="@ViewBag.CurrentStartPosition"
+       asp-route-destination="@ViewBag.CurrentDestination"
        asp-route-sortOrder="@ViewBag.CurrentSortOrder"
+       asp-route-pageNumber="@(Model.PageIndex - 1)"
        class="btn btn-default">
         Previous
     </a>
@@ -114,6 +135,8 @@ else
 {
     <a asp-action="Index"
        asp-route-pageNumber="@i"
+       asp-route-startPosition="@ViewBag.CurrentStartPosition"
+       asp-route-destination="@ViewBag.CurrentDestination"
        asp-route-sortOrder="@ViewBag.CurrentSortOrder"
        class="btn @(i == Model.PageIndex ? "btn-primary" : "btn-default")">
         @i
@@ -124,6 +147,8 @@ else
 @if (Model.HasNextPage)
 {
     <a asp-action="Index"
+       asp-route-startPosition="@ViewBag.CurrentStartPosition"
+       asp-route-destination="@ViewBag.CurrentDestination"
        asp-route-pageNumber="@(Model.PageIndex + 1)"
        asp-route-sortOrder="@ViewBag.CurrentSortOrder"
        class="btn btn-default">
@@ -133,4 +158,16 @@ else
 else
 {
     <button disabled class="btn btn-default">Next</button>
+}
+
+@section Scripts {
+    <script>
+        function clearSearch() {
+            // Clear only search fields
+            document.querySelector('input[name="startPosition"]').value = '';
+            document.querySelector('input[name="destination"]').value = '';
+            // Submit the form to refresh
+            document.getElementById("tripSearchForm").submit();
+        }
+    </script>
 }
