@@ -78,8 +78,10 @@ public class ListAllUsersController : Controller
             u.User.LastName.Contains(searchTerm, StringComparison.OrdinalIgnoreCase)).ToList(); // Search LastName
         }
 
+        ViewBag.FilteredUserCountMessage = $"Number of users with these filters: {userList.Count}";
+
         // Pagination
-        int pageSize = 5;
+        int pageSize = 3;
         var paginatedUsers = PaginatedList<UserViewModel>.CreateFromList(userList, pageNumber ?? 1, pageSize);
 
         return View(paginatedUsers);

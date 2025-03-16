@@ -10,14 +10,14 @@
 <!-- Combined Search and Filter Form -->
 <form asp-action="Users" method="get" id="searchFilterForm">
 
-        <div class="form-group col-md-3">
-            <label>Filter by Role:</label>
-            <select name="roleFilter"
-                    asp-items="@(new SelectList(ViewBag.Roles as IEnumerable<SelectListItem>, "Value", "Text", ViewBag.CurrentRoleFilter))"
-                    class="form-control">
-                <option value="">All Roles</option>
-            </select>
-        </div>
+    <div class="form-group col-md-3">
+        <label>Filter by Role:</label>
+        <select name="roleFilter"
+                asp-items="@(new SelectList(ViewBag.Roles as IEnumerable<SelectListItem>, "Value", "Text", ViewBag.CurrentRoleFilter))"
+                class="form-control" onchange="this.form.submit()">
+            <option value="">All Roles</option>
+        </select>
+    </div>
 
     <div class="form-row">
         <div class="form-group col-md-4">
@@ -35,6 +35,7 @@
 </form>
 
 <p>@ViewBag.UserCountMessage</p>
+<p>@ViewBag.FilteredUserCountMessage</p>
 
 <table class="table">
     <thead>

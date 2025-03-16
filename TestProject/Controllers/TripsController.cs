@@ -122,7 +122,7 @@ namespace TestProject.Controllers
             }
 
             // Pagination
-            int pageSize = 4;
+            int pageSize = 3;
             var paginatedTrips = PaginatedList<Trip>.CreateFromList(orderedTrips, pageNumber ?? 1, pageSize);
 
             // Convert to ViewModel

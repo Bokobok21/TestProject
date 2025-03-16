@@ -14,25 +14,6 @@
 <!-- Combined Search and Sort Form -->
 <form asp-action="Index" method="get" id="tripSearchForm">
     <div class="form-row">
-        <div class="form-group col-md-4">
-            <label>Start Position:</label>
-            <input type="text"
-                   name="startPosition"
-                   value="@ViewBag.CurrentStartPosition"
-                   class="form-control" />
-        </div>
-        <div class="form-group col-md-4">
-            <label>Destination:</label>
-            <input type="text"
-                   name="destination"
-                   value="@ViewBag.CurrentDestination"
-                   class="form-control" />
-        </div>
-        <div class="form-group col-md-2">
-            <button type="submit" class="btn btn-sm btn-primary">Search</button>
-            <button type="button" class="btn btn-sm btn-secondary" onclick="clearSearch()">Clear</button>
-        </div>
-    </div>
 
     <!-- Sorting Dropdown -->
     <div class="form-group">
@@ -42,6 +23,29 @@
                 class="form-control">
         </select>
     </div>
+
+        <div class="form-group col-md-4">
+            <label>Start Position:</label>
+            <input type="text"
+                   name="startPosition"
+                   value="@ViewBag.CurrentStartPosition"
+                   class="form-control" />
+        </div>
+
+        <div class="form-group col-md-4">
+            <label>Destination:</label>
+            <input type="text"
+                   name="destination"
+                   value="@ViewBag.CurrentDestination"
+                   class="form-control" />
+        </div>
+
+        <div class="form-group col-md-2">
+            <button type="submit" class="btn btn-sm btn-primary">Search</button>
+            <button type="button" class="btn btn-sm btn-secondary" onclick="clearSearch()">Clear</button>
+        </div>
+    </div>
+
 </form>
 
 
