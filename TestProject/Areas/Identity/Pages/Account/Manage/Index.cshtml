@@ -18,7 +18,7 @@
             @if (User.IsInRole("Driver"))
             {
                 <div>
-                    <img src="@Model.CurrentUser.ImagePath" alt="Profile Picture" />
+                    <img src="@Model.CurrentUser.ImagePath" alt="Profile Picture" style="max-width: 200px;" />
                     <p>Approved as Driver on: @Model.CurrentUser.DateOfDriverAcceptance?.ToString("yyyy-MM-dd")</p>
 
                     <!-- Driver profile image upload form -->
@@ -29,11 +29,12 @@
                     </div>
                 </div>
             }
-            else @if (@* User.IsInRole("Tourist") &&  *@!Model.HasDriverRequest)
+            //be cautions with the role because everyone is a tourist by default 
+            else @if (User.IsInRole("Tourist") && !Model.HasDriverRequest)
             {
                 <a asp-page="/Account/ApplyToBeDriver" class="btn btn-secondary">Apply to Be a Driver</a>
             }
-            else @if (@* User.IsInRole("Tourist") &&  *@Model.HasDriverRequest)
+            else @if (User.IsInRole("Tourist") && Model.HasDriverRequest)
             {
                 <p>You have already submitted a driver application.</p>
             }

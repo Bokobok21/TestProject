@@ -43,13 +43,6 @@ namespace TestProject.Areas.Identity.Pages.Account
             if (user == null)
                 return NotFound();
 
-            // Check if the user already has a driver request
-            if (await _context.RequestDrivers.AnyAsync(r => r.UserId == user.Id && r.StatusRequest != RequestStatus.Rejected))
-            {
-                ModelState.AddModelError("", "You have already submitted a driver application.");
-                return Page();
-            }
-
             // Save driver application
             var request = new RequestDriver
             {

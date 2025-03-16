@@ -96,6 +96,10 @@ namespace TestProject.Areas.Identity.Pages.Account
             [Display(Name = "LastName")]
             public string LastName { get; set; }
 
+            [Required]
+            [Display(Name = "Phone number")]
+            public string PhoneNumber { get; set; }
+
             /// <summary>
             ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
             ///     directly from your code. This API may change or be removed in future releases.
@@ -136,6 +140,7 @@ namespace TestProject.Areas.Identity.Pages.Account
                     Email = Input.Email,
                     FirstName = Input.FirstName,
                     LastName = Input.LastName,
+                    PhoneNumber = Input.PhoneNumber,
                     Position = "Tourist",
                 };
 

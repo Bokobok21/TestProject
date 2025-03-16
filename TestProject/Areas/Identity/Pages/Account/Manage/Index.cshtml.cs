@@ -66,10 +66,14 @@ namespace TestProject.Areas.Identity.Pages.Account.Manage
 
             // Check if the user has a pending driver request
             HasDriverRequest = await _context.RequestDrivers
-                .AnyAsync(r => r.UserId == CurrentUser.Id && r.StatusRequest == RequestStatus.Pending); 
+                .AnyAsync(r => r.UserId == CurrentUser.Id && r.StatusRequest == RequestStatus.Pending);
 
+            // Re-fetch the user's roles to reflect any changes made by the admin
+            var roles = await _userManager.GetRolesAsync(CurrentUser);
             // Set the Username property
             Username = await _userManager.GetUserNameAsync(CurrentUser);
+
+            await _signInManager.RefreshSignInAsync(CurrentUser);
 
             return Page();
         }
@@ -84,48 +88,48 @@ namespace TestProject.Areas.Identity.Pages.Account.Manage
 
             if (!ModelState.IsValid)
             {
-                // Reassign Username if ModelState is invalid
                 Username = await _userManager.GetUserNameAsync(user);
                 return Page();
             }
 
-            if (User.IsInRole("Driver"))
+            if (User.IsInRole("Driver") && Input.ImageFile != null && Input.ImageFile.Length > 0)
             {
-
-                // Handle image upload
-                if (Input.ImageFile != null && Input.ImageFile.Length > 0)
+                // Check if the current image is not the default image before deleting
+                if (!string.IsNullOrEmpty(user.ImagePath) && !user.ImagePath.Equals("/images/drivers/default-image-Driver.jpg", StringComparison.OrdinalIgnoreCase))
                 {
-                    if (!string.IsNullOrEmpty(user.ImagePath))
+                    var oldImage = Path.Combine(_webHostEnvironment.WebRootPath, user.ImagePath.TrimStart('/'));
+                    if (System.IO.File.Exists(oldImage))
                     {
-                        var oldImage = Path.Combine(_webHostEnvironment.WebRootPath, user.ImagePath);
-                        if (System.IO.File.Exists(oldImage))
-                        {
-                            System.IO.File.Delete(oldImage);
-                        }
+                        System.IO.File.Delete(oldImage);
                     }
-
-                    string uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, "images", "drivers");
-                    if (!Directory.Exists(uploadsFolder))
-                    {
-                        Directory.CreateDirectory(uploadsFolder);
-                    }
-
-                    string uniqueFileName = Guid.NewGuid().ToString() + Path.GetExtension(Input.ImageFile.FileName);
-                    string filePath = Path.Combine(uploadsFolder, uniqueFileName);
-
-                    using (var stream = new FileStream(filePath, FileMode.Create))
-                    {
-                        await Input.ImageFile.CopyToAsync(stream);
-                    }
-
-                    user.ImagePath = $"/images/drivers/{uniqueFileName}";
-                    StatusMessage = "Profile picture updated successfully!";
-                } else if (string.IsNullOrEmpty(user.ImagePath))
-                {
-                    user.ImagePath = "/images/drivers/default-image-Driver.jpg";
                 }
+
+                // Handle new image upload
+                string uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, "images", "drivers");
+                if (!Directory.Exists(uploadsFolder))
+                {
+                    Directory.CreateDirectory(uploadsFolder);
+                }
+
+                string uniqueFileName = Guid.NewGuid().ToString() + Path.GetExtension(Input.ImageFile.FileName);
+                string filePath = Path.Combine(uploadsFolder, uniqueFileName);
+
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    await Input.ImageFile.CopyToAsync(stream);
+                }
+
+                // Update ImagePath
+                user.ImagePath = $"/images/drivers/{uniqueFileName}";
+                StatusMessage = "Profile picture updated successfully!";
+            }
+            else if (string.IsNullOrEmpty(user.ImagePath) || user.ImagePath.Equals("/images/drivers/default-image-Driver.jpg", StringComparison.OrdinalIgnoreCase))
+            {
+                // Ensure the default image path is set if no file is uploaded
+                user.ImagePath = "/images/drivers/default-image-Driver.jpg";
             }
 
+            // Save changes to the database
             await _userManager.UpdateAsync(user);
             await _signInManager.RefreshSignInAsync(user);
 

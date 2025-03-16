@@ -113,7 +113,10 @@ public class ListAllUsersController : Controller
         if (newRole == "Driver")
         {
             user.DateOfDriverAcceptance = DateTime.Now;
-            user.ImagePath = "default-image-driver";
+            user.ImagePath = "/images/drivers/default-image-Driver.jpg";
+
+            var requestDrivers = await _context.RequestDrivers.Where(rd => rd.UserId == user.Id).ToListAsync();
+            _context.RequestDrivers.RemoveRange(requestDrivers);
         }
         else if (newRole == "Tourist")
         {
@@ -141,6 +144,9 @@ public class ListAllUsersController : Controller
 
         var requests = await _context.Requests.Where(r => r.UserId == user.Id).ToListAsync();
         _context.Requests.RemoveRange(requests);
+
+        var requestDrivers = await _context.RequestDrivers.Where(rd => rd.UserId == user.Id).ToListAsync();
+        _context.RequestDrivers.RemoveRange(requestDrivers);
 
         var tripParticipants = await _context.TripParticipants.Where(tp => tp.UserId == user.Id).ToListAsync();
         _context.TripParticipants.RemoveRange(tripParticipants);

@@ -70,10 +70,6 @@ app.Run();
 
 // admin
 // ???? // redovni marshruti i ednokratni marshruti
-// add a phone number to the user
-// search for the users by their name, surname or username 
-// filter the users by their role not sort them
-// view all the roles with their number of users 
 
 // driver
 // the driver should accept you for the trip not the admin
