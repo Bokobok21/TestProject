@@ -69,8 +69,6 @@ app.Run();
 // admin
 // ???? // redovni marshruti i ednokratni marshruti
 
-// driver
-// the driver should accept you for the trip not the admin
 
 
 // he shoudn't be able to join a trip at the same time of another one 
