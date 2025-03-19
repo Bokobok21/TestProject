@@ -46,6 +46,9 @@ namespace TestProject.Models
 
         public DateTime CreatedDate { get; set; } = DateTime.Now;
 
+        public bool IsRecurring { get; set; }
+        public TimeSpan? RecurrenceInterval { get; set; } = TimeSpan.Zero;
+        public DateTime? NextRunDate { get; set; } = DateTime.Now;
 
         public ICollection<TripParticipant>? TripParticipants { get; set; }
         public ICollection<Request>? Requests { get; set; }

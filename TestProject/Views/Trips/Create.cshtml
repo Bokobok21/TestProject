@@ -61,6 +61,28 @@
                 <span asp-validation-for="ImageFile" class="text-danger"></span>
             </div>
 
+
+            <div class="form-group">
+                <label asp-for="IsRecurring"></label>
+                <input asp-for="IsRecurring" id="isRecurring" />
+            </div>
+
+            <div id="recurrenceFields" style="display: none;">
+                <div class="form-group">
+                    <label>Repeat every:</label>
+                    <input asp-for="RecurrenceIntervalDays" class="form-control" placeholder="Days" />
+                </div>
+                <div class="form-group">
+                    <label>Hours:</label>
+                    <input asp-for="RecurrenceIntervalHours" class="form-control" placeholder="Hours" />
+                </div>
+                <div class="form-group">
+                    <label>Minutes:</label>
+                    <input asp-for="RecurrenceIntervalMinutes" class="form-control" placeholder="Minutes" />
+                </div>
+            </div>
+
+
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
             </div>
@@ -75,3 +97,10 @@
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }
+
+
+<script>
+    document.getElementById("isRecurring").addEventListener("change", function() {
+        document.getElementById("recurrenceFields").style.display = this.checked ? "block" : "none";
+    });
+</script>

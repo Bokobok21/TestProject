@@ -207,6 +207,16 @@ namespace TestProject.Controllers
             tripViewModel.DriversId = User.Id();
             tripViewModel.StatusTrip = TripStatus.Upcoming;
 
+            var recurrenceInterval = TimeSpan.FromDays(tripViewModel.RecurrenceIntervalDays ?? 0)
+              .Add(TimeSpan.FromHours(tripViewModel.RecurrenceIntervalHours ?? 0))
+              .Add(TimeSpan.FromMinutes(tripViewModel.RecurrenceIntervalMinutes ?? 0));
+
+            if (tripViewModel.IsRecurring && recurrenceInterval == TimeSpan.Zero)
+            {
+                ModelState.AddModelError("", "Recurrence interval must be greater than zero.");
+            }
+
+
             if (ModelState.IsValid)
             {
 
@@ -248,7 +258,10 @@ namespace TestProject.Controllers
                     CarModel = tripViewModel.CarModel,
                     PlateNumber = tripViewModel.PlateNumber,
                     ImagePath = tripViewModel.ImagePath,
-                    StatusTrip = tripViewModel.StatusTrip
+                    StatusTrip = tripViewModel.StatusTrip,
+                    IsRecurring = tripViewModel.IsRecurring,
+                    RecurrenceInterval = recurrenceInterval,
+                    NextRunDate = tripViewModel.DepartureTime.Add(recurrenceInterval)
                 };
 
                 _context.Add(trip);

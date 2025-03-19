@@ -56,7 +56,7 @@ public class DriverApplicationsController : Controller
 
         // Update RequestDriver status
         request.StatusRequest = RequestStatus.Accepted;
-        user.DateOfDriverAcceptance = DateTime.UtcNow;
+        user.DateOfDriverAcceptance = DateTime.Now;
         user.Position = "Driver";
 
         if (string.IsNullOrEmpty(user.ImagePath))

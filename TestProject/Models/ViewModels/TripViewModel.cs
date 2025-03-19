@@ -11,5 +11,9 @@ namespace TestProject.Models.ViewModels
         public IFormFile? ImageFile { get; set; }
         public string? DriverName { get; set; }
 
+        public int? RecurrenceIntervalMinutes { get; set; } = 0;
+        public int? RecurrenceIntervalDays { get; set; } = 0;
+        public int? RecurrenceIntervalHours { get; set; } = 0;
+
     }
 }
