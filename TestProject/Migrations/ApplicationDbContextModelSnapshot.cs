@@ -3,20 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TestProject.Data;
 
 #nullable disable
 
-namespace TestProject.Data.Migrations
+namespace TestProject.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250214073255_Updated ApplicationUser")]
-    partial class UpdatedApplicationUser
+    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
     {
-        /// <inheritdoc />
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -253,9 +250,6 @@ namespace TestProject.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("ApplicationUserId")
-                        .HasColumnType("nvarchar(450)");
-
                     b.Property<string>("Comment")
                         .HasColumnType("nvarchar(max)");
 
@@ -268,20 +262,13 @@ namespace TestProject.Data.Migrations
                     b.Property<int>("TripId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("TripId1")
-                        .HasColumnType("int");
-
                     b.Property<string>("UserId")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ApplicationUserId");
-
                     b.HasIndex("TripId");
-
-                    b.HasIndex("TripId1");
 
                     b.HasIndex("UserId");
 
@@ -296,9 +283,6 @@ namespace TestProject.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("ApplicationUserId")
-                        .HasColumnType("nvarchar(450)");
-
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
 
@@ -308,20 +292,13 @@ namespace TestProject.Data.Migrations
                     b.Property<int>("TripId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("TripId1")
-                        .HasColumnType("int");
-
                     b.Property<string>("UserId")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ApplicationUserId");
-
                     b.HasIndex("TripId");
-
-                    b.HasIndex("TripId1");
 
                     b.HasIndex("UserId");
 
@@ -338,10 +315,6 @@ namespace TestProject.Data.Migrations
 
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
-
-                    b.Property<string>("ImagePath")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("StatusRequest")
                         .HasColumnType("int");
@@ -369,6 +342,9 @@ namespace TestProject.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
                     b.Property<DateTime>("DepartureTime")
                         .HasColumnType("datetime2");
 
@@ -384,8 +360,13 @@ namespace TestProject.Data.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("ImagePath")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsRecurring")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("NextRunDate")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("PlateNumber")
                         .IsRequired()
@@ -393,6 +374,9 @@ namespace TestProject.Data.Migrations
 
                     b.Property<int>("Price")
                         .HasColumnType("int");
+
+                    b.Property<TimeSpan?>("RecurrenceInterval")
+                        .HasColumnType("time");
 
                     b.Property<DateTime>("ReturnTime")
                         .HasColumnType("datetime2");
@@ -422,13 +406,7 @@ namespace TestProject.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("ApplicationUserId")
-                        .HasColumnType("nvarchar(450)");
-
                     b.Property<int>("TripId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("TripId1")
                         .HasColumnType("int");
 
                     b.Property<string>("UserId")
@@ -437,11 +415,7 @@ namespace TestProject.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ApplicationUserId");
-
                     b.HasIndex("TripId");
-
-                    b.HasIndex("TripId1");
 
                     b.HasIndex("UserId", "TripId")
                         .IsUnique();
@@ -502,22 +476,14 @@ namespace TestProject.Data.Migrations
 
             modelBuilder.Entity("TestProject.Models.Rating", b =>
                 {
-                    b.HasOne("TestProject.Models.ApplicationUser", null)
-                        .WithMany("Ratings")
-                        .HasForeignKey("ApplicationUserId");
-
                     b.HasOne("TestProject.Models.Trip", "Trip")
-                        .WithMany()
+                        .WithMany("Ratings")
                         .HasForeignKey("TripId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("TestProject.Models.Trip", null)
-                        .WithMany("Ratings")
-                        .HasForeignKey("TripId1");
-
                     b.HasOne("TestProject.Models.ApplicationUser", "User")
-                        .WithMany()
+                        .WithMany("Ratings")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
@@ -529,22 +495,14 @@ namespace TestProject.Data.Migrations
 
             modelBuilder.Entity("TestProject.Models.Request", b =>
                 {
-                    b.HasOne("TestProject.Models.ApplicationUser", null)
-                        .WithMany("Requests")
-                        .HasForeignKey("ApplicationUserId");
-
                     b.HasOne("TestProject.Models.Trip", "Trip")
-                        .WithMany()
+                        .WithMany("Requests")
                         .HasForeignKey("TripId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("TestProject.Models.Trip", null)
-                        .WithMany("Requests")
-                        .HasForeignKey("TripId1");
-
                     b.HasOne("TestProject.Models.ApplicationUser", "User")
-                        .WithMany()
+                        .WithMany("Requests")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
@@ -578,22 +536,14 @@ namespace TestProject.Data.Migrations
 
             modelBuilder.Entity("TestProject.Models.TripParticipant", b =>
                 {
-                    b.HasOne("TestProject.Models.ApplicationUser", null)
-                        .WithMany("TripParticipants")
-                        .HasForeignKey("ApplicationUserId");
-
                     b.HasOne("TestProject.Models.Trip", "Trip")
-                        .WithMany()
+                        .WithMany("TripParticipants")
                         .HasForeignKey("TripId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("TestProject.Models.Trip", null)
-                        .WithMany("TripParticipants")
-                        .HasForeignKey("TripId1");
-
                     b.HasOne("TestProject.Models.ApplicationUser", "User")
-                        .WithMany()
+                        .WithMany("TripParticipants")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();

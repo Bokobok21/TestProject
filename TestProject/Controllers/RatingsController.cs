@@ -2,22 +2,28 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using TestProject.Data;
 using TestProject.Models;
+using TestProject.Models.ViewModels;
 
 namespace TestProject.Controllers
 {
     public class RatingsController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public RatingsController(ApplicationDbContext context)
+        public RatingsController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
+            _userManager = userManager;
         }
+
 
         // GET: Ratings
         public async Task<IActionResult> Index()
@@ -59,7 +65,7 @@ namespace TestProject.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,TripId,UserId,Score,Comment,Date")] Rating rating)
+        public async Task<IActionResult> Create(Rating rating)
         {
             if (ModelState.IsValid)
             {
@@ -95,7 +101,7 @@ namespace TestProject.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,TripId,UserId,Score,Comment,Date")] Rating rating)
+        public async Task<IActionResult> Edit(int id, Rating rating)
         {
             if (id != rating.Id)
             {

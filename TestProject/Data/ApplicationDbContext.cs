@@ -25,26 +25,26 @@ namespace TestProject.Data
             //fixes the multiple cascade paths for rating
             modelBuilder.Entity<Rating>()
                .HasOne(r => r.Trip)
-               .WithMany()
+               .WithMany(r => r.Ratings)
                .HasForeignKey(r => r.TripId)
                .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<Rating>()
                 .HasOne(r => r.User)
-                .WithMany()
+                .WithMany(r => r.Ratings)
                 .HasForeignKey(r => r.UserId)
                 .OnDelete(DeleteBehavior.Restrict);
 
             //fixes the multiple cascade paths for request
             modelBuilder.Entity<Request>()
                .HasOne(r => r.Trip)
-               .WithMany()
+               .WithMany(r => r.Requests)
                .HasForeignKey(r => r.TripId)
                .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<Request>()
                 .HasOne(r => r.User)
-                .WithMany()
+                .WithMany(r => r.Requests)
                 .HasForeignKey(r => r.UserId)
                 .OnDelete(DeleteBehavior.NoAction);
 

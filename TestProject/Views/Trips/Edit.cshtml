@@ -61,6 +61,12 @@
                 <input asp-for="ImageFile" type="file" class="form-control" accept="image/*" />
                 <span asp-validation-for="ImageFile" class="text-danger"></span>
             </div>
+
+            <div class="form-group">
+                <label asp-for="StatusTrip" class="control-label"></label>
+                <select asp-for="StatusTrip" class="form-control" asp-items="Html.GetEnumSelectList<TestProject.Models.TripStatus>()"></select>
+                <span asp-validation-for="StatusTrip" class="text-danger"></span>
+            </div>
        
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />

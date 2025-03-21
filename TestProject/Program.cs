@@ -66,13 +66,21 @@ app.MapRazorPages();
 app.Run();
 
 
+// reviews:
+// they pass the information from the initial creating (5 and null) not from the user's input
+// they don't show in the view even though the if statement is true (they are not null)
+
+
 // when changing the user's role, check if the user is a driver and if he is delete all his trips/put them in hold
 // tripParticipant should be able to be modified by the admin 
 
-// admin
-// ???? // redovni marshruti i ednokratni marshruti
+// admin should accept trips?
 
+// add (a partial view) for displaying the trip as a whole in every place it appears
 
+//when tripparticipant is denied delete the request so he can request again..
+
+// fix editing of status in trips because it resets or doesn't change the status
 
 // he shoudn't be able to join a trip at the same time of another one 
 // a/an driver/user can't be on two trips at the same time
