@@ -5,16 +5,16 @@ namespace TestProject.Models
 {
     public class TripParticipant
     {
-        [Key] 
+        [Key]
         public int Id { get; set; }
 
         public string UserId { get; set; }
         [ForeignKey(nameof(UserId))]
-        public ApplicationUser User { get; set; }
+        public ApplicationUser User { get; set; }  // Add null-forgiving operator
 
         public int TripId { get; set; }
         [ForeignKey(nameof(TripId))]
-        public Trip Trip { get; set; }
+        public Trip Trip { get; set; }  // Add null-forgiving operator
 
     }
 }

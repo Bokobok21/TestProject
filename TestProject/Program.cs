@@ -65,10 +65,8 @@ app.MapRazorPages();
 
 app.Run();
 
-
-// reviews:
-// they pass the information from the initial creating (5 and null) not from the user's input
-// they don't show in the view even though the if statement is true (they are not null)
+// trip about background service 
+// style display none should be fixed
 
 
 // when changing the user's role, check if the user is a driver and if he is delete all his trips/put them in hold

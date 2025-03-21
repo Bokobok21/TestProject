@@ -1,11 +1,11 @@
 ﻿@using TestProject.Extentions
-    @{  
-       ViewData["Title"] = "Index";  
-    }  
-     
-    <h1>Index</h1>  
-     
-  
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+
 <form asp-controller="PassengerRequests" asp-action="MyRequests" method="get">
     <input type="hidden" name="UserId" value="@User.Id()" />
     <button type="submit" class="btn btn-primary">My Requests</button>
@@ -16,16 +16,14 @@
     <button type="submit" class="btn btn-primary">Entered trips</button>
 </form>
 
-@if (User.IsInRole("Driver"))
+@if (User.IsInRole("Driver") || User.IsInRole("Admin"))
 {
-<form asp-controller="DriverTrips" asp-action="MyDriverTrips" method="get">
-    <input type="hidden" name="UserId" value="@User.Id()" />
-    <button type="submit" class="btn btn-primary">My Trips</button>
-</form>
-}
+    <form asp-controller="DriverTrips" asp-action="MyDriverTrips" method="get">
+        <input type="hidden" name="UserId" value="@User.Id()" />
+        <button type="submit" class="btn btn-primary">My Trips</button>
+    </form>
 
-@if (User.IsInRole("Driver"))
-{
+
     <form asp-controller="DriverRequests" asp-action="PendingRequests" method="get">
         <input type="hidden" name="UserId" value="@User.Id()" />
         <button type="submit" class="btn btn-primary">Pending Requests</button>

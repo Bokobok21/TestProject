@@ -15,8 +15,5 @@ namespace TestProject.Models.ViewModels
         public int? RecurrenceIntervalDays { get; set; } = 0;
         public int? RecurrenceIntervalHours { get; set; } = 0;
 
-        //public bool CanReview { get; set; } = false;
-        //public RatingViewModel? Review { get; set; } 
-
     }
 }

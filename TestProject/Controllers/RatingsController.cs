@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using TestProject.Data;
 using TestProject.Models;
@@ -53,29 +54,51 @@ namespace TestProject.Controllers
         }
 
         // GET: Ratings/Create
-        public IActionResult Create()
+        // GET: Ratings/Create/5
+        public async Task<IActionResult> Create(int tripId)
         {
-            ViewData["TripId"] = new SelectList(_context.Trips, "Id", "Id");
-            ViewData["UserId"] = new SelectList(_context.ApplicationUsers, "Id", "Id");
+            var trip = await _context.Trips
+                .Include(t => t.TripParticipants)
+                .FirstOrDefaultAsync(t => t.Id == tripId);
+
+            var user = await _userManager.GetUserAsync(User);
+
+            if (trip == null || user == null ||
+                trip.StatusTrip != TripStatus.Finished ||
+                !trip.TripParticipants.Any(tp => tp.UserId == user.Id))
+            {
+                return RedirectToAction("Details", "Trips", new { id = tripId });
+            }
+
+            ViewData["TripId"] = tripId;
             return View();
         }
 
         // POST: Ratings/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(Rating rating)
+        public async Task<IActionResult> Create(int tripId, [Bind("Score,Comment")] Rating rating)
         {
-            if (ModelState.IsValid)
+            var trip = await _context.Trips
+                 .Include(t => t.TripParticipants)
+                 .FirstOrDefaultAsync(t => t.Id == tripId);
+
+            var user = await _userManager.GetUserAsync(User);
+            if (trip == null || user == null ||
+                            trip.StatusTrip != TripStatus.Finished ||
+                            !trip.TripParticipants.Any(tp => tp.UserId == user.Id))
             {
-                _context.Add(rating);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("Details", "Trips", new { id = tripId });
             }
-            ViewData["TripId"] = new SelectList(_context.Trips, "Id", "Id", rating.TripId);
-            ViewData["UserId"] = new SelectList(_context.ApplicationUsers, "Id", "Id", rating.UserId);
-            return View(rating);
+
+            rating.UserId = user.Id;
+            rating.Date = DateTime.Now;
+            rating.TripId = tripId;
+
+            _context.Ratings.Add(rating);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("Details", "Trips", new { id = tripId });
         }
 
         // GET: Ratings/Edit/5
