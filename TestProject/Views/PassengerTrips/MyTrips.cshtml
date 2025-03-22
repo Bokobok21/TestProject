@@ -1,7 +1,9 @@
-﻿@{
+﻿@model IEnumerable<TestProject.Models.Trip>
+
+@{
     ViewData["Title"] = "Passenger Trips";
 }
-<h2>Trips I Have Entered</h2>
+@* <h2>Trips I Have Entered</h2>
 <ul>
     @foreach (var trip in Model)
     {
@@ -14,3 +16,6 @@
         </li>
     }
 </ul>
+ *@
+
+<partial name="_TripTablePartial" model="Model" />

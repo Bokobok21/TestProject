@@ -147,7 +147,7 @@ namespace TestProject.Controllers
             }).ToList();
 
             // Return view with paginated list
-            return View(new PaginatedList<TripViewModel>(tripViewModels, tripsList.Count, paginatedTrips.PageIndex, pageSize));
+            return View(new PaginatedList<Trip>(paginatedTrips, tripsList.Count, paginatedTrips.PageIndex, pageSize));
         }
 
 
@@ -220,6 +220,7 @@ namespace TestProject.Controllers
               .Add(TimeSpan.FromHours(tripViewModel.RecurrenceIntervalHours ?? 0))
               .Add(TimeSpan.FromMinutes(tripViewModel.RecurrenceIntervalMinutes ?? 0));
 
+
             if (tripViewModel.IsRecurring && recurrenceInterval == TimeSpan.Zero)
             {
                 ModelState.AddModelError("", "Recurrence interval must be greater than zero.");
@@ -269,7 +270,7 @@ namespace TestProject.Controllers
                     ImagePath = tripViewModel.ImagePath,
                     StatusTrip = tripViewModel.StatusTrip,
                     IsRecurring = tripViewModel.IsRecurring,
-                    RecurrenceInterval = recurrenceInterval,
+                    RecurrenceInterval = recurrenceInterval.ToString(),
                     NextRunDate = tripViewModel.DepartureTime.Add(recurrenceInterval)
                 };
 
@@ -308,6 +309,8 @@ namespace TestProject.Controllers
                 return NotFound();
             }
 
+            TimeSpan reccuranceInterval = TimeSpan.Parse(trip.RecurrenceInterval);
+
             var tripViewModel = new TripViewModel
             {
                 Id = trip.Id,
@@ -325,9 +328,9 @@ namespace TestProject.Controllers
                 StatusTrip = trip.StatusTrip,
                 IsRecurring = trip.IsRecurring,
                 RecurrenceInterval = trip.RecurrenceInterval,
-                RecurrenceIntervalDays = (int)trip.RecurrenceInterval!.Value.TotalDays,
-                RecurrenceIntervalHours = trip.RecurrenceInterval.Value.Hours,
-                RecurrenceIntervalMinutes = trip.RecurrenceInterval.Value.Minutes
+                RecurrenceIntervalDays = reccuranceInterval.Days,
+                RecurrenceIntervalHours = reccuranceInterval.Hours,
+                RecurrenceIntervalMinutes = reccuranceInterval.Minutes 
             };
 
 
@@ -419,7 +422,7 @@ namespace TestProject.Controllers
                     trip.CarModel = tripViewModel.CarModel;
                     trip.PlateNumber = tripViewModel.PlateNumber;
                     trip.IsRecurring = tripViewModel.IsRecurring;
-                    trip.RecurrenceInterval = recurrenceInterval;
+                    trip.RecurrenceInterval = recurrenceInterval.ToString();
                     trip.NextRunDate = tripViewModel.DepartureTime.Add(recurrenceInterval);
 
                     if (trip.FreeSeats <= 0)

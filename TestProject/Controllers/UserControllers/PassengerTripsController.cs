@@ -20,6 +20,7 @@ namespace TestProject.Controllers.UserControllers
             var trips = _context.TripParticipants
                          .Where(tp => tp.UserId == userId)
                          .Include(tp => tp.Trip)
+                            .ThenInclude(tp => tp.Driver)
                          .Select(tp => tp.Trip)
                          .ToList();
 

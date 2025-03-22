@@ -375,8 +375,8 @@ namespace TestProject.Migrations
                     b.Property<int>("Price")
                         .HasColumnType("int");
 
-                    b.Property<TimeSpan?>("RecurrenceInterval")
-                        .HasColumnType("time");
+                    b.Property<string>("RecurrenceInterval")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("ReturnTime")
                         .HasColumnType("datetime2");

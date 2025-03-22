@@ -19,6 +19,7 @@ namespace TestProject.Controllers.UserControllers
             var userId = User.Id();
             var trips = _context.Trips
                          .Where(t => t.DriversId == userId)
+                            .Include(t => t.Driver)
                          .ToList();
 
             return View(trips);

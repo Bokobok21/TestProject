@@ -28,7 +28,7 @@ namespace TestProject.Services
 
                     // Get due recurring trips
                     var recurringTrips = await context.Trips
-                        .Where(t => t.IsRecurring && t.RecurrenceInterval.HasValue && t.NextRunDate.HasValue && t.NextRunDate <= Now)
+                        .Where(t => t.IsRecurring && t.RecurrenceInterval != "00:00:00" && t.NextRunDate.HasValue && t.NextRunDate <= Now)
                         .ToListAsync();
 
                     foreach (var trip in recurringTrips)
@@ -56,8 +56,10 @@ namespace TestProject.Services
                             IsRecurring = false // New trips are not templates
                         };
 
+                        TimeSpan reccurenceInterval = TimeSpan.Parse(trip.RecurrenceInterval);
+
                         // Update next run date
-                        trip.NextRunDate = newDepartureTime.Add(trip.RecurrenceInterval.Value);
+                        trip.NextRunDate = newDepartureTime.Add(reccurenceInterval);
 
                         // Save to database
                         context.Trips.Add(newTrip);
@@ -66,7 +68,7 @@ namespace TestProject.Services
                 }
 
                 // Run every minute (adjust as needed)
-                await Task.Delay(TimeSpan.FromMinutes(1), stoppingToken);
+                await Task.Delay(TimeSpan.FromSeconds(30), stoppingToken);
             }
         }
     }

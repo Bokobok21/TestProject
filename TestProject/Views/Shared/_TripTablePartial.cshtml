@@ -1,0 +1,48 @@
+﻿@using TestProject.Models
+@model IEnumerable<Trip>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Driver</th>
+            <th>Start Position</th>
+            <th>Destination</th>
+            <th>Departure Time</th>
+            <th>Return Time</th>
+            <th>Price</th>
+            <th>Total Seats</th>
+            <th>Free Seats</th>
+            <th>Car Model</th>
+            <th>Plate Number</th>
+            <th>Picture</th>
+            <th>Status</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Driver.UserName</td>
+                <td>@item.StartPosition</td>
+                <td>@item.Destination</td>
+                <td>@item.DepartureTime.ToString("yyyy-MM-dd HH:mm")</td>
+                <td>@item.ReturnTime.ToString("yyyy-MM-dd HH:mm")</td>
+                <td>@item.Price</td>
+                <td>@item.TotalSeats</td>
+                <td>@item.FreeSeats</td>
+                <td>@item.CarModel</td>
+                <td>@item.PlateNumber</td>
+                <td>
+                    <img src="@item.ImagePath" alt="Trip Picture" style="max-width: 100px;" />
+                </td>
+                <td> @Html.DisplayFor(modelItem => item.StatusTrip)</td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
