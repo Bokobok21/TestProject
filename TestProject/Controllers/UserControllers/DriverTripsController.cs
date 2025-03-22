@@ -22,6 +22,7 @@ namespace TestProject.Controllers.UserControllers
                             .Include(t => t.Driver)
                          .ToList();
 
+            ViewData["ShowActions"] = true;
             return View(trips);
         }
 

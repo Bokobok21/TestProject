@@ -24,6 +24,7 @@ namespace TestProject.Controllers.UserControllers
                          .Select(tp => tp.Trip)
                          .ToList();
 
+         
             return View(trips);
         }
     }

@@ -65,7 +65,10 @@ app.MapRazorPages();
 
 app.Run();
 
-// trip about background service 
+
+// in the partial view ( possibly make it only for one trip and not the whole list)
+
+// trip about background service is reccuring should stay vissible or not 
 // style display none should be fixed
 
 
@@ -73,8 +76,6 @@ app.Run();
 // tripParticipant should be able to be modified by the admin 
 
 // admin should accept trips?
-
-// add (a partial view) for displaying the trip as a whole in every place it appears
 
 //when tripparticipant is denied delete the request so he can request again..
 
