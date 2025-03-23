@@ -25,8 +25,13 @@ namespace TestProject.Controllers
 
 
         // GET: Trips
-        public async Task<IActionResult> Index(string sortOrder,string startPosition, string destination, int? pageNumber)
+        public async Task<IActionResult> Index(string sortOrder, string startPosition, string destination, int? pageNumber, string? returnUrl)
         {
+            if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
+            {
+                return Redirect(returnUrl); // Redirects back to the previous page
+            }
+
             sortOrder ??= "created_date_desc"; // Default sorting
 
             ViewBag.CurrentSortOrder = sortOrder;
@@ -35,20 +40,18 @@ namespace TestProject.Controllers
 
             ViewBag.SortOptions = new List<SelectListItem>
             {
-                new SelectListItem { Value = "created_date_desc", Text = "Newest First" },
-                new SelectListItem { Value = "created_date_asc", Text = "Oldest First" },
-                new SelectListItem { Value = "departure_time_asc", Text = "Departure Time (Ascending)" },
-                new SelectListItem { Value = "departure_time_desc", Text = "Departure Time (Descending)" },
-                new SelectListItem { Value = "return_time_asc", Text = "Return Time (Ascending)" },
-                new SelectListItem { Value = "return_time_desc", Text = "Return Time (Descending)" },
-                new SelectListItem { Value = "price_asc", Text = "Price (Low to High)" },
-                new SelectListItem { Value = "price_desc", Text = "Price (High to Low)" },
-                new SelectListItem { Value = "free_seats_asc", Text = "Free Seats (Ascending)" },
-                new SelectListItem { Value = "free_seats_desc", Text = "Free Seats (Descending)" },
-                new SelectListItem { Value = "total_seats_asc", Text = "Total Seats (Ascending)" },
-                new SelectListItem { Value = "total_seats_desc", Text = "Total Seats (Descending)" },
-                new SelectListItem { Value = "status_asc", Text = "Status (Ascending)" },
-                new SelectListItem { Value = "status_desc", Text = "Status (Descending)" }
+                new SelectListItem { Value = "created_date_desc", Text = "Най-нови" },
+                new SelectListItem { Value = "created_date_asc", Text = "Най-стари" },
+                new SelectListItem { Value = "departure_time_asc", Text = "Час на тръгване (възходящо)" },
+                new SelectListItem { Value = "departure_time_desc", Text = "Час на тръгване (низходящо)" },
+                new SelectListItem { Value = "return_time_asc", Text = "Час на връщане (възходящо)" },
+                new SelectListItem { Value = "return_time_desc", Text = "Час на връщане (низходящо)" },
+                new SelectListItem { Value = "price_asc", Text = "Цена (от ниска към висока)" },
+                new SelectListItem { Value = "price_desc", Text = "Цена (от висока към ниска)" },
+                new SelectListItem { Value = "free_seats_asc", Text = "Свободни места (възходящо)" },
+                new SelectListItem { Value = "free_seats_desc", Text = "Свободни места (низходящо)" },
+                new SelectListItem { Value = "total_seats_asc", Text = "Общо места (възходящо)" },
+                new SelectListItem { Value = "total_seats_desc", Text = "Общо места (низходящо)" }
             };
 
             // Fetch trips from the database
@@ -110,12 +113,6 @@ namespace TestProject.Controllers
                 case "total_seats_desc":
                     orderedTrips = orderedTrips.ThenByDescending(t => t.TotalSeats);
                     break;
-                case "status_asc":
-                    orderedTrips = orderedTrips.ThenBy(t => t.StatusTrip);
-                    break;
-                case "status_desc":
-                    orderedTrips = orderedTrips.ThenByDescending(t => t.StatusTrip);
-                    break;
                 default:
                     // Default secondary sort (e.g., Newest First)
                     orderedTrips = orderedTrips.ThenByDescending(t => t.CreatedDate);
@@ -146,13 +143,15 @@ namespace TestProject.Controllers
                 CreatedDate = trip.CreatedDate
             }).ToList();
 
+            ViewData["ShowActions"] = true; // should be false
+            ViewBag.ReturnUrl = returnUrl;
             // Return view with paginated list
             return View(new PaginatedList<Trip>(paginatedTrips, tripsList.Count, paginatedTrips.PageIndex, pageSize));
         }
 
 
         // GET: Trips/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public async Task<IActionResult> Details(int? id, string? returnUrl)
         {
             if (id == null)
             {
@@ -164,6 +163,8 @@ namespace TestProject.Controllers
                      .ThenInclude(r => r.User)
                 .Include(t => t.Driver)
                 .Include(t => t.TripParticipants)
+                .Include(t => t.Requests!)
+                     .ThenInclude(r => r.User)
                 .FirstOrDefaultAsync(m => m.Id == id);
 
             if (trip == null)
@@ -175,7 +176,8 @@ namespace TestProject.Controllers
             {
                 Id = trip.Id,
                 DriversId = trip.DriversId,
-                DriverName = trip.Driver?.UserName,
+                DriverName = trip.Driver.UserName,
+                DriverPhoneNumber = trip.Driver.PhoneNumber,
                 StartPosition = trip.StartPosition,
                 Destination = trip.Destination,
                 DepartureTime = trip.DepartureTime,
@@ -191,9 +193,11 @@ namespace TestProject.Controllers
                 TripParticipants = trip.TripParticipants,
                 IsRecurring = trip.IsRecurring,
                 RecurrenceInterval = trip.RecurrenceInterval,
-                NextRunDate = trip.NextRunDate
+                NextRunDate = trip.NextRunDate,
+                Requests = trip.Requests
             };
 
+            ViewBag.ReturnUrl = returnUrl;
             return View(tripViewModel);
         }
 
@@ -223,7 +227,7 @@ namespace TestProject.Controllers
 
             if (tripViewModel.IsRecurring && recurrenceInterval == TimeSpan.Zero)
             {
-                ModelState.AddModelError("", "Recurrence interval must be greater than zero.");
+                ModelState.AddModelError("", "Интервалът трябва да е по-голям от нула.");
             }
 
 
@@ -276,18 +280,9 @@ namespace TestProject.Controllers
 
                 _context.Add(trip);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            else
-            {
 
-                foreach (var modelState in ModelState.Values)
-                {
-                    foreach (var error in modelState.Errors)
-                    {
-                        Console.WriteLine($"Error: {error.ErrorMessage}");
-                    }
-                }
+                return RedirectToAction(nameof(Index));
+
             }
 
             ViewData["DriversId"] = new SelectList(_context.ApplicationUsers, "Id", "Id", tripViewModel.DriversId);
@@ -296,7 +291,7 @@ namespace TestProject.Controllers
 
         // GET: Trips/Edit/5
         [Authorize(Roles = "Admin,Driver")]
-        public async Task<IActionResult> Edit(int? id)
+        public async Task<IActionResult> Edit(int? id, string? returnUrl)
         {
             if (id == null || _context.Trips == null)
             {
@@ -330,10 +325,10 @@ namespace TestProject.Controllers
                 RecurrenceInterval = trip.RecurrenceInterval,
                 RecurrenceIntervalDays = reccuranceInterval.Days,
                 RecurrenceIntervalHours = reccuranceInterval.Hours,
-                RecurrenceIntervalMinutes = reccuranceInterval.Minutes 
+                RecurrenceIntervalMinutes = reccuranceInterval.Minutes
             };
 
-
+            ViewBag.ReturnUrl = returnUrl;
             ViewData["DriversId"] = new SelectList(_context.ApplicationUsers, "Id", "Id", trip.DriversId);
             return View(tripViewModel);
         }
@@ -344,7 +339,7 @@ namespace TestProject.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Admin,Driver")]
-        public async Task<IActionResult> Edit(int id, TripViewModel tripViewModel)
+        public async Task<IActionResult> Edit(int id, TripViewModel tripViewModel, string? returnUrl)
         {
             if (id != tripViewModel.Id)
             {
@@ -357,7 +352,7 @@ namespace TestProject.Controllers
 
             if (tripViewModel.IsRecurring && recurrenceInterval == TimeSpan.Zero)
             {
-                ModelState.AddModelError("", "Recurrence interval must be greater than zero.");
+                ModelState.AddModelError("", "Интервалът трябва да е по-голям от нула.");
             }
 
             if (ModelState.IsValid)
@@ -425,8 +420,9 @@ namespace TestProject.Controllers
                     trip.RecurrenceInterval = recurrenceInterval.ToString();
                     trip.NextRunDate = tripViewModel.DepartureTime.Add(recurrenceInterval);
 
-                    if (trip.FreeSeats <= 0)
+                    if (trip.FreeSeats <= 0 && trip.StatusTrip == tripViewModel.StatusTrip && trip.StatusTrip != TripStatus.Upcoming)
                     {
+                        trip.FreeSeats = 0;
                         trip.StatusTrip = TripStatus.Booked;
                     }
                     else
@@ -448,46 +444,26 @@ namespace TestProject.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
-            }
-            else
-            {
-
-                foreach (var modelState in ModelState.Values)
+                if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
                 {
-                    foreach (var error in modelState.Errors)
-                    {
-                        Console.WriteLine($"Error: {error.ErrorMessage}");
-                    }
+                    ViewBag.ReturnUrl = returnUrl;
+                    return Redirect(returnUrl); // Redirects back to the previous page
                 }
+
+
+                return RedirectToAction(nameof(Index));
+
             }
+
             ViewData["DriversId"] = new SelectList(_context.ApplicationUsers, "Id", "Id", tripViewModel.DriversId);
             return View(tripViewModel);
         }
 
-        // GET: Trips/Delete/5
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var trip = await _context.Trips
-                .Include(t => t.Driver)
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (trip == null)
-            {
-                return NotFound();
-            }
-
-            return View(trip);
-        }
 
         // POST: Trips/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> DeleteConfirmed(int id, string? returnUrl)
         {
             var trip = await _context.Trips.FindAsync(id);
             if (trip != null)
@@ -501,11 +477,19 @@ namespace TestProject.Controllers
                     }
                 }
 
+
+
                 _context.Trips.Remove(trip);
             }
 
             await _context.SaveChangesAsync();
+            if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
+            {
+                return Redirect(returnUrl); // Redirects back to the previous page
+            }
+
             return RedirectToAction(nameof(Index));
+
         }
 
         private bool TripExists(int id)

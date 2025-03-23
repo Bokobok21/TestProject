@@ -53,19 +53,19 @@ namespace TestProject.Areas.Identity.Pages.Account.Manage
             ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
             ///     directly from your code. This API may change or be removed in future releases.
             /// </summary>
-            [Required]
+            [Required(ErrorMessage = "Сегашната парола е задължителна")]
             [DataType(DataType.Password)]
-            [Display(Name = "Current password")]
+            [Display(Name = "Сегашна парола")]
             public string OldPassword { get; set; }
 
             /// <summary>
             ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
             ///     directly from your code. This API may change or be removed in future releases.
             /// </summary>
-            [Required]
-            [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
+            [Required(ErrorMessage = "Новата парола е задължителна")]
+            [StringLength(100, ErrorMessage = "{0} трябва да бъде с дължина между {2} и {1} символа.", MinimumLength = 6)]
             [DataType(DataType.Password)]
-            [Display(Name = "New password")]
+            [Display(Name = "Нова парола")]
             public string NewPassword { get; set; }
 
             /// <summary>
@@ -73,8 +73,8 @@ namespace TestProject.Areas.Identity.Pages.Account.Manage
             ///     directly from your code. This API may change or be removed in future releases.
             /// </summary>
             [DataType(DataType.Password)]
-            [Display(Name = "Confirm new password")]
-            [Compare("NewPassword", ErrorMessage = "The new password and confirmation password do not match.")]
+            [Display(Name = "Потвърдете паролата си")]
+            [Compare("NewPassword", ErrorMessage = "Паролите не съвпадат")]
             public string ConfirmPassword { get; set; }
         }
 
@@ -120,7 +120,7 @@ namespace TestProject.Areas.Identity.Pages.Account.Manage
 
             await _signInManager.RefreshSignInAsync(user);
             _logger.LogInformation("User changed their password successfully.");
-            StatusMessage = "Your password has been changed.";
+            StatusMessage = "Паролата ви беше сменена.";
 
             return RedirectToPage();
         }

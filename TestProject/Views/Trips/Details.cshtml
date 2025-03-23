@@ -1,4 +1,6 @@
-﻿@using Microsoft.AspNetCore.Identity
+﻿@using Microsoft.AspNetCore.Http.Extensions
+@using Microsoft.AspNetCore.Identity
+@using TestProject.Extentions
 @model TestProject.Models.ViewModels.TripViewModel
 
 @inject UserManager<ApplicationUser> UserManager
@@ -9,137 +11,179 @@
 
 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
-<h1>Details</h1>
+<h1>Детайли</h1>
 
 <div>
-    <h4>Trip</h4>
+    <h4>Пътуване</h4>
     <hr />
     <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Driver)
+        <dt class="col-sm-2">
+            Шофьор
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.DriverName)
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.StartPosition)
+
+        <dt class="col-sm-2">
+            Телефонен номер
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.DriverPhoneNumber)
+        </dd>
+
+        <dt class="col-sm-2">
+            Начална позиция
+        </dt>
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.StartPosition)
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Destination)
+
+        <dt class="col-sm-2">
+            Дестинация
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Destination)
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.DepartureTime)
+
+        <dt class="col-sm-2">
+            Час на тръгване
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.DepartureTime)
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.ReturnTime)
+
+        <dt class="col-sm-2">
+            Час на връщане
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.ReturnTime)
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Price)
+
+        <dt class="col-sm-2">
+            Цена
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Price)
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.TotalSeats)
+
+        <dt class="col-sm-2">
+            Общ брой места
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.TotalSeats)
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.FreeSeats)
+
+        <dt class="col-sm-2">
+            Свободни места
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.FreeSeats)
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.CarModel)
+
+        <dt class="col-sm-2">
+            Модел на колата
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.CarModel)
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.PlateNumber)
+
+        <dt class="col-sm-2">
+            Регистрационен номер
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.PlateNumber)
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.ImagePath)
+
+        <dt class="col-sm-2">
+            Снимка
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.ImagePath)
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.StatusTrip)
+
+        <dt class="col-sm-2">
+            Статус
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.StatusTrip)
         </dd>
 
-        @if(Model.IsRecurring == true)
+        @if (Model.IsRecurring == true)
         {
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.IsRecurring)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.IsRecurring)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.RecurrenceInterval)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.RecurrenceInterval)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.NextRunDate)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.NextRunDate)
-        </dd>
-        }
+            <dt class="col-sm-2">
+                Повтарящо се
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.IsRecurring)
+            </dd>
 
+            <dt class="col-sm-2">
+                Интервал на повторение
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.RecurrenceInterval)
+            </dd>
+
+            <dt class="col-sm-2">
+                Следваща дата
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.NextRunDate)
+            </dd>
+        }
     </dl>
 </div>
+
 <div>
     @if (Model.FreeSeats > 0)
     {
-        <form asp-controller="Requests" asp-action="SendJoinRequest" method="post">
-            <input type="hidden" name="tripId" value="@Model.Id" />
-            <button type="submit" class="btn btn-primary">Join Trip</button>
-        </form>
+
+        if (!Model.Requests.Any(r => r.UserId == User.Id()))
+        {
+
+            <form asp-controller="Requests" asp-action="SendJoinRequest" method="post">
+                <input type="hidden" name="returnUrl" value="@ViewBag.ReturnUrl" />
+                <input type="hidden" name="tripId" value="@Model.Id" />
+                <button type="submit" class="btn btn-primary">Заяви място</button>
+            </form>
+        }
+        else
+        {
+            <p>Вече имате заявка</p>
+        }
     }
     else
     {
-        <p>No free seats available.</p>
+        <p>Няма свободни места.</p>
+    }  
+
+    <a asp-controller="Trips" asp-action="Edit" asp-route-id="@Model.Id" asp-route-returnUrl="@Context.Request.Path">Edit</a> |
+    @* <a href="@ViewBag.ReturnUrl">Return To List</a> *@
+    @{
+        var url = Context.Request.GetDisplayUrl();
+        if (url.Contains("MyDriverTrips"))
+        {
+            <a asp-action="MyDriverTrips" asp-controller="DriverTrips">Върни се обратно</a>
+        }
+        else
+        {
+            <a asp-action="Index" asp-controller="Trips">Върни се обратно</a>
+        }
     }
-    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
 </div>
 
 
 
 @if (Model.StatusTrip == TripStatus.Finished)
 {
-    <h3>Reviews</h3>
+    <h3>Ревюта</h3>
     <div>
         @if (Model.Ratings.Any())
         {
             @foreach (var rating in Model.Ratings)
             {
                 <div>
-                    <p>User: @(rating.User.UserName ?? "Anonymous")</p>
+                    <p>User: @(rating.User.UserName ?? "Анонимно")</p>
                     <p>Score: @rating.Score/5</p>
                     <p>@(rating.Comment ?? "")</p>
                     <small>@rating.Date.ToString("yyyy-MM-dd")</small>
@@ -148,7 +192,7 @@
         }
         else
         {
-            <p>No reviews yet.</p>
+            <p>Няма ревюта.</p>
         }
     </div>
 
@@ -165,17 +209,17 @@
             asp-action="Create"
             asp-route-tripId="@Model.Id"
             class="btn btn-primary">
-                Leave a Review
+                Остави ревю
             </a>
         }
         else
         {
-            <p>You can't leave a review.</p>
+            <p>Не може да оставиш ревю.</p>
         }
 
     }
 }
 else
 {
-    <p>Reviews can only be left after the trip has finished.</p>
+    <p>Ревюта може да бюдат оставени само след като пътуването приключи.</p>
 }

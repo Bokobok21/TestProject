@@ -5,7 +5,7 @@
     ViewData["ActivePage"] = ManageNavPages.Index;
 }
 
-<h3>@ViewData["Title"]</h3>
+<h3>Профил</h3>
 <partial name="_StatusMessage" for="StatusMessage" />
 <div class="row">
     <div class="col-md-6">
@@ -13,17 +13,17 @@
             <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
             <div class="form-floating mb-3">
                 <input asp-for="Username" class="form-control" placeholder="Please choose your username." disabled />
-                <label asp-for="Username" class="form-label"></label>
+                <label asp-for="Username" class="form-label">Потребителско име</label>
             </div>
             @if (User.IsInRole("Driver"))
             {
                 <div>
                     <img src="@Model.CurrentUser.ImagePath" alt="Profile Picture" style="max-width: 200px;" />
-                    <p>Approved as Driver on: @Model.CurrentUser.DateOfDriverAcceptance?.ToString("yyyy-MM-dd")</p>
+                    <p>Станал шофьор на: @Model.CurrentUser.DateOfDriverAcceptance?.ToString("yyyy-MM-dd")</p>
 
                     <!-- Driver profile image upload form -->
                     <div class="form-group">
-                        <label>Update Profile Picture</label>
+                        <label>Смени профилната си снимка</label>
                         <input asp-for="Input.ImageFile" type="file" class="form-control" accept="image/*" />
                         <span asp-validation-for="Input.ImageFile" class="text-danger"></span>
                     </div>
@@ -32,13 +32,13 @@
             //be cautions with the role because everyone is a tourist by default 
             else @if (User.IsInRole("Tourist") && !Model.HasDriverRequest)
             {
-                <a asp-page="/Account/ApplyToBeDriver" class="btn btn-secondary">Apply to Be a Driver</a>
+                <a asp-page="/Account/ApplyToBeDriver" class="btn btn-secondary">Заяви да станеш шофьор</a>
             }
             else @if (User.IsInRole("Tourist") && Model.HasDriverRequest)
             {
-                <p>You have already submitted a driver application.</p>
+                <p>Заявката ви е в процес.</p>
             }
-            <button id="update-profile-button" type="submit" class="w-100 btn btn-lg btn-primary">Save</button>
+            <button id="update-profile-button" type="submit" class="w-100 btn btn-lg btn-primary">Запази</button>
         </form>
     </div>
 </div>

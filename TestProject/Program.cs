@@ -59,21 +59,19 @@ app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+    pattern: "{controller=Trips}/{action=Index}/{id?}");
 app.MapRazorPages();
 //app.MapControllers();
 
 app.Run();
 
+//if statements for the joining (also if it joins resend him to the same page so there is no issue with the edit after?)
+
+// when joining a tirp you then you can't edit it 
 
 // in the partial view ( possibly make it only for one trip and not the whole list)
 
-// trip about background service is reccuring should stay vissible or not 
-// style display none should be fixed
-
-
 // when changing the user's role, check if the user is a driver and if he is delete all his trips/put them in hold
-// tripParticipant should be able to be modified by the admin 
 
 // admin should accept trips?
 
@@ -86,8 +84,8 @@ app.Run();
 
 // keep order of request when free seats are changed to delete the users that have entered last and only keep the first ones
 
-// fix registering with the same email and changing password
 
+// tripParticipant should be able to be modified by the admin 
 
 // fix foulders and files
 // the role should be passenger not tourist

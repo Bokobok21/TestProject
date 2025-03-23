@@ -1,24 +1,25 @@
 ﻿@using TestProject.Models
+@using TestProject.Extentions;
 @model IEnumerable<Trip>
 
 <table class="table">
     <thead>
         <tr>
-            <th>Driver</th>
-            <th>Start Position</th>
-            <th>Destination</th>
-            <th>Departure Time</th>
-            <th>Return Time</th>
-            <th>Price</th>
-            <th>Total Seats</th>
-            <th>Free Seats</th>
-            <th>Car Model</th>
-            <th>Plate Number</th>
-            <th>Picture</th>
-            <th>Status</th>
+            <th>Шофьор</th>
+            <th>Начална позиция</th>
+            <th>Дестинация</th>
+            <th>Час на тръгване</th>
+            <th>Час на връщане</th>
+            <th>Цена</th>
+            <th>Общо места</th>
+            <th>Свободни места</th>
+            <th>Модел на колата</th>
+            <th>Регистрационен номер</th>
+            <th>Снимка</th>
+            <th>Статус</th>
             @if (ViewData["ShowActions"] as bool? ?? false)
             {
-            <th>Actions</th>
+                <th>Опции</th>
             }
         </tr>
     </thead>
@@ -40,14 +41,26 @@
                     <img src="@item.ImagePath" alt="Trip Picture" style="max-width: 100px;" />
                 </td>
                 <td> @Html.DisplayFor(modelItem => item.StatusTrip)</td>
+                @*   @if (item.Driver.Id == User.Id())
+                { *@
+
                 @if (ViewData["ShowActions"] as bool? ?? false)
                 {
                     <td>
-                        <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                        <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                        <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                        <a asp-controller="Trips" asp-action="Edit" asp-route-id="@item.Id" asp-route-returnUrl="@Context.Request.Path">Edit</a> |
+                        <a asp-controller="Trips" asp-action="Details" asp-route-id="@item.Id" asp-route-returnUrl="@Context.Request.Path">Details</a> |
+                        <form asp-controller="Trips" asp-action="Delete" method="post" style="display:inline">
+                            @Html.AntiForgeryToken()
+                            <input type="hidden" name="id" value="@item.Id" />
+                            <input type="hidden" name="returnUrl" value="@Context.Request.Path" />
+                            <button type="submit" class="btn btn-sm btn-danger"
+                                    onclick="return confirm('Сигурен ли си, че искаш да го изтриеш?')">
+                                Delete
+                            </button>
+                        </form>
                     </td>
                 }
+                @*  } *@
             </tr>
         }
     </tbody>

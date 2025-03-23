@@ -9,16 +9,16 @@
     <input type="hidden" name="tripId" value="@ViewData["TripId"]" />
 
     <div class="form-group">
-        <label asp-for="Score"></label>
+        <label asp-for="Score">Рейтинг</label>
         <input asp-for="Score" class="form-control" />
         <span asp-validation-for="Score" class="text-danger"></span>
     </div>
     <div class="form-group">
-        <label asp-for="Comment"></label>
+        <label asp-for="Comment">Коментар</label>
         <textarea asp-for="Comment" class="form-control"></textarea>
         <span asp-validation-for="Comment" class="text-danger"></span>
     </div>
-    <button type="submit" class="btn btn-success">Submit Review</button>
+    <button type="submit" class="btn btn-success">Изпрати ревю</button>
 </form>
 
 @section Scripts {

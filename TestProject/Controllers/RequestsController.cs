@@ -122,10 +122,15 @@ namespace TestProject.Controllers
         public async Task<IActionResult> DenyRequest(int requestId)
         {
             var request = await _context.Requests.FindAsync(requestId);
+            var user = await _context.Users.FindAsync(requestId);
+
             if (request == null || request.StatusRequest != RequestStatus.Pending)
             {
                 return NotFound();
             }
+
+            var requests = await _context.Requests.Where(r => r.UserId == user.Id).ToListAsync();
+            _context.Requests.RemoveRange(requests);
 
             request.StatusRequest = RequestStatus.Rejected;
             await _context.SaveChangesAsync();

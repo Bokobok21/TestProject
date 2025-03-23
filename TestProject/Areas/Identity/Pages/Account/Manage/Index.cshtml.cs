@@ -121,7 +121,7 @@ namespace TestProject.Areas.Identity.Pages.Account.Manage
 
                 // Update ImagePath
                 user.ImagePath = $"/images/drivers/{uniqueFileName}";
-                StatusMessage = "Profile picture updated successfully!";
+                StatusMessage = "Снимката беше сменена успешно!";
             }
             else if (string.IsNullOrEmpty(user.ImagePath) || user.ImagePath.Equals("/images/drivers/default-image-Driver.jpg", StringComparison.OrdinalIgnoreCase))
             {
