@@ -5,41 +5,115 @@
     ViewData["Title"] = "Log in";
 }
 
-<h1>Влез в акаунта си</h1>
-<div class="row">
-    <div class="col-md-4">
-        <section>
-            <form id="account" method="post">
-                <hr />
-                <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
-                <div class="form-floating mb-3">
-                    <input asp-for="Input.UserName" class="form-control" autocomplete="username" aria-required="true" placeholder="UserName" />
-                    <label asp-for="Input.UserName" class="form-label">Потребителско име</label>
-                    <span asp-validation-for="Input.UserName" class="text-danger"></span>
-                </div>
-                <div class="form-floating mb-3">
-                    <input asp-for="Input.Password" class="form-control" autocomplete="current-password" aria-required="true" placeholder="password" />
-                    <label asp-for="Input.Password" class="form-label">Парола</label>
-                    <span asp-validation-for="Input.Password" class="text-danger"></span>
-                </div>
-                <div class="checkbox mb-3">
-                    <label asp-for="Input.RememberMe" class="form-label">
-                        <input class="form-check-input" asp-for="Input.RememberMe" />
-                       Запомни ме
-                    </label>
-                </div>
-                <div>
-                    <button id="login-submit" type="submit" class="w-100 btn btn-lg btn-primary">Влез</button>
-                </div>
-                <div>
-                    <p>
-                      Нямаш акаунт? <a asp-page="./Register" asp-route-returnUrl="@Model.ReturnUrl">Регистрирай се</a>
-                    </p>
-                </div>
-            </form>
-        </section>
-    </div>
+<style>
+    body {
+        background: url('/images/site/Form.jpg') no-repeat center center fixed;
+        background-size: cover;
+        background-blend-mode: darken;
+        overflow: hidden;
+        color: white;
+        font-family: Arial, sans-serif;
+        margin-top: 60px; /* Adjust margin to accommodate the fixed navbar */
+        height: 100vh; /* Make sure body takes the full height of the screen */
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    
+    .container {
+        display: flex;
+        justify-content: center;
+    }
 
+    .navbar {
+        position: fixed;
+        top: 0;
+        width: 100%;
+        z-index: 1000;
+    }
+
+
+    .login-container {
+        background: rgba(0, 0, 50, 0.8);
+        padding: 30px;
+        border-radius: 10px;
+        width: 700px;
+        max-width: 700px;
+        box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
+    }
+
+    h2 {
+        text-align: center;
+        color: #fff;
+    }
+
+    .form-floating {
+        margin-bottom: 20px;
+    }
+
+        .form-floating input {
+            background-color: rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+
+        .form-floating label {
+            color: white; /* Ensuring label is visible */
+        }
+
+    .btn-primary {
+        background-color: #007bff;
+        border-color: #007bff;
+    }
+
+        .btn-primary:hover {
+            background-color: #0056b3;
+            border-color: #004085;
+        }
+
+    a {
+        color: #00aaff;
+    }
+
+        a:hover {
+            color: #0088cc;
+        }
+
+    .text-center p {
+        color: white;
+    }
+</style>
+
+<div class="login-container">
+    <h2>Влез в акаунта си</h2>
+    <hr />
+    <form id="account" method="post">
+        <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
+
+        <div class="form-floating mb-3">
+            <input asp-for="Input.UserName" class="form-control" autocomplete="username" aria-required="true" placeholder="UserName" />
+            <label asp-for="Input.UserName" class="form-label">Потребителско име</label>
+            <span asp-validation-for="Input.UserName" class="text-danger"></span>
+        </div>
+
+        <div class="form-floating mb-3">
+            <input asp-for="Input.Password" type="password" class="form-control" autocomplete="current-password" aria-required="true" placeholder="Password" />
+            <label asp-for="Input.Password" class="form-label">Парола</label>
+            <span asp-validation-for="Input.Password" class="text-danger"></span>
+        </div>
+
+        <div class="checkbox mb-3">
+            <label asp-for="Input.RememberMe" class="form-label">
+                <input class="form-check-input" asp-for="Input.RememberMe" />
+                Запомни ме
+            </label>
+        </div>
+
+        <button id="login-submit" type="submit" class="w-100 btn btn-lg btn-primary">Влез</button>
+
+        <div class="text-center mt-3">
+            <p>Нямаш акаунт? <a asp-page="./Register" asp-route-returnUrl="@Model.ReturnUrl">Регистрирай се</a></p>
+        </div>
+    </form>
 </div>
 
 @section Scripts {

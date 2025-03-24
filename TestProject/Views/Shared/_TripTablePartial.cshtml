@@ -27,7 +27,7 @@
         @foreach (var item in Model)
         {
             <tr>
-                <td>@(item.Driver?.UserName ?? "Anonymous")</td>
+                <td>@(item.Driver?.UserName ?? "Вече не съществува")</td>
                 <td>@item.StartPosition</td>
                 <td>@item.Destination</td>
                 <td>@item.DepartureTime.ToString("yyyy-MM-dd HH:mm")</td>

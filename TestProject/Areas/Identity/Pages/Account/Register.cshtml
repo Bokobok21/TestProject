@@ -4,53 +4,159 @@
     ViewData["Title"] = "Register";
 }
 
+<style>
+    body {
+        background: url('/images/site/Form.jpg') no-repeat center center fixed;
+        background-size: cover;
+        background-blend-mode: darken;
+        color: white;
+        font-family: Arial, sans-serif;
+        margin-top: 60px; /* Adjust margin to accommodate the fixed navbar */
+        height: 90%; /* Make sure body takes the full height of the screen */
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
 
-<div class="row">
-    <div class="col-md-4">
-        <form id="registerForm" asp-route-returnUrl="@Model.ReturnUrl" method="post">
-            <h2>Регистрирай се</h2>
-            <hr />
-            <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
-            <div class="form-floating mb-3">
-                <input asp-for="Input.FirstName" class="form-control" autocomplete="given-name" aria-required="true" placeholder="FirstName" />
-                <label asp-for="Input.FirstName">Име</label>
-                <span asp-validation-for="Input.FirstName" class="text-danger"></span>
-            </div>
-            <div class="form-floating mb-3">
-                <input asp-for="Input.LastName" class="form-control" autocomplete="family-name" aria-required="true" placeholder="LastName" />
-                <label asp-for="Input.LastName">Фамилия</label>
-                <span asp-validation-for="Input.LastName" class="text-danger"></span>
-            </div>
-            <div class="form-floating mb-3">
-                <input asp-for="Input.UserName" class="form-control" aria-required="true" placeholder="UserName" />
-                <label asp-for="Input.UserName">Потребителско име</label>
-                <span asp-validation-for="Input.UserName" class="text-danger"></span>
-            </div>
-            <div class="form-floating mb-3">
-                <input asp-for="Input.Email" class="form-control" autocomplete="email" aria-required="true" placeholder="name@example.com" />
-                <label asp-for="Input.Email">Имейл</label>
-                <span asp-validation-for="Input.Email" class="text-danger"></span>
-            </div>
-            <div class="form-floating mb-3">
-                <input asp-for="Input.PhoneNumber" class="form-control" autocomplete="tel" aria-required="true" placeholder="+359877388244" />
-                <label asp-for="Input.PhoneNumber">Телефонен номер</label>
-                <span asp-validation-for="Input.PhoneNumber" class="text-danger"></span>
-            </div>  
-            <div class="form-floating mb-3">
-                <input asp-for="Input.Password" class="form-control" autocomplete="new-password" aria-required="true" placeholder="password" />
-                <label asp-for="Input.Password">Парола</label>
-                <span asp-validation-for="Input.Password" class="text-danger"></span>
-            </div>
-            <div class="form-floating mb-3">
-                <input asp-for="Input.ConfirmPassword" class="form-control" autocomplete="new-password" aria-required="true" placeholder="password" />
-                <label asp-for="Input.ConfirmPassword">Потвърди паролата</label>
-                <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
-            </div>
-            <button id="registerSubmit" type="submit" class="w-100 btn btn-lg btn-primary">Регистрирай</button>
-        </form>
-    </div>
+    .container {
+        display: flex;
+        justify-content: center;
+    }
+
+    .navbar {
+        position: fixed;
+        top: 0;
+        width: 100%;
+        z-index: 1000;
+    }
+
+
+    .login-container {
+        background: rgba(0, 0, 50, 0.8);
+        display: flex;
+        justify-content: center;
+        padding: 30px;
+        border-radius: 10px;
+        width: 700px;
+        padding-bottom: 0px;
+        max-width: 700px;
+        box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
+        position: absolute;
+        top: 50%;
+        left: 50%;    
+        transform: translate(-50%, -50%);
+        margin: 30px 0px;
+        overflow: auto; /* Ensure it scrolls if needed */
+        max-height: 90vh; /* Limit height to 90% of the viewport */
+    }
+
+    button#registerSubmit {
+        margin-bottom: 40px; /* Adds space below the button */
+    }
+
+    h2 {
+        text-align: center;
+        color: #fff;
+    }
+    
+    form{
+        margin-top: -20px;
+        position: relative;
+        width: 300%;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        max-height: 100%;
+        padding: 20px;
+    }
+
+   /*  form {
+        width: 100%;
+        padding: 20px;
+    } */
+
+    .form-floating {
+        margin-bottom: 20px;
+    }
+
+        .form-floating input {
+            background-color: rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+
+        .form-floating label {
+            color: white; /* Ensuring label is visible */
+        }
+
+    .btn-primary {
+        background-color: #007bff;
+        border-color: #007bff;
+    }
+
+        .btn-primary:hover {
+            background-color: #0056b3;
+            border-color: #004085;
+        }
+
+    a {
+        color: #00aaff;
+    }
+
+        a:hover {
+            color: #0088cc;
+        }
+
+    .text-center p {
+        color: white;
+    }
+</style>
+
+<div class="login-container">
+ 
+        <div class="col-md-4">
+            <form id="registerForm" asp-route-returnUrl="@Model.ReturnUrl" method="post">
+                <h2>Регистрирай се</h2>
+                <hr />
+                <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
+                <div class="form-floating mb-3">
+                    <input asp-for="Input.FirstName" class="form-control" autocomplete="given-name" aria-required="true" placeholder="FirstName" />
+                    <label asp-for="Input.FirstName">Име</label>
+                    <span asp-validation-for="Input.FirstName" class="text-danger"></span>
+                </div>
+                <div class="form-floating mb-3">
+                    <input asp-for="Input.LastName" class="form-control" autocomplete="family-name" aria-required="true" placeholder="LastName" />
+                    <label asp-for="Input.LastName">Фамилия</label>
+                    <span asp-validation-for="Input.LastName" class="text-danger"></span>
+                </div>
+                <div class="form-floating mb-3">
+                    <input asp-for="Input.UserName" class="form-control" aria-required="true" placeholder="UserName" />
+                    <label asp-for="Input.UserName">Потребителско име</label>
+                    <span asp-validation-for="Input.UserName" class="text-danger"></span>
+                </div>
+                <div class="form-floating mb-3">
+                    <input asp-for="Input.Email" class="form-control" autocomplete="email" aria-required="true" placeholder="name@example.com" />
+                    <label asp-for="Input.Email">Имейл</label>
+                    <span asp-validation-for="Input.Email" class="text-danger"></span>
+                </div>
+                <div class="form-floating mb-3">
+                    <input asp-for="Input.PhoneNumber" class="form-control" autocomplete="tel" aria-required="true" placeholder="+359877388244" />
+                    <label asp-for="Input.PhoneNumber">Телефонен номер</label>
+                    <span asp-validation-for="Input.PhoneNumber" class="text-danger"></span>
+                </div>
+                <div class="form-floating mb-3">
+                    <input asp-for="Input.Password" class="form-control" autocomplete="new-password" aria-required="true" placeholder="password" />
+                    <label asp-for="Input.Password">Парола</label>
+                    <span asp-validation-for="Input.Password" class="text-danger"></span>
+                </div>
+                <div class="form-floating mb-3">
+                    <input asp-for="Input.ConfirmPassword" class="form-control" autocomplete="new-password" aria-required="true" placeholder="password" />
+                    <label asp-for="Input.ConfirmPassword">Потвърди паролата</label>
+                    <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
+                </div>
+                <button id="registerSubmit" type="submit" class="w-100 btn btn-lg btn-primary">Регистрирай</button>
+            </form>
+        </div>
 </div>
-
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
 }

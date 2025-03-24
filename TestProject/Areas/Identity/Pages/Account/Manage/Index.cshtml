@@ -15,10 +15,15 @@
                 <input asp-for="Username" class="form-control" placeholder="Please choose your username." disabled />
                 <label asp-for="Username" class="form-label">Потребителско име</label>
             </div>
+            @{
+                string style1 = "none";
+            }
+
             @if (User.IsInRole("Driver"))
             {
+                style1 = "block";
                 <div>
-                    <img src="@Model.CurrentUser.ImagePath" alt="Profile Picture" style="max-width: 200px;" />
+                    <img src="@Model.CurrentUser.ImagePath" alt="Profile Picture" style="max-width: 50%;" />
                     <p>Станал шофьор на: @Model.CurrentUser.DateOfDriverAcceptance?.ToString("yyyy-MM-dd")</p>
 
                     <!-- Driver profile image upload form -->
@@ -26,19 +31,19 @@
                         <label>Смени профилната си снимка</label>
                         <input asp-for="Input.ImageFile" type="file" class="form-control" accept="image/*" />
                         <span asp-validation-for="Input.ImageFile" class="text-danger"></span>
-                    </div>
+                    </div> <br />
                 </div>
             }
             //be cautions with the role because everyone is a tourist by default 
             else @if (User.IsInRole("Tourist") && !Model.HasDriverRequest)
             {
-                <a asp-page="/Account/ApplyToBeDriver" class="btn btn-secondary">Заяви да станеш шофьор</a>
+                <a asp-page="/Account/ApplyToBeDriver" class="w-100 btn btn-lg btn-primary">Заяви да станеш шофьор</a>
             }
             else @if (User.IsInRole("Tourist") && Model.HasDriverRequest)
             {
                 <p>Заявката ви е в процес.</p>
             }
-            <button id="update-profile-button" type="submit" class="w-100 btn btn-lg btn-primary">Запази</button>
+            <button id="update-profile-button" type="submit" class="w-100 btn btn-lg btn-primary" style="display: @style1;">Запази</button>
         </form>
     </div>
 </div>

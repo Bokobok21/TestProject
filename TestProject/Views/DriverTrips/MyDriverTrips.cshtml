@@ -1,36 +1,9 @@
 ﻿@{
     ViewData["Title"] = "Driver Trips";
 }
-@* 
-<h2>My Created Trips</h2>
-<table>
-    <tr>
-        <th>Destination</th>
-        <th>Start Position</th>
-        <th>Price</th>
-        <th>Departure Time</th>
-        <th>Free Seats</th>
-        <th>Action</th>
-    </tr>
-    @foreach (var trip in Model)
-    {
-        <tr>
-            <td>@trip.Destination</td>
-            <td>@trip.StartPosition</td>
-            <td>@trip.Price</td>
-            <td>@trip.DepartureTime</td>
-            <td>@trip.FreeSeats</td>
-            <td>
-                <td>
-                    <form asp-action="DeleteTrip" asp-controller="DriverTrips" method="post" onsubmit="return confirm('Are you sure?')">
-                        <input type="hidden" name="id" value="@trip.Id" />
-                        <button type="submit">Delete</button>
-                    </form>
-                </td>
-            </td>
-        </tr>
-    }
-</table>
- *@
+
+<p>
+    <a asp-controller="Trips" asp-action="Create" asp-route-returnUrl="@Context.Request.Path">Създай ново пътешествие</a>
+</p>
 
 <partial name="_TripTablePartial" model="Model" />

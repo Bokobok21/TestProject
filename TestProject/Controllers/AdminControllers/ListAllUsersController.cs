@@ -86,7 +86,7 @@ public class ListAllUsersController : Controller
 
         return View(paginatedUsers);
     }
-        
+
     // POST: Admin/EditRole
     [HttpPost]
     [ValidateAntiForgeryToken]
@@ -124,6 +124,15 @@ public class ListAllUsersController : Controller
         {
             user.DateOfDriverAcceptance = null;
             user.ImagePath = null;
+
+            var trips = await _context.Trips.Where(rd => rd.DriversId == user.Id && rd.StatusTrip != TripStatus.Finished).ToListAsync();
+            _context.Trips.RemoveRange(trips);
+
+            var requests = await _context.Requests.Where(r => r.Trip.DriversId == user.Id && r.Trip.StatusTrip != TripStatus.Finished).ToListAsync();
+            _context.Requests.RemoveRange(requests);
+
+            var tripParticipants = await _context.TripParticipants.Where(tp => tp.Trip.DriversId == user.Id && tp.Trip.StatusTrip != TripStatus.Finished).ToListAsync();
+            _context.TripParticipants.RemoveRange(tripParticipants);
         }
 
         // Save changes to user

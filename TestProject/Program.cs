@@ -59,11 +59,13 @@ app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Trips}/{action=Index}/{id?}");
+    pattern: "{controller=Home}/{action=Index}/{id?}");
 app.MapRazorPages();
 //app.MapControllers();
 
 app.Run();
+
+// password iziskvaniq are still in english
 
 //if statements for the joining (also if it joins resend him to the same page so there is no issue with the edit after?)
 

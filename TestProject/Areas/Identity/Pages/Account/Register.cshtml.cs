@@ -79,24 +79,24 @@ namespace TestProject.Areas.Identity.Pages.Account
             ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
             ///     directly from your code. This API may change or be removed in future releases.
             /// </summary>
-            [Required]
+            [Required(ErrorMessage = "Полето е задължително")]
             [EmailAddress]
             [Display(Name = "Email")]
             public string Email { get; set; }
 
-            [Required]
+            [Required(ErrorMessage = "Полето е задължително")]
             [Display(Name = "UserName")]
             public string UserName { get; set; }
 
-            [Required]
+            [Required(ErrorMessage = "Полето е задължително")]
             [Display(Name = "FirstName")]
             public string FirstName { get; set; }
 
-            [Required]
+            [Required(ErrorMessage = "Полето е задължително")]
             [Display(Name = "LastName")]
             public string LastName { get; set; }
 
-            [Required]
+            [Required(ErrorMessage = "Полето е задължително")]
             [Display(Name = "Phone number")]
             public string PhoneNumber { get; set; }
 
@@ -104,7 +104,7 @@ namespace TestProject.Areas.Identity.Pages.Account
             ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
             ///     directly from your code. This API may change or be removed in future releases.
             /// </summary>
-            [Required]
+            [Required(ErrorMessage = "Полето е задължително")]
             [StringLength(100, ErrorMessage = "{0} трябва да бъде с дължина между {2} и {1} символа.", MinimumLength = 6)]
 
             [DataType(DataType.Password)]

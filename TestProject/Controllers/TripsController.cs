@@ -175,6 +175,7 @@ namespace TestProject.Controllers
             var tripViewModel = new TripViewModel
             {
                 Id = trip.Id,
+                Driver = trip.Driver,
                 DriversId = trip.DriversId,
                 DriverName = trip.Driver.UserName,
                 DriverPhoneNumber = trip.Driver.PhoneNumber,
@@ -203,8 +204,9 @@ namespace TestProject.Controllers
 
         // GET: Trips/Create
         [Authorize(Roles = "Admin,Driver")]
-        public IActionResult Create()
+        public IActionResult Create(string? returnUrl)
         {
+            ViewBag.ReturnUrl = returnUrl;
             return View();
         }
 
@@ -214,7 +216,7 @@ namespace TestProject.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Admin,Driver")]
-        public async Task<IActionResult> Create(TripViewModel tripViewModel)
+        public async Task<IActionResult> Create(TripViewModel tripViewModel, string? returnUrl)
         {
 
             tripViewModel.DriversId = User.Id();
@@ -280,6 +282,12 @@ namespace TestProject.Controllers
 
                 _context.Add(trip);
                 await _context.SaveChangesAsync();
+
+                if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
+                {
+                    ViewBag.ReturnUrl = returnUrl;
+                    return Redirect(returnUrl); // Redirects back to the previous page
+                }
 
                 return RedirectToAction(nameof(Index));
 

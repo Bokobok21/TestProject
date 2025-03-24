@@ -53,31 +53,38 @@
                 <td>@($"{item.User.FirstName} {item.User.LastName}")</td>
                 <td>@item.User.UserName</td>
                 <td>@item.Role</td>
-                <td>
-                    <!-- Role Edit Form -->
-                    <form asp-action="EditRole" method="post">
-                        <input type="hidden" name="userId" value="@item.User.Id" />
-                        <select name="newRole" class="form-control">
-                            @foreach (var role in ViewBag.Roles as SelectList)
-                            {
-                                <option value="@role.Value" selected="@(role.Value == item.Role)">
-                                    @role.Text
-                                </option>
-                            }
-                        </select>
-                        <button type="submit" class="btn btn-sm btn-secondary">Update Role</button>
-                    </form>
+                @if (item.User.UserName != "admin@example.com")
+                {
+                    <td class="actions-center">
+                        <!-- Role Edit Form -->
+                        <form asp-action="EditRole" method="post">
+                            <input type="hidden" name="userId" value="@item.User.Id" />
+                            <select name="newRole" class="form-control ">
+                                @foreach (var role in ViewBag.Roles as SelectList)
+                                {
+                                    <option value="@role.Value" selected="@(role.Value == item.Role)">
+                                        @role.Text
+                                    </option>
+                                }
+                            </select>
+                            <button type="submit" class="btn btn-sm btn-secondary">Update Role</button>
+                        </form>
 
-                    <!-- Delete User Form -->
-                    <form asp-action="DeleteUser" method="post" style="display:inline">
-                        @Html.AntiForgeryToken()
-                        <input type="hidden" name="id" value="@item.User.Id" />
-                        <button type="submit" class="btn btn-sm btn-danger"
-                                onclick="return confirm('Сигурен ли си, че искаш да го изтриеш?')">
-                            Delete
-                        </button>
-                    </form>
-                </td>
+                        <!-- Delete User Form -->
+                        <form asp-action="DeleteUser" method="post" style="display:inline">
+                            @Html.AntiForgeryToken()
+                            <input type="hidden" name="id" value="@item.User.Id" />
+                            <button type="submit" class="btn btn-sm btn-danger"
+                                    onclick="return confirm('Сигурен ли си, че искаш да го изтриеш?')">
+                                Delete
+                            </button>
+                        </form>
+                    </td>
+                }
+                else
+                {
+                    <td class="actions-center">You can't edit this user</td>
+                }
             </tr>
         }
     </tbody>
@@ -121,3 +128,14 @@ else
         document.getElementById("searchFilterForm").submit();
     }
 </script>
+
+<style>
+    .actions-center {
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+    }
+
+
+
+</style>
