@@ -65,26 +65,29 @@ app.MapRazorPages();
 
 app.Run();
 
-// password iziskvaniq are still in english
+// in the list all users admind panel when i tourist just got changed to driver via a request in the panel it isn't reflected and it still shows tourist even though he is a driver now 
 
-//if statements for the joining (also if it joins resend him to the same page so there is no issue with the edit after?)
-
-// when joining a tirp you then you can't edit it 
-
-// in the partial view ( possibly make it only for one trip and not the whole list)
-
-// when changing the user's role, check if the user is a driver and if he is delete all his trips/put them in hold
-
-// admin should accept trips?
-
-//when tripparticipant is denied delete the request so he can request again..
-
-// fix editing of status in trips because it resets or doesn't change the status
+//when tripparticipant is denied delete the request so he can request again.. 
 
 // he shoudn't be able to join a trip at the same time of another one 
 // a/an driver/user can't be on two trips at the same time
 
+// fix editing of status in trips because it resets or doesn't change the status 
+
 // keep order of request when free seats are changed to delete the users that have entered last and only keep the first ones
+
+// password iziskvaniq are still in english
+
+//if statements for the joining in trip back to list meaingng(also if it joins resend him to the same page so there is no issue with the edit after?)
+// when joining a tirp you then you can't edit it 
+
+
+// when changing the user's role, check if the user is a driver and if he is delete all his trips/put them in hold
+//this should be done run checks on it
+
+// admin should accept trips???
+
+
 
 
 // tripParticipant should be able to be modified by the admin 
