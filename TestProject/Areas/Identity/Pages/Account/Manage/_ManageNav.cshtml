@@ -7,4 +7,8 @@
     <li class="nav-item"><a class="nav-link @ManageNavPages.IndexNavClass(ViewContext)" id="profile" asp-page="./Index">Профил</a></li>
     <li class="nav-item"><a class="nav-link @ManageNavPages.ChangePasswordNavClass(ViewContext)" id="change-password" asp-page="./ChangePassword">Смяна на парола</a></li>
     <li class="nav-item"><a class="nav-link" asp-controller="UserPanel" asp-action="Index">Моят панел</a></li>
+    @if (User.IsInRole("Admin"))
+    {
+        <li class="nav-item"><a class="nav-link" asp-controller="ListAllUsers" asp-action="Users">Админ панел</a></li>
+    }
 </ul>

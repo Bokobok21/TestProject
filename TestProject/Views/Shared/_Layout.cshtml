@@ -24,18 +24,16 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Trips" asp-action="Index">Пътешествия</a>
                         </li>
-                
+
                        @if(User.IsInRole("Admin"))
-                       {
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Trips" asp-action="Index">Пътешествия</a>
-                        </li>
-                        } 
-                        @if (User.IsInRole("Driver"))
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="TripParticipants" asp-action="Index">Участници</a>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="ListAllUsers" asp-action="Users">Админ Панел</a>
                             </li>
+                        }
+                        @if (User.IsInRole("Driver"))
+                        {
+
                         }
                     </ul>
                     <partial name="_LoginPartial" />
@@ -49,7 +47,7 @@
         </main>
     </div>
 
-  
+
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>

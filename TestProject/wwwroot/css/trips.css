@@ -241,13 +241,44 @@ body {
     position: absolute;
     top: 10px;
     left: 10px;
-    background-color: var(--secondary);
-    color: white;
+/*    background-color: var(--secondary);
+    color: white;*/
     padding: 4px 10px;
     border-radius: 4px;
     font-size: 0.75rem;
     font-weight: 500;
     z-index: 1;
+}
+
+
+.status-upcoming {
+    background-color: var(--secondary);
+    color: white;
+}
+
+.status-completed {
+    background-color: var(--gray-dark);
+    color: white;
+}
+
+.status-cancelled {
+    background-color: var(--danger);
+    color: white;
+}
+
+.status-in-progress {
+    background-color: #ff9800; /* Orange */
+    color: white;
+}
+
+.status-full {
+    background-color: #007bff; /* blue */
+    color: white;
+}
+
+.status-default {
+    background-color: var(--gray);
+    color: var(--gray-dark);
 }
 
 .trip-content {

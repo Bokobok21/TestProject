@@ -143,7 +143,7 @@ namespace TestProject.Controllers
                 CreatedDate = trip.CreatedDate
             }).ToList();
 
-            ViewData["ShowActions"] = true; // should be false
+            //ViewData["ShowActions"] = true; // should be false
             ViewBag.ReturnUrl = returnUrl;
             // Return view with paginated list
             return View(new PaginatedList<Trip>(paginatedTrips, tripsList.Count, paginatedTrips.PageIndex, pageSize));
