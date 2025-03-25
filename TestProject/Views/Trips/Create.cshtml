@@ -8,62 +8,61 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Edit" enctype="multipart/form-data">
+        <form asp-action="Create" enctype="multipart/form-data">
             <input type="hidden" name="returnUrl" value="@ViewBag.ReturnUrl" />
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="Id" />
 
             <div class="form-group">
-                <label for="StartPosition" class="control-label">Начална Позиция</label>
+                <label asp-for="StartPosition" class="control-label">Начална Позиция</label>
                 <input asp-for="StartPosition" class="form-control" />
                 <span asp-validation-for="StartPosition" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label for="Destination" class="control-label">Дестинация</label>
+                <label asp-for="Destination" class="control-label">Дестинация</label>
                 <input asp-for="Destination" class="form-control" />
                 <span asp-validation-for="Destination" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label for="DepartureTime" class="control-label">Час на заминаване</label>
+                <label asp-for="DepartureTime" class="control-label">Час на заминаване</label>
                 <input asp-for="DepartureTime" class="form-control" />
                 <span asp-validation-for="DepartureTime" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label for="ReturnTime" class="control-label">Час на връщане</label>
+                <label asp-for="ReturnTime" class="control-label">Час на връщане</label>
                 <input asp-for="ReturnTime" class="form-control" />
                 <span asp-validation-for="ReturnTime" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label for="Price" class="control-label">Цена</label>
+                <label asp-for="Price" class="control-label">Цена</label>
                 <input asp-for="Price" class="form-control" />
                 <span asp-validation-for="Price" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label for="TotalSeats" class="control-label">Общо места</label>
+                <label asp-for="TotalSeats" class="control-label">Общо места</label>
                 <input asp-for="TotalSeats" class="form-control" />
                 <span asp-validation-for="TotalSeats" class="text-danger"></span>
             </div>
 
             <div class="form-group">
-                <label for="CarModel" class="control-label">Модел на автомобила</label>
+                <label asp-for="CarModel" class="control-label">Модел на автомобила</label>
                 <input asp-for="CarModel" class="form-control" />
                 <span asp-validation-for="CarModel" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label for="PlateNumber" class="control-label">Регистрационен номер</label>
+                <label asp-for="PlateNumber" class="control-label">Регистрационен номер</label>
                 <input asp-for="PlateNumber" class="form-control" />
                 <span asp-validation-for="PlateNumber" class="text-danger"></span>
             </div>
 
             <div class="form-group">
-                <label for="ImageFile" class="control-label">Изображение</label>
+                <label asp-for="ImageFile" class="control-label">Изображение</label>
                 <input asp-for="ImageFile" type="file" class="form-control" accept="image/*" />
                 <span asp-validation-for="ImageFile" class="text-danger"></span>
             </div>
 
        
             <div class="form-group">
-                <label for="IsRecurring">Повтарящо се пътуване</label>
+                <label asp-for="IsRecurring">Повтарящо се пътуване</label>
                 <input asp-for="IsRecurring" id="isRecurring" />
             </div>
 

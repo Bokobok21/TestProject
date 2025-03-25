@@ -1,0 +1,443 @@
+﻿/* Main Colors */
+:root {
+    --primary: #1a73e8;
+    --primary-dark: #0d47a1;
+    --primary-light: #e8f0fe;
+    --secondary: #34a853;
+    --danger: #ea4335;
+    --gray-light: #f8f9fa;
+    --gray: #dadce0;
+    --gray-dark: #5f6368;
+    --white: #ffffff;
+    --shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    --radius: 8px;
+}
+
+/* General Styles */
+body {
+    font-family: "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    color: #333;
+    background-color: #f5f7fa;
+    line-height: 1.6;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* Page Header */
+.page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    border-bottom: 2px solid var(--primary);
+    padding-bottom: 15px;
+}
+
+    .page-header h1 {
+        color: var(--primary-dark);
+        font-size: 2.2rem;
+        margin: 0;
+    }
+
+.create-trip-btn {
+    background-color: var(--primary);
+    color: white;
+    padding: 10px 20px;
+    border-radius: var(--radius);
+    text-decoration: none;
+    font-weight: 500;
+    transition: background-color 0.2s;
+    display: inline-flex;
+    align-items: center;
+}
+
+    .create-trip-btn:hover {
+        background-color: var(--primary-dark);
+        text-decoration: none;
+        color: white;
+    }
+
+    .create-trip-btn i {
+        margin-right: 8px;
+    }
+
+/* Search Form */
+.search-form {
+    background-color: var(--white);
+    padding: 20px;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    margin-bottom: 30px;
+}
+
+.search-form-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.search-form-title {
+    font-size: 1.2rem;
+    color: var(--primary-dark);
+    font-weight: 500;
+    margin: 0;
+}
+
+.search-form-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    align-items: flex-end;
+}
+
+.form-group {
+    flex: 1;
+    min-width: 200px;
+}
+
+    .form-group label {
+        display: block;
+        margin-bottom: 5px;
+        color: var(--gray-dark);
+        font-weight: 500;
+    }
+
+.form-control {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid var(--gray);
+    border-radius: var(--radius);
+    font-size: 1rem;
+    transition: border-color 0.2s;
+}
+
+    .form-control:focus {
+        border-color: var(--primary);
+        outline: none;
+        box-shadow: 0 0 0 3px rgba(26, 115, 232, 0.2);
+    }
+
+.search-buttons {
+    display: flex;
+    gap: 10px;
+}
+
+.btn {
+    padding: 10px 20px;
+    border-radius: var(--radius);
+    font-weight: 500;
+    cursor: pointer;
+    border: none;
+    transition: all 0.2s;
+}
+
+.btn-primary {
+    background-color: var(--primary);
+    color: white;
+}
+
+    .btn-primary:hover {
+        background-color: var(--primary-dark);
+    }
+
+.btn-secondary {
+    background-color: var(--gray);
+    color: var(--gray-dark);
+}
+
+    .btn-secondary:hover {
+        background-color: #c0c0c0;
+    }
+
+.btn-danger {
+    background-color: var(--danger);
+    color: white;
+}
+
+    .btn-danger:hover {
+        background-color: #c62828;
+    }
+
+.btn-sm {
+    padding: 6px 12px;
+    font-size: 0.875rem;
+}
+
+/* Trip Cards */
+.trips-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+.trip-card {
+    background-color: var(--white);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    overflow: hidden;
+    transition: transform 0.2s, box-shadow 0.2s;
+    position: relative;
+}
+
+    .trip-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    }
+
+.trip-image-container {
+    position: relative;
+    height: 200px;
+    overflow: hidden;
+}
+
+.trip-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s;
+}
+
+.trip-card:hover .trip-image {
+    transform: scale(1.05);
+}
+
+.trip-favorite {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background-color: white;
+    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    z-index: 1;
+}
+
+    .trip-favorite i {
+        color: #ccc;
+        font-size: 18px;
+        transition: color 0.2s;
+    }
+
+    .trip-favorite:hover i {
+        color: var(--danger);
+    }
+
+    .trip-favorite.active i {
+        color: var(--danger);
+    }
+
+.trip-status-badge {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background-color: var(--secondary);
+    color: white;
+    padding: 4px 10px;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    font-weight: 500;
+    z-index: 1;
+}
+
+.trip-content {
+    padding: 15px;
+}
+
+.trip-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 10px;
+}
+
+.trip-route {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--primary-dark);
+    margin: 0 0 5px 0;
+}
+
+.trip-price {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: var(--primary);
+}
+
+.trip-driver {
+    color: var(--gray-dark);
+    font-size: 0.9rem;
+    margin-bottom: 10px;
+}
+
+.trip-details {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.trip-detail-item {
+    display: flex;
+    flex-direction: column;
+}
+
+.trip-detail-label {
+    font-size: 0.8rem;
+    color: var(--gray-dark);
+}
+
+.trip-detail-value {
+    font-weight: 500;
+}
+
+.trip-car-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 0;
+    border-top: 1px solid var(--gray);
+    margin-top: 5px;
+}
+
+.trip-car-model {
+    font-weight: 500;
+}
+
+.trip-plate {
+    color: var(--gray-dark);
+    font-size: 0.9rem;
+}
+
+.trip-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 1px solid var(--gray);
+}
+
+.trip-action-btn {
+    flex: 1;
+    text-align: center;
+    padding: 8px;
+    border-radius: var(--radius);
+    font-weight: 500;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.action-edit {
+    background-color: var(--primary-light);
+    color: var(--primary);
+}
+
+    .action-edit:hover {
+        background-color: var(--primary);
+        color: white;
+        text-decoration: none;
+    }
+
+.action-details {
+    background-color: var(--gray-light);
+    color: var(--gray-dark);
+}
+
+    .action-details:hover {
+        background-color: var(--gray-dark);
+        color: white;
+        text-decoration: none;
+    }
+
+.action-delete {
+    background-color: #ffebee;
+    color: var(--danger);
+    border: none;
+}
+
+    .action-delete:hover {
+        background-color: var(--danger);
+        color: white;
+    }
+
+/* Pagination */
+.pagination {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 30px;
+}
+
+.pagination-btn {
+    padding: 8px 16px;
+    border-radius: var(--radius);
+    background-color: var(--white);
+    border: 1px solid var(--gray);
+    color: var(--gray-dark);
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+    .pagination-btn:hover:not(:disabled) {
+        background-color: var(--primary-light);
+        border-color: var(--primary);
+        color: var(--primary);
+    }
+
+    .pagination-btn.active {
+        background-color: var(--primary);
+        border-color: var(--primary);
+        color: white;
+    }
+
+    .pagination-btn:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
+
+/* Responsive adjustments */
+@media (max-width: 992px) {
+    .trips-grid {
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    }
+
+    .search-form-row {
+        flex-direction: column;
+    }
+
+    .form-group {
+        width: 100%;
+    }
+}
+
+@media (max-width: 768px) {
+    .page-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+    }
+
+    .search-buttons {
+        width: 100%;
+    }
+
+    .btn {
+        flex: 1;
+    }
+
+    .trips-grid {
+        grid-template-columns: 1fr;
+    }
+}

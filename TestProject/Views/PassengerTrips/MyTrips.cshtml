@@ -3,19 +3,12 @@
 @{
     ViewData["Title"] = "Passenger Trips";
 }
-@* <h2>Trips I Have Entered</h2>
-<ul>
-    @foreach (var trip in Model)
-    {
-        <li>
-            <strong>Destination:</strong> @trip.Destination <br />
-            <strong>Departure Time:</strong> @trip.DepartureTime <br />
-            <strong>End Date:</strong> @trip.ReturnTime <br />
-            <strong>Price:</strong> @trip.Price <br />
-            <img src="@trip.ImagePath" alt="Trip Image" width="300px" />
-        </li>
-    }
-</ul>
- *@
+
+<div class="page-header">
+    <h1>Моите Пътувания</h1>
+   
+       
+</div>
 
 <partial name="_TripTablePartial" model="Model" />
+

@@ -65,6 +65,12 @@ app.MapRazorPages();
 
 app.Run();
 
+// user panel - my request - driver and passenger perspective and my trips - driver and passenger perspectives
+
+// add sorting pagination to the mytrips page
+
+// fix the status of the trips to be red if it isn't upcoming 
+
 // in the list all users admind panel when i tourist just got changed to driver via a request in the panel it isn't reflected and it still shows tourist even though he is a driver now 
 
 //when tripparticipant is denied delete the request so he can request again.. 

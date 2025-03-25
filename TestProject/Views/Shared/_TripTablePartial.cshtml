@@ -2,66 +2,79 @@
 @using TestProject.Extentions;
 @model IEnumerable<Trip>
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>Шофьор</th>
-            <th>Начална позиция</th>
-            <th>Дестинация</th>
-            <th>Час на тръгване</th>
-            <th>Час на връщане</th>
-            <th>Цена</th>
-            <th>Общо места</th>
-            <th>Свободни места</th>
-            <th>Модел на колата</th>
-            <th>Регистрационен номер</th>
-            <th>Снимка</th>
-            <th>Статус</th>
-            @if (ViewData["ShowActions"] as bool? ?? false)
-            {
-                <th>Опции</th>
-            }
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>@(item.Driver?.UserName ?? "Вече не съществува")</td>
-                <td>@item.StartPosition</td>
-                <td>@item.Destination</td>
-                <td>@item.DepartureTime.ToString("yyyy-MM-dd HH:mm")</td>
-                <td>@item.ReturnTime.ToString("yyyy-MM-dd HH:mm")</td>
-                <td>@item.Price</td>
-                <td>@item.TotalSeats</td>
-                <td>@item.FreeSeats</td>
-                <td>@item.CarModel</td>
-                <td>@item.PlateNumber</td>
-                <td>
-                    <img src="@item.ImagePath" alt="Trip Picture" style="max-width: 100px;" />
-                </td>
-                <td> @Html.DisplayFor(modelItem => item.StatusTrip)</td>
-                @*   @if (item.Driver.Id == User.Id())
-                { *@
+<div class="trips-grid">
+    @foreach (var item in Model)
+    {
+        <div class="trip-card">
+            <div class="trip-image-container">
+                <img src="@item.ImagePath" alt="Trip Picture" class="trip-image" />
+       @*          <div class="trip-favorite">
+                    <i class="far fa-heart"></i>
+                </div> *@
+                <div class="trip-status-badge">
+                    @Html.DisplayFor(modelItem => item.StatusTrip)
+                </div>
+            </div>
+            <div class="trip-content">
+                <div class="trip-header">
+                    <div>
+                        <h3 class="trip-route">@item.StartPosition → @item.Destination</h3>
+                        <div class="trip-driver">
+                            <i class="fas fa-user"></i> @(item.Driver?.UserName ?? "Вече не съществува")
+                        </div>
+                    </div>
+                    <div class="trip-price">@item.Price лв.</div>
+                </div>
+
+                <div class="trip-details">
+                    <div class="trip-detail-item">
+                        <span class="trip-detail-label">Тръгване</span>
+                        <span class="trip-detail-value">@item.DepartureTime.ToString("yyyy-MM-dd HH:mm")</span>
+                    </div>
+                    <div class="trip-detail-item">
+                        <span class="trip-detail-label">Връщане</span>
+                        <span class="trip-detail-value">@item.ReturnTime.ToString("yyyy-MM-dd HH:mm")</span>
+                    </div>
+                    <div class="trip-detail-item">
+                        <span class="trip-detail-label">Общо места</span>
+                        <span class="trip-detail-value">@item.TotalSeats</span>
+                    </div>
+                    <div class="trip-detail-item">
+                        <span class="trip-detail-label">Свободни места</span>
+                        <span class="trip-detail-value">@item.FreeSeats</span>
+                    </div>
+                </div>
+
+                <div class="trip-car-info" style=" display: flex; justify-content: center;">
+                    <i class="fas fa-car"></i>
+                    <div>
+                        <span class="trip-car-model">@item.CarModel</span>
+                        <span class="trip-plate">@item.PlateNumber</span>
+                    </div>
+                </div>
 
                 @if (ViewData["ShowActions"] as bool? ?? false)
                 {
-                    <td>
-                        <a asp-controller="Trips" asp-action="Edit" asp-route-id="@item.Id" asp-route-returnUrl="@Context.Request.Path">Edit</a> |
-                        <a asp-controller="Trips" asp-action="Details" asp-route-id="@item.Id" asp-route-returnUrl="@Context.Request.Path">Details</a> |
-                        <form asp-controller="Trips" asp-action="Delete" method="post" style="display:inline">
+                    <div class="trip-actions">
+                        <a asp-controller="Trips" asp-action="Edit" asp-route-id="@item.Id" asp-route-returnUrl="@Context.Request.Path" class="trip-action-btn action-edit">
+                            <i class="fas fa-edit"></i> Edit
+                        </a>
+                        <a asp-controller="Trips" asp-action="Details" asp-route-id="@item.Id" asp-route-returnUrl="@Context.Request.Path" class="trip-action-btn action-details">
+                            <i class="fas fa-info-circle"></i> Details
+                        </a>
+                        <form asp-controller="Trips" asp-action="Delete" method="post" style="flex: 1;">
                             @Html.AntiForgeryToken()
                             <input type="hidden" name="id" value="@item.Id" />
                             <input type="hidden" name="returnUrl" value="@Context.Request.Path" />
-                            <button type="submit" class="btn btn-sm btn-danger"
+                            <button type="submit" class="trip-action-btn action-delete"
                                     onclick="return confirm('Сигурен ли си, че искаш да го изтриеш?')">
-                                Delete
+                                <i class="fas fa-trash"></i> Delete
                             </button>
                         </form>
-                    </td>
+                    </div>
                 }
-                @*  } *@
-            </tr>
-        }
-    </tbody>
-</table>
+            </div>
+        </div>
+    }
+</div>
+

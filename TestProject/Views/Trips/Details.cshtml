@@ -165,16 +165,14 @@
     }  
 
     <a asp-controller="Trips" asp-action="Edit" asp-route-id="@Model.Id" asp-route-returnUrl="@Context.Request.Path">Edit</a> |
-    @* <a href="@ViewBag.ReturnUrl">Return To List</a> *@
     @{
-        var url = Context.Request.GetDisplayUrl();
-        if (url.Contains("MyDriverTrips"))
+        if (ViewBag.ReturnUrl as bool? == true)
         {
-            <a asp-action="MyDriverTrips" asp-controller="DriverTrips">Върни се обратно</a>
+            <a href="@ViewBag.ReturnUrl">Return To List</a> 
         }
         else
         {
-            <a asp-action="Index" asp-controller="Trips">Върни се обратно</a>
+            <a asp-action="MyDriverTrips" asp-controller="DriverTrips">Върни се обратно</a>
         }
     }
 </div>

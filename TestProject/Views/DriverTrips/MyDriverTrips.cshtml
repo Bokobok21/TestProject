@@ -2,8 +2,14 @@
     ViewData["Title"] = "Driver Trips";
 }
 
-<p>
-    <a asp-controller="Trips" asp-action="Create" asp-route-returnUrl="@Context.Request.Path">Създай ново пътешествие</a>
-</p>
+<div class="page-header">
+    <h1>Моите Пътешествия</h1>
+
+   
+        <a asp-controller="Trips" asp-action="Create" asp-route-returnUrl="@Context.Request.Path" class="create-trip-btn">
+            <i class="fas fa-plus-circle"></i> Създай ново пътешествие
+        </a>
+</div>
 
 <partial name="_TripTablePartial" model="Model" />
+
