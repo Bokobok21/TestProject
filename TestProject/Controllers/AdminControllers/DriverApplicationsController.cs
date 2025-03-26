@@ -24,20 +24,21 @@ public class DriverApplicationsController : Controller
     }
 
     // GET: DriverApplications
-    public async Task<IActionResult> Index()
+    public async Task<IActionResult> Index(string? returnUrl)
     {
         var requests = await _context.RequestDrivers
             .Include(a => a.User)
             .Where(a => a.StatusRequest == RequestStatus.Pending)
             .ToListAsync();
 
+        ViewBag.ReturnUrl = returnUrl;
         return View(requests);
     }
 
     // POST: DriverApplications/Approve/5
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Approve(int id)
+    public async Task<IActionResult> Approve(int id, string? returnUrl)
     {
         var request = await _context.RequestDrivers.FindAsync(id);
         if (request == null || request.StatusRequest != RequestStatus.Pending)
@@ -71,13 +72,19 @@ public class DriverApplicationsController : Controller
 
         await _signinManager.RefreshSignInAsync(user);
 
-        return RedirectToAction(nameof(Index));
+        if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
+        {
+            ViewBag.ReturnUrl = returnUrl;
+            return Redirect(returnUrl); // Redirects back to the previous page
+        }
+
+        return RedirectToAction("MyRequests", "PassengerRequests");
     }
 
     // POST: DriverApplications/Deny/5
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Deny(int id)
+    public async Task<IActionResult> Deny(int id, string? returnUrl)
     {
         var request = await _context.RequestDrivers.FindAsync(id);
         if (request == null || request.StatusRequest != RequestStatus.Pending)
@@ -103,6 +110,12 @@ public class DriverApplicationsController : Controller
 
         await _context.SaveChangesAsync();
 
-        return RedirectToAction(nameof(Index));
+        if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
+        {
+            ViewBag.ReturnUrl = returnUrl;
+            return Redirect(returnUrl); // Redirects back to the previous page
+        }
+
+        return RedirectToAction("MyRequests", "PassengerRequests");
     }
 }

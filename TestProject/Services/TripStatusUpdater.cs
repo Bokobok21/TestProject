@@ -64,7 +64,7 @@ public class TripStatusUpdater : BackgroundService
             }
 
             // Wait for 5 minutes before checking again
-            await Task.Delay(TimeSpan.FromMinutes(1), stoppingToken);
+            await Task.Delay(TimeSpan.FromSeconds(30), stoppingToken);
         }
     }
 }

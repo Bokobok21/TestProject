@@ -64,9 +64,9 @@
                         <div class="form-row">
                             <div class="form-group">
                                 <label asp-for="Price" class="control-label">
-                                    <i class="fas fa-tag"></i> Цена (лв.)
+                                    <i class="fas fa-tag"></i> Цена (лв)
                                 </label>
-                                <input asp-for="Price" class="form-control" type="number" step="0.01" min="0" placeholder="0.00" />
+                                <input asp-for="Price" class="form-control" type="number" step="1" min="0" placeholder="0" />
                                 <span asp-validation-for="Price" class="text-danger"></span>
                             </div>
                             
@@ -162,7 +162,7 @@
                         </div>
                     </div>
                 </div>
-                
+             
                 <div class="form-actions">
                     <button type="submit" class="btn btn-primary btn-lg">
                         <i class="fas fa-save"></i> Запази пътуването
@@ -189,7 +189,7 @@
                                 <i class="fas fa-user"></i> Вашето име
                             </div>
                         </div>
-                        <div class="trip-price" id="preview-price">0.00 лв.</div>
+                        <div class="trip-price" id="preview-price">0 лв</div>
                     </div>
                     
                     <div class="trip-details">
@@ -271,7 +271,7 @@
         function updatePreview() {
             const startPosition = document.querySelector('[name="StartPosition"]').value || 'Начална позиция';
             const destination = document.querySelector('[name="Destination"]').value || 'Дестинация';
-            const price = document.querySelector('[name="Price"]').value || '0.00';
+            const price = document.querySelector('[name="Price"]').value || '0';
             const totalSeats = document.querySelector('[name="TotalSeats"]').value || '0';
             const carModel = document.querySelector('[name="CarModel"]').value || 'Модел на автомобила';
             const plateNumber = document.querySelector('[name="PlateNumber"]').value || 'Рег. номер';
@@ -291,7 +291,7 @@
             }
             
             document.getElementById('preview-route').textContent = `${startPosition} → ${destination}`;
-            document.getElementById('preview-price').textContent = `${price} лв.`;
+            document.getElementById('preview-price').textContent = `${price} лв`;
             document.getElementById('preview-departure').textContent = departureTime;
             document.getElementById('preview-return').textContent = returnTime;
             document.getElementById('preview-seats').textContent = totalSeats;

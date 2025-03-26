@@ -26,9 +26,11 @@
                 <td>@request.StatusRequest</td>
                 <td>
                     <form asp-controller="Requests" asp-action="ApproveRequest" asp-route-requestId="@request.Id" method="post" style="display:inline;">
+                        <input type="hidden" name="returnUrl" value="@ViewBag.ReturnUrl" />
                         <button type="submit" class="btn btn-success">Потвърди</button>
                     </form>
                     <form asp-controller="Requests" asp-action="DenyRequest" asp-route-requestId="@request.Id" method="post" style="display:inline;">
+                        <input type="hidden" name="returnUrl" value="@ViewBag.ReturnUrl" />
                         <button type="submit" class="btn btn-danger">Откажи</button>
                     </form>
                 </td>

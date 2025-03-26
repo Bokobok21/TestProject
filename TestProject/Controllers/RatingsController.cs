@@ -55,8 +55,9 @@ namespace TestProject.Controllers
 
         // GET: Ratings/Create
         // GET: Ratings/Create/5
-        public async Task<IActionResult> Create(int tripId)
+        public async Task<IActionResult> Create(int tripId, string? returnUrl, string? returnUrlOriginal)
         {
+           
             var trip = await _context.Trips
                 .Include(t => t.TripParticipants)
                 .FirstOrDefaultAsync(t => t.Id == tripId);
@@ -70,6 +71,9 @@ namespace TestProject.Controllers
                 return RedirectToAction("Details", "Trips", new { id = tripId });
             }
 
+            ViewBag.ReturnUrl = returnUrl;
+            ViewBag.ReturnUrlOriginal = returnUrlOriginal;
+
             ViewData["TripId"] = tripId;
             return View();
         }
@@ -77,7 +81,7 @@ namespace TestProject.Controllers
         // POST: Ratings/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(int tripId, [Bind("Score,Comment")] Rating rating)
+        public async Task<IActionResult> Create(int tripId, [Bind("Score,Comment")] Rating rating, string? returnUrl, string? returnUrlOriginal)
         {
             var trip = await _context.Trips
                  .Include(t => t.TripParticipants)
@@ -88,6 +92,7 @@ namespace TestProject.Controllers
                             trip.StatusTrip != TripStatus.Finished ||
                             !trip.TripParticipants.Any(tp => tp.UserId == user.Id))
             {
+                Console.WriteLine("Error");
                 return RedirectToAction("Details", "Trips", new { id = tripId });
             }
 
@@ -98,88 +103,21 @@ namespace TestProject.Controllers
             _context.Ratings.Add(rating);
             await _context.SaveChangesAsync();
 
-            return RedirectToAction("Details", "Trips", new { id = tripId });
+            if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl) && !string.IsNullOrEmpty(returnUrlOriginal) && Url.IsLocalUrl(returnUrlOriginal))
+            {
+                return Redirect($"{returnUrl}?returnUrl={Uri.EscapeDataString(returnUrlOriginal)}"); // Redirects back to the previous page with returnUrl as a query parameter
+            }
+            if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
+            {
+                return Redirect(returnUrl);
+            }
+
+            return RedirectToAction("Details", "Trips", new { id = tripId, returnUrl = returnUrlOriginal });
         }
 
-        // GET: Ratings/Edit/5
-        public async Task<IActionResult> Edit(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var rating = await _context.Ratings.FindAsync(id);
-            if (rating == null)
-            {
-                return NotFound();
-            }
-            ViewData["TripId"] = new SelectList(_context.Trips, "Id", "Id", rating.TripId);
-            ViewData["UserId"] = new SelectList(_context.ApplicationUsers, "Id", "Id", rating.UserId);
-            return View(rating);
-        }
-
-        // POST: Ratings/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, Rating rating)
-        {
-            if (id != rating.Id)
-            {
-                return NotFound();
-            }
-
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(rating);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!RatingExists(rating.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            ViewData["TripId"] = new SelectList(_context.Trips, "Id", "Id", rating.TripId);
-            ViewData["UserId"] = new SelectList(_context.ApplicationUsers, "Id", "Id", rating.UserId);
-            return View(rating);
-        }
-
-        // GET: Ratings/Delete/5
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var rating = await _context.Ratings
-                .Include(r => r.Trip)
-                .Include(r => r.User)
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (rating == null)
-            {
-                return NotFound();
-            }
-
-            return View(rating);
-        }
-
-        // POST: Ratings/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> DeleteConfirmed(int id, string? returnUrl)
         {
             var rating = await _context.Ratings.FindAsync(id);
             if (rating != null)
@@ -188,6 +126,11 @@ namespace TestProject.Controllers
             }
 
             await _context.SaveChangesAsync();
+            if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
+            {
+                return Redirect(returnUrl); // Redirects back to the previous page
+            }
+
             return RedirectToAction(nameof(Index));
         }
 

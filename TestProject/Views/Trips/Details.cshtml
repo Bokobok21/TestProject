@@ -13,13 +13,12 @@
     <div class="page-header">
         <h1>Детайли за пътуването</h1>
         @{
-            if (ViewBag.ReturnUrl != null)
+            if (!string.IsNullOrEmpty(@ViewBag.ReturnUrl) && Url.IsLocalUrl(@ViewBag.ReturnUrl))
             {
                 <a href="@ViewBag.ReturnUrl" class="btn btn-secondary">
                     <i class="fas fa-arrow-left"></i> Върни се обратно
                 </a>
-            }
-            else
+            }else
             {
                 <a asp-action="MyDriverTrips" asp-controller="DriverTrips" class="btn btn-secondary">
                     <i class="fas fa-arrow-left"></i> Върни се обратно
@@ -40,34 +39,51 @@
 
                 if (Model.StatusTrip != null)
                 {
-                    string status = Model.StatusTrip.ToString().ToLower();
+                    // string status = Model.StatusTrip.ToString().ToLower();
 
-                    if (status.Contains("резервирано") || status.Contains("предстоящо") || status.Contains("upcoming"))
+                    // if (status.Contains("резервирано") || status.Contains("предстоящо") || status.Contains("upcoming"))
+                    // {
+                    //     statusClass = "status-upcoming";
+                    // }
+                    // else if (status.Contains("завършено") || status.Contains("completed"))
+                    // {
+                    //     statusClass = "status-completed";
+                    // }
+                    // else if (status.Contains("отказано") || status.Contains("cancelled"))
+                    // {
+                    //     statusClass = "status-cancelled";
+                    // }
+                    // else if (status.Contains("в процес") || status.Contains("in progress"))
+                    // {
+                    //     statusClass = "status-in-progress";
+                    // }
+                    // else if (status.Contains("пълно") || status.Contains("full") || Model.FreeSeats <= 0)
+                    // {
+                    //     statusClass = "status-full";
+                    // }
+
+                    if (Model.StatusTrip == TripStatus.Upcoming)
                     {
                         statusClass = "status-upcoming";
                     }
-                    else if (status.Contains("завършено") || status.Contains("completed"))
+                    else if (Model.StatusTrip == TripStatus.Finished)
                     {
                         statusClass = "status-completed";
                     }
-                    else if (status.Contains("отказано") || status.Contains("cancelled"))
-                    {
-                        statusClass = "status-cancelled";
-                    }
-                    else if (status.Contains("в процес") || status.Contains("in progress"))
+                    else if (Model.StatusTrip == TripStatus.Ongoing)
                     {
                         statusClass = "status-in-progress";
                     }
-                    else if (status.Contains("пълно") || status.Contains("full") || Model.FreeSeats <= 0)
+                    else if (Model.StatusTrip == TripStatus.Booked)
                     {
                         statusClass = "status-full";
                     }
                 }
 
-                if (Model.FreeSeats <= 0)
-                {
-                    statusClass = "status-full";
-                }
+                // if (Model.FreeSeats <= 0)
+                // {
+                //     statusClass = "status-full";
+                // }
             }
 
             <div class="trip-status-badge @statusClass">
@@ -90,7 +106,7 @@
                     </div>
                 </div>
                 <div class="trip-details-price">
-                    <span>@Model.Price лв.</span>
+                    <span>@Model.Price лв</span>
                 </div>
             </div>
 
@@ -174,35 +190,65 @@
 
             <!-- Actions Section -->
             <div class="trip-details-actions">
-                @if (Model.FreeSeats > 0)
+
+                @if (Model.StatusTrip == TripStatus.Upcoming)
                 {
-                    if (!Model.Requests.Any(r => r.UserId == User.Id()))
+                    @if (Model.FreeSeats > 0)
                     {
-                        <form asp-controller="Requests" asp-action="SendJoinRequest" method="post">
-                            <input type="hidden" name="returnUrl" value="@ViewBag.ReturnUrl" />
-                            <input type="hidden" name="tripId" value="@Model.Id" />
-                            <button type="submit" class="btn btn-primary">
-                                <i class="fas fa-ticket-alt"></i> Заяви място
-                            </button>
-                        </form>
+                        if (!Model.Requests.Any(r => r.UserId == User.Id()))
+                        {
+                            <form asp-controller="Requests" asp-action="SendJoinRequest" method="post">
+                                <input type="hidden" name="returnUrl" value="@ViewBag.ReturnUrl" />
+                                <input type="hidden" name="tripId" value="@Model.Id" />
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fas fa-ticket-alt"></i> Заяви място
+                                </button>
+                            </form>
+                        }
+                        else
+                        {
+                            <div class="request-status">
+                                <i class="fas fa-info-circle"></i> Вече имате заявка за това пътуване
+                           
+@*                                 <form method="post" asp-action="DeleteRequest" asp-controller="PassengerRequests">
+                                    <input type="hidden" name="id" value="@Model.Requests.Where(r => r.TripId == Model.Id).FirstOrDefault(r => r.UserId == User.Id())?.Id" />
+                                    <input type="hidden" name="returnUrl" value="@Context.Request.Path" />
+                                    <button class="trip-action-btn action-delete" type="submit" onclick="return confirm('Сигурен ли си, че искаш да го изтриеш?')">
+                                        <i class="fas fa-trash"></i> Изтрии
+                                    </button>
+                                </form> *@
+                            
+                            </div>
+                        }
                     }
                     else
                     {
                         <div class="request-status">
-                            <i class="fas fa-info-circle"></i> Вече имате заявка за това пътуване
+                            <i class="fas fa-ban"></i> Няма свободни места
                         </div>
                     }
                 }
                 else
                 {
                     <div class="request-status">
-                        <i class="fas fa-ban"></i> Няма свободни места
+                        <i class="fas fa-info-circle"></i> Времето за записване приключи
                     </div>
                 }
-
-                <a asp-controller="Trips" asp-action="Edit" asp-route-id="@Model.Id" asp-route-returnUrl="@Context.Request.Path" class="btn btn-secondary">
-                    <i class="fas fa-edit"></i> Редактирай
-                </a>
+                @if (User.Id() == Model.DriversId)
+                {
+                    <a asp-controller="Trips" asp-action="Edit" asp-route-id="@Model.Id" asp-route-returnUrl="@Context.Request.Path" asp-route-returnUrlOriginal="@ViewBag.ReturnUrl" class="btn btn-secondary">
+                        <i class="fas fa-edit"></i> Редактирай
+                    </a>
+                    <form asp-controller="Trips" asp-action="Delete" method="post" style="flex: 1;">
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" name="id" value="@Model.Id" />
+                        <input type="hidden" name="returnUrl" value="@ViewBag.ReturnUrl" />
+                        <button type="submit" class="btn action-delete"
+                                onclick="return confirm('Сигурен ли си, че искаш да го изтриеш?')">
+                            <i class="fas fa-trash"></i> Изтрии
+                        </button>
+                    </form>
+                }
             </div>
         </div>
     </div>
@@ -211,7 +257,31 @@
     @if (Model.StatusTrip == TripStatus.Finished)
     {
         <div class="trip-reviews-container">
-            <h3 class="reviews-title"><i class="fas fa-star"></i> Ревюта</h3>
+            <div class="reviews-header">
+                <h3 class="reviews-title"><i class="fas fa-star"></i> Ревюта</h3>
+
+                @if (User.Identity.IsAuthenticated)
+                {
+                    var user = await UserManager.GetUserAsync(User);
+                    bool canReview = user != null &&
+                    Model.StatusTrip == TripStatus.Finished &&
+                    Model.TripParticipants.Any(tp => tp.UserId.Equals(user.Id, StringComparison.OrdinalIgnoreCase));
+
+                    @if (canReview)
+                    {
+                        <div class="add-review-section">
+                            <a asp-controller="Ratings"
+                               asp-action="Create"
+                               asp-route-tripId="@Model.Id"
+                               asp-route-returnUrl="@Context.Request.Path"
+                               asp-route-returnUrlOriginal="@ViewBag.ReturnUrl"
+                               class="btn btn-primary">
+                                <i class="fas fa-pen"></i> Остави ревю
+                            </a>
+                        </div>
+                    }
+                }
+            </div>
 
             @if (Model.Ratings.Any())
             {
@@ -247,8 +317,19 @@
                                     <p class="no-comment">Няма коментар</p>
                                 }
                             </div>
-                            <div class="review-date">
-                                <i class="far fa-calendar-alt"></i> @rating.Date.ToString("yyyy-MM-dd")
+                            <div class="review-footer">
+                                <div class="review-date">
+                                    <i class="far fa-calendar-alt"></i> @rating.Date.ToString("yyyy-MM-dd")
+                                </div>
+                                @if (User.Identity.IsAuthenticated && (User.IsInRole("Admin") || User.Id() == rating.UserId))
+                                {
+                                    <a asp-controller="Ratings"
+                                       asp-action="Delete"
+                                       asp-route-id="@rating.Id"
+                                       class="review-delete" style="text-decoration: none">
+                                        <i class="fas fa-trash"></i> Изтрий
+                                    </a>
+                                }
                             </div>
                         </div>
                     }
@@ -269,18 +350,7 @@
                 Model.StatusTrip == TripStatus.Finished &&
                 Model.TripParticipants.Any(tp => tp.UserId.Equals(user.Id, StringComparison.OrdinalIgnoreCase));
 
-                @if (canReview)
-                {
-                    <div class="add-review-section">
-                        <a asp-controller="Ratings"
-                           asp-action="Create"
-                           asp-route-tripId="@Model.Id"
-                           class="btn btn-primary">
-                            <i class="fas fa-pen"></i> Остави ревю
-                        </a>
-                    </div>
-                }
-                else
+                @if (!canReview)
                 {
                     <div class="cannot-review">
                         <i class="fas fa-info-circle"></i>
@@ -297,5 +367,7 @@
             <p>Ревюта може да бъдат оставени само след като пътуването приключи.</p>
         </div>
     }
+
+
 </div>
 

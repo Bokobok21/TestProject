@@ -26,7 +26,7 @@ namespace TestProject.Controllers
 
         [HttpPost]
         [Authorize]
-        public async Task<IActionResult> SendJoinRequest(int tripId)
+        public async Task<IActionResult> SendJoinRequest(int tripId, string? returnUrl)
         {
             //var userId = _userManager.GetUserId(User); // Get the current user's ID
             var userId = User.Id();
@@ -63,6 +63,7 @@ namespace TestProject.Controllers
                     StatusTrip = trip.StatusTrip,
                 };
 
+                ViewBag.ReturnUrl = returnUrl;
                 return View("~/Views/Trips/Details.cshtml", tripViewModel);
             }
 
@@ -78,7 +79,8 @@ namespace TestProject.Controllers
             _context.Requests.Add(request);
             await _context.SaveChangesAsync();
 
-            return RedirectToAction("Details", "Trips", new { id = tripId });
+            ViewBag.ReturnUrl = returnUrl;
+            return RedirectToAction("Details", "Trips", new { id = tripId, returnUrl = returnUrl });
         }
 
         public async Task<IActionResult> ApproveRequest(int requestId)
@@ -245,30 +247,11 @@ namespace TestProject.Controllers
             return View(request);
         }
 
-        // GET: Requests/Delete/5
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var request = await _context.Requests
-                .Include(r => r.Trip)
-                .Include(r => r.User)
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (request == null)
-            {
-                return NotFound();
-            }
-
-            return View(request);
-        }
 
         // POST: Requests/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> DeleteConfirmed(int id, string? returnUrl)
         {
             var request = await _context.Requests.FindAsync(id);
             if (request != null)
@@ -277,6 +260,10 @@ namespace TestProject.Controllers
             }
 
             await _context.SaveChangesAsync();
+            if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
+            {
+                return Redirect(returnUrl); // Redirects back to the previous page
+            }
             return RedirectToAction(nameof(Index));
         }
 

@@ -7,6 +7,8 @@
 
 <form asp-action="Create" method="post">
     <input type="hidden" name="tripId" value="@ViewData["TripId"]" />
+    <input type="hidden" name="returnUrl" value="@ViewBag.ReturnUrl" />
+    <input type="hidden" name="returnUrlOriginal" value="@ViewBag.ReturnUrlOriginal" />
 
     <div class="form-group">
         <label asp-for="Score">Рейтинг</label>

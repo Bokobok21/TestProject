@@ -301,7 +301,7 @@ namespace TestProject.Controllers
 
         // GET: Trips/Edit/5
         [Authorize(Roles = "Admin,Driver")]
-        public async Task<IActionResult> Edit(int? id, string? returnUrl)
+        public async Task<IActionResult> Edit(int? id, string? returnUrl, string? returnUrlOriginal)
         {
             if (id == null || _context.Trips == null)
             {
@@ -339,6 +339,7 @@ namespace TestProject.Controllers
             };
 
             ViewBag.ReturnUrl = returnUrl;
+            ViewBag.ReturnUrlOriginal = returnUrlOriginal;
             ViewData["DriversId"] = new SelectList(_context.ApplicationUsers, "Id", "Id", trip.DriversId);
             return View(tripViewModel);
         }
@@ -349,7 +350,7 @@ namespace TestProject.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Admin,Driver")]
-        public async Task<IActionResult> Edit(int id, TripViewModel tripViewModel, string? returnUrl)
+        public async Task<IActionResult> Edit(int id, TripViewModel tripViewModel, string? returnUrl, string? returnUrlOriginal)
         {
             if (id != tripViewModel.Id)
             {
@@ -442,17 +443,21 @@ namespace TestProject.Controllers
                     trip.RecurrenceInterval = recurrenceInterval.ToString();
                     trip.NextRunDate = tripViewModel.DepartureTime.Add(recurrenceInterval);
 
-                    if (trip.FreeSeats == 0 && trip.StatusTrip == tripViewModel.StatusTrip && trip.StatusTrip != TripStatus.Upcoming)
+                   
+                    if (trip.FreeSeats == 0)
                     {
-                        trip.FreeSeats = 0;
                         trip.StatusTrip = TripStatus.Booked;
+                    }
+                    else if (trip.FreeSeats == 0 && trip.StatusTrip != tripViewModel.StatusTrip && tripViewModel.StatusTrip != TripStatus.Upcoming)
+                    {
+                        trip.StatusTrip = tripViewModel.StatusTrip;
                     }
                     else
                     {
                         trip.StatusTrip = tripViewModel.StatusTrip;
                     }
 
-                    _context.Update(trip);
+                        _context.Update(trip);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
@@ -466,14 +471,18 @@ namespace TestProject.Controllers
                         throw;
                     }
                 }
+                if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl) && !string.IsNullOrEmpty(returnUrlOriginal) && Url.IsLocalUrl(returnUrlOriginal))
+                {
+                    return Redirect($"{returnUrl}?returnUrl={Uri.EscapeDataString(returnUrlOriginal)}"); // Redirects back to the previous page with returnUrl as a query parameter
+                }
                 if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
                 {
-                    ViewBag.ReturnUrl = returnUrl;
-                    return Redirect(returnUrl); // Redirects back to the previous page
+                    return Redirect(returnUrl); 
                 }
 
-
-                return RedirectToAction(nameof(Index));
+                //https://localhost:7052/Trips/Details/21?returnUrl=%2FDriverTrips%2FMyDriverTrips
+                //https://localhost:7052/Trips/Details/21?returnUrl=%2FTrips%2FDetails%2F21
+                return RedirectToAction("MyDriverTrips", "DriverTrips");
 
             }
 
@@ -510,7 +519,8 @@ namespace TestProject.Controllers
                 return Redirect(returnUrl); // Redirects back to the previous page
             }
 
-            return RedirectToAction(nameof(Index));
+
+            return RedirectToAction("MyDriverTrips", "DriverTrips");
 
         }
 

@@ -38,11 +38,11 @@
                     }
 
 
-                    // If free seats are 0, always show as full regardless of status
-                    if (item.FreeSeats <= 0)
-                    {
-                        statusClass = "status-full";
-                    }
+                    // // If free seats are 0, always show as full regardless of status
+                    // if (item.FreeSeats <= 0)
+                    // {
+                    //     statusClass = "status-full";
+                    // }
                 }
 
                 <div class="trip-status-badge @statusClass">
@@ -122,6 +122,16 @@
                     <a asp-controller="Ratings" asp-action="Create" asp-route-tripid="@item.Id" class="btn btn-primary" style="width: 100%; margin-top: 10px;">
                         <i class="fa fa-clipboard "></i> Остави ревю @* fa fa-clipboard/star/comment/pen/thumbs-up *@
                     </a>
+                }
+                else if (Context.Request.Path.ToString().Contains("MyRequests"))
+                {
+                    <form method="post" asp-action="DeleteRequest" asp-controller="PassengerRequests">
+                        <input type="hidden" name="id" value="@item.Requests!.Where(r => r.TripId == item.Id).FirstOrDefault(r => r.UserId == User.Id())?.Id" />
+                        <input type="hidden" name="returnUrl" value="@Context.Request.Path" />
+                        <button type="submit" onclick="return confirm('Сигурен ли си, че искаш да го изтриеш?')" class="btn btn-primary" style="width: 100%; margin-top: 10px;">
+                            <i class="fas fa-trash"></i> Изтрии заявка
+                        </button>
+                    </form>
                 }
                 else
                 {

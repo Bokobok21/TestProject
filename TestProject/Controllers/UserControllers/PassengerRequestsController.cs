@@ -21,16 +21,23 @@ namespace TestProject.Controllers.UserControllers
         public IActionResult MyRequests()
         {
             var userId = User.Id(); // Get logged-in user ID
+
             var requests = _context.Requests
                             .Where(r => r.UserId == userId && r.StatusRequest == RequestStatus.Pending)
                             .Include(r => r.Trip)
                             .ToList();
 
-            return View(requests);
+            var trips = _context.Trips
+                                .Where(t => t.Requests.Any(r => r.StatusRequest == RequestStatus.Pending))
+                                .Include(t => t.Requests!.Where(r => r.StatusRequest == RequestStatus.Pending))
+                                .ThenInclude(r => r.User)
+                                .ToList();
+
+            return View(trips);
         }
 
         // Delete a request
-        public IActionResult DeleteRequest(int id)
+        public IActionResult DeleteRequest(int id, string? returnUrl)
         {
             var request = _context.Requests.Find(id);
 
@@ -41,6 +48,11 @@ namespace TestProject.Controllers.UserControllers
 
             _context.Requests.Remove(request);
             _context.SaveChanges();
+
+            if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
+            {
+                return Redirect(returnUrl); // Redirects back to the previous page
+            }
 
             return RedirectToAction("MyRequests");
         }

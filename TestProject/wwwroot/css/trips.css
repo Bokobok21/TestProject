@@ -903,7 +903,7 @@ input:checked + .slider:before {
     color: var(--gray-dark);
 }
 
-/* Reviews Section */
+/* Updated Reviews Section Styles */
 .trip-reviews-container {
     background-color: var(--white);
     border-radius: var(--radius);
@@ -912,13 +912,24 @@ input:checked + .slider:before {
     margin-bottom: 30px;
 }
 
+.reviews-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
 .reviews-title {
     font-size: 1.5rem;
     color: var(--primary-dark);
-    margin-bottom: 20px;
     display: flex;
     align-items: center;
     gap: 8px;
+    margin: 0;
+}
+
+.add-review-section {
+    margin: 0;
 }
 
 .reviews-list {
@@ -933,6 +944,9 @@ input:checked + .slider:before {
     border-radius: var(--radius);
     padding: 15px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    display: flex;
+    flex-direction: column;
+    height: 100%;
 }
 
 .review-header {
@@ -956,13 +970,24 @@ input:checked + .slider:before {
 }
 
 .review-content {
+    flex: 1;
     margin-bottom: 15px;
-    min-height: 50px;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
 }
 
 .no-comment {
     color: var(--gray-dark);
     font-style: italic;
+}
+
+.review-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: auto;
+    padding-top: 10px;
+    border-top: 1px solid var(--gray);
 }
 
 .review-date {
@@ -972,6 +997,25 @@ input:checked + .slider:before {
     align-items: center;
     gap: 5px;
 }
+
+.review-delete {
+    background-color: #ffebee;
+    color: var(--danger);
+    border: none;
+    padding: 5px 10px;
+    border-radius: var(--radius);
+    cursor: pointer;
+    transition: all 0.2s;
+    font-size: 0.85rem;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+    .review-delete:hover {
+        background-color: var(--danger);
+        color: white;
+    }
 
 .no-reviews,
 .reviews-not-available,
@@ -993,11 +1037,23 @@ input:checked + .slider:before {
         opacity: 0.5;
     }
 
-.add-review-section {
-    display: flex;
-    justify-content: center;
-    margin-top: 20px;
+/* Responsive adjustments for reviews */
+@media (max-width: 768px) {
+    .reviews-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+    }
+
+    .add-review-section {
+        width: 100%;
+    }
+
+        .add-review-section .btn {
+            width: 100%;
+        }
 }
+
 
 /* Responsive adjustments for details page */
 @media (max-width: 992px) {

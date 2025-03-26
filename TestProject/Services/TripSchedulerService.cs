@@ -28,7 +28,7 @@ namespace TestProject.Services
 
                     // Get due recurring trips
                     var recurringTrips = await context.Trips
-                        .Where(t => t.IsRecurring && t.RecurrenceInterval != "00:00:00" && t.NextRunDate.HasValue && t.NextRunDate <= Now)
+                        .Where(t => t.IsRecurring && t.RecurrenceInterval != "00:00:00" && t.NextRunDate.HasValue/* && t.NextRunDate <= Now*/)
                         .ToListAsync();
 
                     foreach (var trip in recurringTrips)
