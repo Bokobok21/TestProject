@@ -65,15 +65,13 @@ app.MapRazorPages();
 
 app.Run();
 
+// make the trip clicking for details with the a tag to the title and the button and picture
+
 // user panel - my request - driver and passenger perspective and my trips - driver and passenger perspectives
 
-// add sorting pagination to the mytrips page
-
-// fix the status of the trips to be red if it isn't upcoming 
 
 // in the list all users admind panel when i tourist just got changed to driver via a request in the panel it isn't reflected and it still shows tourist even though he is a driver now 
 
-//when tripparticipant is denied delete the request so he can request again.. 
 
 // he shoudn't be able to join a trip at the same time of another one 
 // a/an driver/user can't be on two trips at the same time
@@ -88,15 +86,9 @@ app.Run();
 // when joining a tirp you then you can't edit it 
 
 
-// when changing the user's role, check if the user is a driver and if he is delete all his trips/put them in hold
-//this should be done run checks on it
-
 // admin should accept trips???
 
 
-
-
-// tripParticipant should be able to be modified by the admin 
 
 // fix foulders and files
 // the role should be passenger not tourist
@@ -108,3 +100,7 @@ app.Run();
 
 // prompts
 
+//trips edit page 
+// free seats aren't updated 
+// reserved status isn't blue but it is green rn
+// add the validations for create/edit trip

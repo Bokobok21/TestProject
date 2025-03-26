@@ -9,6 +9,8 @@ using TestProject.Data;
 using TestProject.Extentions;
 using TestProject.Models.ViewModels;
 using TestProject.Models;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.CodeAnalysis.Elfie.Model.Strings;
 
 //[Authorize(Roles = "Admin")]
 public class ListAllUsersController : Controller
@@ -16,15 +18,18 @@ public class ListAllUsersController : Controller
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly RoleManager<IdentityRole> _roleManager;
     private readonly ApplicationDbContext _context;
+    private readonly IWebHostEnvironment _webHostEnvironment;
 
     public ListAllUsersController(
         UserManager<ApplicationUser> userManager,
         RoleManager<IdentityRole> roleManager,
-        ApplicationDbContext context)
+        ApplicationDbContext context,
+        IWebHostEnvironment webHostEnvironment)
     {
         _userManager = userManager;
         _roleManager = roleManager;
         _context = context;
+        _webHostEnvironment = webHostEnvironment;
     }
 
     // GET: Admin/Users
@@ -34,30 +39,47 @@ public class ListAllUsersController : Controller
         ViewBag.Roles = new SelectList(await _roleManager.Roles.ToListAsync(), "Name", "Name", roleFilter);
         ViewBag.CurrentRoleFilter = roleFilter;
 
-        // Query users with their roles
-        var usersQuery = from u in _context.Users
-                         join ur in _context.UserRoles on u.Id equals ur.UserId into userRoles
-                         from ur in userRoles.DefaultIfEmpty()
-                         join r in _context.Roles on ur.RoleId equals r.Id into userRolesRoles
-                         from r in userRolesRoles.DefaultIfEmpty()
-                         group r by u into g
-                         select new UserViewModel
-                         {
-                             User = g.Key,
-                             Role = g.Select(x => x.Name).FirstOrDefault() ?? "No Role"
-                         };
+        // //Query users with their roles
+        //var usersQuery = (from u in _context.Users.AsNoTracking()
+        //                  join ur in _context.UserRoles on u.Id equals ur.UserId into userRoles
+        //                 from ur in userRoles.DefaultIfEmpty()
+        //                 join r in _context.Roles on ur.RoleId equals r.Id into userRolesRoles
+        //                 from r in userRolesRoles.DefaultIfEmpty()
+        //                 group r by u into g
+        //                 select new UserViewModel
+        //                 {
+        //                     User = g.Key,
+        //                     Role = g.Select(x => x.Name).FirstOrDefault() ?? "No Role"
+        //                 }).ToList();
+      
+
+        var usersQuery = _context.ApplicationUsers
+    .AsNoTracking() // Ensure fresh data
+    .GroupJoin(_context.UserRoles, u => u.Id, ur => ur.UserId, (u, userRoles) => new { u, userRoles })
+    .SelectMany(joined => joined.userRoles.DefaultIfEmpty(), (joined, ur) => new { joined.u, ur })
+    .GroupJoin(_context.Roles, temp => temp.ur.RoleId, r => r.Id, (temp, roles) => new { temp.u, roles })
+    .SelectMany(joined => joined.roles.DefaultIfEmpty(), (joined, r) => new { joined.u, Role = r })
+    .GroupBy(x => x.u)
+    .Select(g => new UserViewModel
+    {
+        User = g.Key,
+        Role = g.Select(x => x.Role.Name).FirstOrDefault() ?? "No Role"
+    })
+    .ToList();
+
+
 
         // Calculate total users before applying filters
-        var totalUsers = await usersQuery.CountAsync();
+        var totalUsers = usersQuery.Count();
 
         // Apply role filter (if not "All Roles")
         if (!string.IsNullOrEmpty(roleFilter) && roleFilter != "All Roles")
         {
-            usersQuery = usersQuery.Where(u => u.Role == roleFilter);
+            usersQuery = usersQuery.Where(u => u.Role == roleFilter).ToList();
         }
 
         // Materialize the query into memory
-        var userList = await usersQuery.ToListAsync();
+        var userList = usersQuery.ToList();
 
         // Set count message in ViewBag
         if (!string.IsNullOrEmpty(roleFilter) && roleFilter != "All Roles")
@@ -105,24 +127,34 @@ public class ListAllUsersController : Controller
 
         // Remove all existing roles
         var currentRoles = await _userManager.GetRolesAsync(user);
-        await _userManager.RemoveFromRolesAsync(user, currentRoles);
 
-        // Assign new role
-        await _userManager.AddToRoleAsync(user, newRole);
-
-        // Update user position and other properties based on role
-        user.Position = newRole;
-        if (newRole == "Driver")
+        if (newRole == "Driver" && !currentRoles.Contains("Driver"))
         {
             user.DateOfDriverAcceptance = DateTime.Now;
-            user.ImagePath = "/images/drivers/default-image-Driver.jpg";
 
             var requestDrivers = await _context.RequestDrivers.Where(rd => rd.UserId == user.Id).ToListAsync();
+
+            if (!requestDrivers.Any())
+            {
+                user.ImagePath = "/images/drivers/default-image-Driver.jpg";
+            }
+
             _context.RequestDrivers.RemoveRange(requestDrivers);
         }
-        else if (newRole == "Tourist")
+        else if (newRole == "Tourist" && !currentRoles.Contains("Tourist"))
         {
             user.DateOfDriverAcceptance = null;
+
+            // Check if the current image is not the default image before deleting
+            if (!string.IsNullOrEmpty(user.ImagePath) && !user.ImagePath.Equals("/images/drivers/default-image-Driver.jpg", StringComparison.OrdinalIgnoreCase))
+            {
+                var oldImage = Path.Combine(_webHostEnvironment.WebRootPath, user.ImagePath.TrimStart('/'));
+                if (System.IO.File.Exists(oldImage))
+                {
+                    System.IO.File.Delete(oldImage);
+                }
+            }
+
             user.ImagePath = null;
 
             var trips = await _context.Trips.Where(rd => rd.DriversId == user.Id && rd.StatusTrip != TripStatus.Finished).ToListAsync();
@@ -134,6 +166,14 @@ public class ListAllUsersController : Controller
             var tripParticipants = await _context.TripParticipants.Where(tp => tp.Trip.DriversId == user.Id && tp.Trip.StatusTrip != TripStatus.Finished).ToListAsync();
             _context.TripParticipants.RemoveRange(tripParticipants);
         }
+
+        await _userManager.RemoveFromRolesAsync(user, currentRoles);
+
+        // Assign new role
+        await _userManager.AddToRoleAsync(user, newRole);
+
+        // Update user position and other properties based on role
+        user.Position = newRole;
 
         // Save changes to user
         await _userManager.UpdateAsync(user);

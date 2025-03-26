@@ -99,10 +99,10 @@
                 @if (ViewData["ShowActions"] as bool? ?? false)
                 {
                     <div class="trip-actions">
-                        <a asp-controller="Trips" asp-action="Edit" asp-route-id="@item.Id" asp-route-returnUrl="@returnUrl" class="trip-action-btn action-edit">
+                        <a asp-controller="Trips" asp-action="Edit" asp-route-id="@item.Id" asp-route-returnUrl="@returnUrl" class="trip-action-btn action-edit" style=" text-decoration: none;">
                             <i class="fas fa-edit"></i> Промени
                         </a>
-                        <a asp-controller="Trips" asp-action="Details" asp-route-id="@item.Id" asp-route-returnUrl="@returnUrl" class="trip-action-btn action-details">
+                        <a asp-controller="Trips" asp-action="Details" asp-route-id="@item.Id" asp-route-returnUrl="@returnUrl" class="trip-action-btn action-details" style=" text-decoration: none;">
                             <i class="fas fa-info-circle"></i> Детайли
                         </a>
                         <form asp-controller="Trips" asp-action="Delete" method="post" style="flex: 1;">
@@ -116,7 +116,7 @@
                         </form>
                     </div>
                 }
-                else
+                else if (!Context.Request.Path.ToString().Contains("MyTrips"))
                 {
                     @if (item.StatusTrip == TripStatus.Upcoming && item.FreeSeats > 0)
                     {

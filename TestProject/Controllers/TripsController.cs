@@ -417,9 +417,21 @@ namespace TestProject.Controllers
                         var change = tripViewModel.TotalSeats - trip.TotalSeats;
 
                         trip.TotalSeats = tripViewModel.TotalSeats;
-                        trip.FreeSeats += change;
 
-                        //here we only add the change, make a method to delete the requests if the free seats are less than the total seats
+                        if (trip.FreeSeats + change < 0)
+                        {
+                            var requests = await _context.Requests.Where(r => r.Trip.DriversId == trip.DriversId && r.StatusRequest != RequestStatus.Pending).ToListAsync();
+                            _context.Requests.RemoveRange(requests);
+
+                            var tripParticipants = await _context.TripParticipants.Where(tp => tp.Trip.DriversId == trip.DriversId && tp.Trip.StatusTrip != TripStatus.Finished).ToListAsync();
+                            _context.TripParticipants.RemoveRange(tripParticipants);
+
+                            trip.FreeSeats = trip.TotalSeats;
+                        }
+                        else
+                        {
+                            trip.FreeSeats += change;
+                        }
                     }
 
                     trip.CarModel = tripViewModel.CarModel;
@@ -428,7 +440,7 @@ namespace TestProject.Controllers
                     trip.RecurrenceInterval = recurrenceInterval.ToString();
                     trip.NextRunDate = tripViewModel.DepartureTime.Add(recurrenceInterval);
 
-                    if (trip.FreeSeats <= 0 && trip.StatusTrip == tripViewModel.StatusTrip && trip.StatusTrip != TripStatus.Upcoming)
+                    if (trip.FreeSeats == 0 && trip.StatusTrip == tripViewModel.StatusTrip && trip.StatusTrip != TripStatus.Upcoming)
                     {
                         trip.FreeSeats = 0;
                         trip.StatusTrip = TripStatus.Booked;

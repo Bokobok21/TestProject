@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using TestProject.Data;
 using TestProject.Extentions;
+using TestProject.Models;
 
 namespace TestProject.Controllers.UserControllers
 {
@@ -24,8 +25,11 @@ namespace TestProject.Controllers.UserControllers
                          .Select(tp => tp.Trip)
                          .ToList();
 
-         
-            return View(trips);
+            IOrderedEnumerable<Trip> orderedTrips = trips.OrderBy(t => t.StatusTrip != TripStatus.Upcoming);
+            orderedTrips = orderedTrips.ThenByDescending(t => t.CreatedDate);
+
+
+            return View(orderedTrips);
         }
     }
 }

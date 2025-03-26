@@ -116,26 +116,24 @@ namespace TestProject.Controllers
             request.StatusRequest = RequestStatus.Accepted;
 
             await _context.SaveChangesAsync();
-            return RedirectToAction("Index", "Requests");
+            return RedirectToAction("PendingRequests", "DriverRequests");
         }
-        
+
         public async Task<IActionResult> DenyRequest(int requestId)
         {
-            var request = await _context.Requests.FindAsync(requestId);
-            var user = await _context.Users.FindAsync(requestId);
+            var request = await _context.Requests.Include(r => r.User).FirstOrDefaultAsync(r => r.Id == requestId);
 
             if (request == null || request.StatusRequest != RequestStatus.Pending)
             {
                 return NotFound();
             }
 
-            var requests = await _context.Requests.Where(r => r.UserId == user.Id).ToListAsync();
+            var requests = await _context.Requests.Where(r => r.UserId == request.User.Id).ToListAsync();
             _context.Requests.RemoveRange(requests);
 
-            request.StatusRequest = RequestStatus.Rejected;
             await _context.SaveChangesAsync();
 
-            return RedirectToAction("Index", "Requests");
+            return RedirectToAction("PendingRequests", "DriverRequests");
         }
 
 

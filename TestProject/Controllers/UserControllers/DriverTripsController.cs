@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using TestProject.Data;
 using TestProject.Extentions;
+using TestProject.Models;
 
 namespace TestProject.Controllers.UserControllers
 {
@@ -22,8 +23,11 @@ namespace TestProject.Controllers.UserControllers
                             .Include(t => t.Driver)
                          .ToList();
 
+           IOrderedEnumerable<Trip> orderedTrips = trips.OrderBy(t => t.StatusTrip != TripStatus.Upcoming);
+            orderedTrips = orderedTrips.ThenByDescending(t => t.CreatedDate);
+
             ViewData["ShowActions"] = true;
-            return View(trips);
+            return View(orderedTrips);
         }
 
         public IActionResult DeleteTrip(int id)

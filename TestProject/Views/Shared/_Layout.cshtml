@@ -24,7 +24,13 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Trips" asp-action="Index">Пътешествия</a>
                         </li>
-
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="DriverApplications" asp-action="Index">Заявки за шофьори</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="ListAllUsers" asp-action="Users">Админ Панел</a>
+                        </li>
+                            
                        @if(User.IsInRole("Admin"))
                         {
                             <li class="nav-item">
