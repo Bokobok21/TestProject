@@ -6,225 +6,296 @@
 @inject UserManager<ApplicationUser> UserManager
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Детайли за пътуването";
 }
 
-<div asp-validation-summary="ModelOnly" class="text-danger"></div>
-
-<h1>Детайли</h1>
-
-<div>
-    <h4>Пътуване</h4>
-    <hr />
-    <dl class="row">
-        <dt class="col-sm-2">
-            Шофьор
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.DriverName)
-        </dd>
-
-        <dt class="col-sm-2">
-            Телефонен номер
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.DriverPhoneNumber)
-        </dd>
-
-        <dt class="col-sm-2">
-            Станал шофьор на
-        </dt>
-        <dd class="col-sm-10">
-            <span>@(Model.Driver?.DateOfDriverAcceptance?.ToString("yyyy-MM-dd") ?? "Вече не съществува")</span>
-        </dd>
-
-        <dt class="col-sm-2">
-            Начална позиция
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.StartPosition)
-        </dd>
-
-        <dt class="col-sm-2">
-            Дестинация
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Destination)
-        </dd>
-
-        <dt class="col-sm-2">
-            Час на тръгване
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.DepartureTime)
-        </dd>
-
-        <dt class="col-sm-2">
-            Час на връщане
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.ReturnTime)
-        </dd>
-
-        <dt class="col-sm-2">
-            Цена
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Price)
-        </dd>
-
-        <dt class="col-sm-2">
-            Общ брой места
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.TotalSeats)
-        </dd>
-
-        <dt class="col-sm-2">
-            Свободни места
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.FreeSeats)
-        </dd>
-
-        <dt class="col-sm-2">
-            Модел на колата
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.CarModel)
-        </dd>
-
-        <dt class="col-sm-2">
-            Регистрационен номер
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.PlateNumber)
-        </dd>
-
-        <dt class="col-sm-2">
-            Снимка
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.ImagePath)
-        </dd>
-
-        <dt class="col-sm-2">
-            Статус
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.StatusTrip)
-        </dd>
-
-        @if (Model.IsRecurring == true)
-        {
-            <dt class="col-sm-2">
-                Повтарящо се
-            </dt>
-            <dd class="col-sm-10">
-                @Html.DisplayFor(model => model.IsRecurring)
-            </dd>
-
-            <dt class="col-sm-2">
-                Интервал на повторение
-            </dt>
-            <dd class="col-sm-10">
-                @Html.DisplayFor(model => model.RecurrenceInterval)
-            </dd>
-
-            <dt class="col-sm-2">
-                Следваща дата
-            </dt>
-            <dd class="col-sm-10">
-                @Html.DisplayFor(model => model.NextRunDate)
-            </dd>
-        }
-    </dl>
-</div>
-
-<div>
-    @if (Model.FreeSeats > 0)
-    {
-
-        if (!Model.Requests.Any(r => r.UserId == User.Id()))
-        {
-
-            <form asp-controller="Requests" asp-action="SendJoinRequest" method="post">
-                <input type="hidden" name="returnUrl" value="@ViewBag.ReturnUrl" />
-                <input type="hidden" name="tripId" value="@Model.Id" />
-                <button type="submit" class="btn btn-primary">Заяви място</button>
-            </form>
-        }
-        else
-        {
-            <p>Вече имате заявка</p>
-        }
-    }
-    else
-    {
-        <p>Няма свободни места.</p>
-    }  
-
-    <a asp-controller="Trips" asp-action="Edit" asp-route-id="@Model.Id" asp-route-returnUrl="@Context.Request.Path">Edit</a> |
-    @{
-        if (ViewBag.ReturnUrl != null)
-        {
-            <a href="@ViewBag.ReturnUrl">Върни се обратно</a>
-        }
-        else
-        {
-            <a asp-action="MyDriverTrips" asp-controller="DriverTrips">Върни се обратно</a>
-        }
-    }
-</div>
-
-
-
-@if (Model.StatusTrip == TripStatus.Finished)
-{
-    <h3>Ревюта</h3>
-    <div>
-        @if (Model.Ratings.Any())
-        {
-            @foreach (var rating in Model.Ratings)
+<div class="container">
+    <div class="page-header">
+        <h1>Детайли за пътуването</h1>
+        @{
+            if (ViewBag.ReturnUrl != null)
             {
-                <div>
-                    <p>User: @(rating.User.UserName ?? "Анонимно")</p>
-                    <p>Score: @rating.Score/5</p>
-                    <p>@(rating.Comment ?? "")</p>
-                    <small>@rating.Date.ToString("yyyy-MM-dd")</small>
-                </div>
+                <a href="@ViewBag.ReturnUrl" class="btn btn-secondary">
+                    <i class="fas fa-arrow-left"></i> Върни се обратно
+                </a>
             }
-        }
-        else
-        {
-            <p>Няма ревюта.</p>
+            else
+            {
+                <a asp-action="MyDriverTrips" asp-controller="DriverTrips" class="btn btn-secondary">
+                    <i class="fas fa-arrow-left"></i> Върни се обратно
+                </a>
+            }
         }
     </div>
 
-    @if (User.Identity.IsAuthenticated)
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+    <div class="trip-details-container">
+        <!-- Trip Image and Status Section -->
+        <div class="trip-details-image-container">
+            <img src="@Model.ImagePath" alt="Trip Picture" class="trip-details-image" />
+
+            @{
+                string statusClass = "status-default";
+
+                if (Model.StatusTrip != null)
+                {
+                    string status = Model.StatusTrip.ToString().ToLower();
+
+                    if (status.Contains("резервирано") || status.Contains("предстоящо") || status.Contains("upcoming"))
+                    {
+                        statusClass = "status-upcoming";
+                    }
+                    else if (status.Contains("завършено") || status.Contains("completed"))
+                    {
+                        statusClass = "status-completed";
+                    }
+                    else if (status.Contains("отказано") || status.Contains("cancelled"))
+                    {
+                        statusClass = "status-cancelled";
+                    }
+                    else if (status.Contains("в процес") || status.Contains("in progress"))
+                    {
+                        statusClass = "status-in-progress";
+                    }
+                    else if (status.Contains("пълно") || status.Contains("full") || Model.FreeSeats <= 0)
+                    {
+                        statusClass = "status-full";
+                    }
+                }
+
+                if (Model.FreeSeats <= 0)
+                {
+                    statusClass = "status-full";
+                }
+            }
+
+            <div class="trip-status-badge @statusClass">
+                @Html.DisplayFor(model => model.StatusTrip)
+            </div>
+        </div>
+
+        <!-- Trip Information Section -->
+        <div class="trip-details-info">
+            <div class="trip-details-header">
+                <div class="trip-details-route">
+                    <h2>@Model.StartPosition → @Model.Destination</h2>
+                    <div class="trip-details-times">
+                        <div class="trip-time">
+                            <i class="fas fa-hourglass-start"></i> Тръгване: @Model.DepartureTime.ToString("yyyy-MM-dd HH:mm")
+                        </div>
+                        <div class="trip-time">
+                            <i class="fas fa-hourglass-end"></i> Връщане: @Model.ReturnTime.ToString("yyyy-MM-dd HH:mm")
+                        </div>
+                    </div>
+                </div>
+                <div class="trip-details-price">
+                    <span>@Model.Price лв.</span>
+                </div>
+            </div>
+
+            <div class="trip-details-sections">
+                <!-- Driver Information -->
+                <div class="trip-details-section">
+                    <h3 class="section-title"><i class="fas fa-user"></i> Информация за шофьора</h3>
+                    <div class="details-grid">
+                        <div class="details-item">
+                            <span class="details-label">Име</span>
+                            <span class="details-value">@Model.DriverName</span>
+                        </div>
+                        <div class="details-item">
+                            <span class="details-label">Телефон</span>
+                            <span class="details-value">@Model.DriverPhoneNumber</span>
+                        </div>
+                        <div class="details-item">
+                            <span class="details-label">Шофьор от</span>
+                            <span class="details-value">@(Model.Driver?.DateOfDriverAcceptance?.ToString("yyyy-MM-dd") ?? "Вече не съществува")</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Vehicle Information -->
+                <div class="trip-details-section">
+                    <h3 class="section-title"><i class="fas fa-car"></i> Информация за автомобила</h3>
+                    <div class="details-grid">
+                        <div class="details-item">
+                            <span class="details-label">Модел</span>
+                            <span class="details-value">@Model.CarModel</span>
+                        </div>
+                        <div class="details-item">
+                            <span class="details-label">Рег. номер</span>
+                            <span class="details-value">@Model.PlateNumber</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Seats Information -->
+                <div class="trip-details-section">
+                    <h3 class="section-title"><i class="fas fa-users"></i> Информация за местата</h3>
+                    <div class="details-grid">
+                        <div class="details-item">
+                            <span class="details-label">Общо места</span>
+                            <span class="details-value">@Model.TotalSeats</span>
+                        </div>
+                        <div class="details-item">
+                            <span class="details-label">Свободни места</span>
+                            <span class="details-value">
+                                @if (Model.FreeSeats > 0)
+                                {
+                                    <span class="free-seats-available">@Model.FreeSeats</span>
+                                }
+                                else
+                                {
+                                    <span class="free-seats-unavailable">@Model.FreeSeats</span>
+                                }
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recurrence Information (if applicable) -->
+                @if (Model.IsRecurring == true)
+                {
+                    <div class="trip-details-section">
+                        <h3 class="section-title"><i class="fas fa-sync"></i> Информация за повторение</h3>
+                        <div class="details-grid">
+                            <div class="details-item">
+                                <span class="details-label">Интервал</span>
+                                <span class="details-value">@Model.RecurrenceInterval</span>
+                            </div>
+                            <div class="details-item">
+                                <span class="details-label">Следваща дата</span>
+                                <span class="details-value">@Model.NextRunDate?.ToString("yyyy-MM-dd HH:mm")</span>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+
+            <!-- Actions Section -->
+            <div class="trip-details-actions">
+                @if (Model.FreeSeats > 0)
+                {
+                    if (!Model.Requests.Any(r => r.UserId == User.Id()))
+                    {
+                        <form asp-controller="Requests" asp-action="SendJoinRequest" method="post">
+                            <input type="hidden" name="returnUrl" value="@ViewBag.ReturnUrl" />
+                            <input type="hidden" name="tripId" value="@Model.Id" />
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-ticket-alt"></i> Заяви място
+                            </button>
+                        </form>
+                    }
+                    else
+                    {
+                        <div class="request-status">
+                            <i class="fas fa-info-circle"></i> Вече имате заявка за това пътуване
+                        </div>
+                    }
+                }
+                else
+                {
+                    <div class="request-status">
+                        <i class="fas fa-ban"></i> Няма свободни места
+                    </div>
+                }
+
+                <a asp-controller="Trips" asp-action="Edit" asp-route-id="@Model.Id" asp-route-returnUrl="@Context.Request.Path" class="btn btn-secondary">
+                    <i class="fas fa-edit"></i> Редактирай
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Reviews Section -->
+    @if (Model.StatusTrip == TripStatus.Finished)
     {
-        var user = await UserManager.GetUserAsync(User);
-        bool canReview = user != null &&
-                         Model.StatusTrip == TripStatus.Finished &&
-                          Model.TripParticipants.Any(tp => tp.UserId.Equals(user.Id, StringComparison.OrdinalIgnoreCase));
+        <div class="trip-reviews-container">
+            <h3 class="reviews-title"><i class="fas fa-star"></i> Ревюта</h3>
 
-        @if (canReview)
-        {
-            <a asp-controller="Ratings"
-            asp-action="Create"
-            asp-route-tripId="@Model.Id"
-            class="btn btn-primary">
-                Остави ревю
-            </a>
-        }
-        else
-        {
-            <p>Не може да оставиш ревю.</p>
-        }
+            @if (Model.Ratings.Any())
+            {
+                <div class="reviews-list">
+                    @foreach (var rating in Model.Ratings)
+                    {
+                        <div class="review-card">
+                            <div class="review-header">
+                                <div class="review-user">
+                                    <i class="fas fa-user-circle"></i> @(rating.User.UserName ?? "Анонимно")
+                                </div>
+                                <div class="review-score">
+                                    @for (int i = 1; i <= 5; i++)
+                                    {
+                                        if (i <= rating.Score)
+                                        {
+                                            <i class="fas fa-star"></i>
+                                        }
+                                        else
+                                        {
+                                            <i class="far fa-star"></i>
+                                        }
+                                    }
+                                </div>
+                            </div>
+                            <div class="review-content">
+                                @if (!string.IsNullOrEmpty(rating.Comment))
+                                {
+                                    <p>@rating.Comment</p>
+                                }
+                                else
+                                {
+                                    <p class="no-comment">Няма коментар</p>
+                                }
+                            </div>
+                            <div class="review-date">
+                                <i class="far fa-calendar-alt"></i> @rating.Date.ToString("yyyy-MM-dd")
+                            </div>
+                        </div>
+                    }
+                </div>
+            }
+            else
+            {
+                <div class="no-reviews">
+                    <i class="far fa-frown"></i>
+                    <p>Няма ревюта за това пътуване.</p>
+                </div>
+            }
 
+            @if (User.Identity.IsAuthenticated)
+            {
+                var user = await UserManager.GetUserAsync(User);
+                bool canReview = user != null &&
+                Model.StatusTrip == TripStatus.Finished &&
+                Model.TripParticipants.Any(tp => tp.UserId.Equals(user.Id, StringComparison.OrdinalIgnoreCase));
+
+                @if (canReview)
+                {
+                    <div class="add-review-section">
+                        <a asp-controller="Ratings"
+                           asp-action="Create"
+                           asp-route-tripId="@Model.Id"
+                           class="btn btn-primary">
+                            <i class="fas fa-pen"></i> Остави ревю
+                        </a>
+                    </div>
+                }
+                else
+                {
+                    <div class="cannot-review">
+                        <i class="fas fa-info-circle"></i>
+                        <p>Не може да оставите ревю за това пътуване.</p>
+                    </div>
+                }
+            }
+        </div>
     }
-}
-else
-{
-    <p>Ревюта може да бюдат оставени само след като пътуването приключи.</p>
-}
+    else
+    {
+        <div class="reviews-not-available">
+            <i class="fas fa-info-circle"></i>
+            <p>Ревюта може да бъдат оставени само след като пътуването приключи.</p>
+        </div>
+    }
+</div>
+

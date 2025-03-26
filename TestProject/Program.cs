@@ -66,6 +66,8 @@ app.MapRazorPages();
 
 app.Run();
 
+//fix the details page to make the picture in landscape driver info to the right of it and the trips details beneath 
+
 // admin panel - listallusers and driverrequests (should i have otherr admin things for things that normally no but for the presentation)
 // user panel - my request - driver and passenger perspective and my trips - driver and passenger perspectives
 
