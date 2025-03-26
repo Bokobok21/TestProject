@@ -32,7 +32,7 @@ namespace TestProject.Controllers
                 return Redirect(returnUrl); // Redirects back to the previous page
             }
 
-            sortOrder ??= "created_date_desc"; // Default sorting
+            sortOrder ??= "departure_time_asc"; // Default sorting
 
             ViewBag.CurrentSortOrder = sortOrder;
             ViewBag.CurrentStartPosition = startPosition;
@@ -40,8 +40,6 @@ namespace TestProject.Controllers
 
             ViewBag.SortOptions = new List<SelectListItem>
             {
-                new SelectListItem { Value = "created_date_desc", Text = "Най-нови" },
-                new SelectListItem { Value = "created_date_asc", Text = "Най-стари" },
                 new SelectListItem { Value = "departure_time_asc", Text = "Час на тръгване (възходящо)" },
                 new SelectListItem { Value = "departure_time_desc", Text = "Час на тръгване (низходящо)" },
                 new SelectListItem { Value = "return_time_asc", Text = "Час на връщане (възходящо)" },
@@ -51,7 +49,9 @@ namespace TestProject.Controllers
                 new SelectListItem { Value = "free_seats_asc", Text = "Свободни места (възходящо)" },
                 new SelectListItem { Value = "free_seats_desc", Text = "Свободни места (низходящо)" },
                 new SelectListItem { Value = "total_seats_asc", Text = "Общо места (възходящо)" },
-                new SelectListItem { Value = "total_seats_desc", Text = "Общо места (низходящо)" }
+                new SelectListItem { Value = "total_seats_desc", Text = "Общо места (низходящо)" },
+                new SelectListItem { Value = "created_date_desc", Text = "Най-нови" },
+                new SelectListItem { Value = "created_date_asc", Text = "Най-стари" },
             };
 
             // Fetch trips from the database
@@ -73,6 +73,7 @@ namespace TestProject.Controllers
 
             // Start with OrderBy()
             IOrderedEnumerable<Trip> orderedTrips = tripsList.OrderBy(t => t.StatusTrip != TripStatus.Upcoming);
+            orderedTrips = orderedTrips.ThenBy(t => t.StatusTrip);
 
             // Apply the selected sort order as secondary sort
             switch (sortOrder)
@@ -114,10 +115,11 @@ namespace TestProject.Controllers
                     orderedTrips = orderedTrips.ThenByDescending(t => t.TotalSeats);
                     break;
                 default:
-                    // Default secondary sort (e.g., Newest First)
-                    orderedTrips = orderedTrips.ThenByDescending(t => t.CreatedDate);
+                    // Default secondary sort 
+                    orderedTrips = orderedTrips.ThenBy(t => t.DepartureTime);
                     break;
             }
+          
 
             // Pagination
             int pageSize = 3;

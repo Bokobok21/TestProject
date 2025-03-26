@@ -25,8 +25,10 @@ namespace TestProject.Controllers.UserControllers
                          .Select(tp => tp.Trip)
                          .ToList();
 
+            // IOrderedEnumerable<Trip> orderedTrips = trips.OrderBy(t => t.StatusTrip != TripStatus.Upcoming);
             IOrderedEnumerable<Trip> orderedTrips = trips.OrderBy(t => t.StatusTrip != TripStatus.Upcoming);
-            orderedTrips = orderedTrips.ThenByDescending(t => t.CreatedDate);
+            orderedTrips = orderedTrips.ThenBy(t => t.StatusTrip);
+            orderedTrips = orderedTrips.ThenBy(t => t.DepartureTime);
 
 
             return View(orderedTrips);

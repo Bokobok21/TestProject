@@ -17,6 +17,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 builder.Services.AddHostedService<TripSchedulerService>();
+builder.Services.AddHostedService<TripStatusUpdater>();
 
 builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
     .AddRoles<IdentityRole>()
@@ -65,32 +66,22 @@ app.MapRazorPages();
 
 app.Run();
 
-// make the trip clicking for details with the a tag to the title and the button and picture
-
+// admin panel - listallusers and driverrequests (should i have otherr admin things for things that normally no but for the presentation)
 // user panel - my request - driver and passenger perspective and my trips - driver and passenger perspectives
-
-
-// in the list all users admind panel when i tourist just got changed to driver via a request in the panel it isn't reflected and it still shows tourist even though he is a driver now 
-
 
 // he shoudn't be able to join a trip at the same time of another one 
 // a/an driver/user can't be on two trips at the same time
 
-// fix editing of status in trips because it resets or doesn't change the status 
-
-// keep order of request when free seats are changed to delete the users that have entered last and only keep the first ones
-
-// password iziskvaniq are still in english
-
 //if statements for the joining in trip back to list meaingng(also if it joins resend him to the same page so there is no issue with the edit after?)
-// when joining a tirp you then you can't edit it 
+// meaning of the top line is to fix the back to list fucntion
 
+// in the list all users admind panel when i tourist just got changed to driver via a request in the panel it isn't reflected and it still shows tourist even though he is a driver now???
 
+// password iziskvaniq are still in english?
 // admin should accept trips???
 
-
-
 // fix foulders and files
+// trips pictures aren't deleted when it is changed in edit form
 // the role should be passenger not tourist
 
 
@@ -100,7 +91,3 @@ app.Run();
 
 // prompts
 
-//trips edit page 
-// free seats aren't updated 
-// reserved status isn't blue but it is green rn
-// add the validations for create/edit trip

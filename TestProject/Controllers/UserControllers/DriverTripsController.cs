@@ -22,9 +22,10 @@ namespace TestProject.Controllers.UserControllers
                          .Where(t => t.DriversId == userId)
                             .Include(t => t.Driver)
                          .ToList();
-
-           IOrderedEnumerable<Trip> orderedTrips = trips.OrderBy(t => t.StatusTrip != TripStatus.Upcoming);
-            orderedTrips = orderedTrips.ThenByDescending(t => t.CreatedDate);
+           // IOrderedEnumerable<Trip> orderedTrips = trips.OrderBy(t => t.StatusTrip != TripStatus.Upcoming);
+            IOrderedEnumerable<Trip> orderedTrips = trips.OrderBy(t => t.StatusTrip != TripStatus.Upcoming);
+            orderedTrips = orderedTrips.ThenBy(t => t.StatusTrip);
+            orderedTrips = orderedTrips.ThenBy(t => t.DepartureTime);
 
             ViewData["ShowActions"] = true;
             return View(orderedTrips);

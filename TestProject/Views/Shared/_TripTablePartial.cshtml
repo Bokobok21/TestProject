@@ -10,8 +10,8 @@
 <div class="trips-grid">
     @foreach (var item in Model)
     {
-        <div class="trip-card" onclick="location.href='@Url.Action("Details", "Trips", new { id = item.Id, returnUrl = returnUrl })'">
-            <div class="trip-image-container">
+        <div class="trip-card" >
+           <a asp-action="Details" asp-controller="Trips" asp-route-id="@item.Id" asp-route-returnUrl="@returnUrl"> <div class="trip-image-container" >
                 <img src="@item.ImagePath" alt="Trip Picture" class="trip-image" />
                 @{
                     string statusClass = "status-default";
@@ -48,11 +48,12 @@
                 <div class="trip-status-badge @statusClass">
                     @Html.DisplayFor(modelItem => item.StatusTrip)
                 </div>
-            </div>
+                </div>
+            </a>
             <div class="trip-content">
                 <div class="trip-header">
                     <div>
-                        <h3 class="trip-route">@item.StartPosition → @item.Destination</h3>
+                        <a asp-action="Details" asp-controller="Trips" asp-route-id="@item.Id" asp-route-returnUrl="@returnUrl" style="text-decoration: none;"> <h3 class="trip-route">@item.StartPosition → @item.Destination</h3> </a>
                         <div class="trip-driver">
                             <i class="fas fa-user"></i> @(item.Driver?.UserName ?? "Вече не съществува")
                         </div>
@@ -110,17 +111,24 @@
                             <input type="hidden" name="id" value="@item.Id" />
                             <input type="hidden" name="returnUrl" value="@returnUrl" />
                             <button type="submit" class="trip-action-btn action-delete"
-                                    onclick="return confirm('Сигурен ли си, че искаш да го изтриеш?')">
+                            onclick="return confirm('Сигурен ли си, че искаш да го изтриеш?')">
                                 <i class="fas fa-trash"></i> Изтрии
                             </button>
                         </form>
                     </div>
                 }
-                else if (!Context.Request.Path.ToString().Contains("MyTrips"))
+                else if (Context.Request.Path.ToString().Contains("MyTrips"))
+                {
+                    <a asp-controller="Ratings" asp-action="Create" asp-route-tripid="@item.Id" class="btn btn-primary" style="width: 100%; margin-top: 10px;">
+                        <i class="fa fa-clipboard "></i> Остави ревю @* fa fa-clipboard/star/comment/pen/thumbs-up *@
+                    </a>
+                }
+                else
                 {
                     @if (item.StatusTrip == TripStatus.Upcoming && item.FreeSeats > 0)
                     {
-                        <a class="btn btn-primary" style="width: 100%; margin-top: 10px;">
+                        <a asp-action="Details" asp-controller="Trips" asp-route-id="@item.Id" asp-route-returnUrl="@returnUrl"
+                            class="btn btn-primary" style="width: 100%; margin-top: 10px;">
                             <i class="fas fa-ticket-alt"></i> Резервирай място
                         </a>
                     }
