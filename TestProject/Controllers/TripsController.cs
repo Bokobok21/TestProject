@@ -206,8 +206,14 @@ namespace TestProject.Controllers
 
         // GET: Trips/Create
         [Authorize(Roles = "Admin,Driver")]
-        public IActionResult Create(string? returnUrl)
+        public async Task<IActionResult> CreateAsync(string? returnUrl)
         {
+            // Get user's existing trips
+            var userId = User.Id();
+            var userTrips = await GetUserOverlappingTrips(userId);
+
+            // Pass to view
+            ViewBag.UserTrips = System.Text.Json.JsonSerializer.Serialize(userTrips);
             ViewBag.ReturnUrl = returnUrl;
             return View();
         }
@@ -313,6 +319,14 @@ namespace TestProject.Controllers
             {
                 return NotFound();
             }
+
+            // Get user's existing trips (excluding current trip)
+            var userId = User.Id();
+            var userTrips = await GetUserOverlappingTrips(userId, id);
+
+            // Pass to view
+            ViewBag.UserTrips = System.Text.Json.JsonSerializer.Serialize(userTrips);
+
 
             TimeSpan reccuranceInterval = TimeSpan.Parse(trip.RecurrenceInterval);
 
@@ -528,5 +542,31 @@ namespace TestProject.Controllers
         {
             return _context.Trips.Any(e => e.Id == id);
         }
+
+        private async Task<List<object>> GetUserOverlappingTrips(string userId, int? excludeTripId = null)
+        {
+            var query = _context.Trips
+                .Where(t => t.DriversId == userId &&
+                       (t.StatusTrip == TripStatus.Upcoming || t.StatusTrip == TripStatus.Ongoing));
+
+            // Exclude current trip in edit mode
+            if (excludeTripId.HasValue)
+            {
+                query = query.Where(t => t.Id != excludeTripId.Value);
+            }
+
+            var userTrips = await query
+                .Select(t => new {
+                    id = t.Id,
+                    start = t.DepartureTime,
+                    end = t.ReturnTime,
+                    startPosition = t.StartPosition,
+                    destination = t.Destination
+                })
+                .ToListAsync();
+
+            return userTrips.Cast<object>().ToList();
+        }
+
     }
 }

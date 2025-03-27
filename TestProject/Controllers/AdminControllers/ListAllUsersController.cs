@@ -141,7 +141,7 @@ public class ListAllUsersController : Controller
 
             _context.RequestDrivers.RemoveRange(requestDrivers);
         }
-        else if (newRole == "Tourist" && !currentRoles.Contains("Tourist"))
+        else if (newRole == "Tourist")
         {
             user.DateOfDriverAcceptance = null;
 

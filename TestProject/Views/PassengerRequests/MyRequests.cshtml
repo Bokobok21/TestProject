@@ -1,8 +1,42 @@
-﻿@using TestProject.Extentions
+﻿@using TestProject.Extentions  
+@{  
+    ViewData["Title"] = "Passenger Requests";  
+}  
+@model IEnumerable<TestProject.Models.Trip>  
+<h2>Моите заявки</h2>  
+
 @{
-    ViewData["Title"] = "Passenger Requests";
+    var IsDriver = ViewBag.IsDriver; 
+
+    @if (IsDriver != null && ((List<TestProject.Models.RequestDriver>)IsDriver).Any())
+    {
+
+        <div class="card-body">
+            @foreach (var request in IsDriver)
+            {
+                <div class="d-flex align-items-center justify-content-between p-3 border-bottom">
+                    <!-- Profile Image & Username -->
+                    <div class="d-flex align-items-center">
+                        <img src="@request.User?.ImagePath" alt="Потребителско изображение" width="50" height="50" class="rounded-circle me-3">
+                        <h6 class="mb-0">@request.User?.UserName</h6>
+                    </div>
+
+                    <!-- Status -->
+                    <span >@request.StatusRequest</span>
+
+                    <!-- Request Date -->
+                    <small class="text-muted">@request.Date.ToString("yyyy-MM-dd HH:mm")</small>
+
+                    <form asp-controller="DriverApplications" asp-action="Deny" asp-route-id="@request.Id" asp-route-returnUrl="@Context.Request.Path" method="post">
+                        <button type="submit" class="btn action-delete">Отмени заявката</button>
+                    </form>
+
+                </div>
+            }
+        </div>
+
+
+    } 
 }
-@model IEnumerable<TestProject.Models.Trip>
-<h2>Моите заявки</h2>
 
 <partial name="_TripTablePartial" model="Model" />

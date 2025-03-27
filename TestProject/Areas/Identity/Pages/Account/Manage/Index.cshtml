@@ -19,7 +19,7 @@
                 string style1 = "none";
             }
 
-            @if (User.IsInRole("Driver"))
+            @if (User.IsInRole("Driver") || User.IsInRole("Admin"))
             {
                 style1 = "block";
                 <div>

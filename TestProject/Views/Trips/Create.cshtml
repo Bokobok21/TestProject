@@ -42,23 +42,23 @@
                                 <span asp-validation-for="Destination" class="text-danger"></span>
                             </div>
                         </div>
-                        
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label asp-for="DepartureTime" class="control-label">
-                                    <i class="fas fa-hourglass-start"></i> Час на заминаване
-                                </label>
-                                <input asp-for="DepartureTime" class="form-control" type="datetime-local" />
-                                <span asp-validation-for="DepartureTime" class="text-danger"></span>
-                            </div>
-                            
-                            <div class="form-group">
-                                <label asp-for="ReturnTime" class="control-label">
-                                    <i class="fas fa-hourglass-end"></i> Час на връщане
-                                </label>
-                                <input asp-for="ReturnTime" class="form-control" type="datetime-local" />
-                                <span asp-validation-for="ReturnTime" class="text-danger"></span>
-                            </div>
+
+                        <div class="form-group">
+                            <label asp-for="DepartureTime" class="control-label">
+                                <i class="fas fa-hourglass-start"></i> Час на заминаване
+                            </label>
+                            <input asp-for="DepartureTime" class="form-control" type="datetime-local" id="departureTime" />
+                            <span asp-validation-for="DepartureTime" class="text-danger"></span>
+                            <div class="datetime-error" id="departureTimeError">Часът на заминаване не може да бъде в миналото</div>
+                        </div>
+
+                        <div class="form-group">
+                            <label asp-for="ReturnTime" class="control-label">
+                                <i class="fas fa-hourglass-end"></i> Час на връщане
+                            </label>
+                            <input asp-for="ReturnTime" class="form-control" type="datetime-local" id="returnTime" />
+                            <span asp-validation-for="ReturnTime" class="text-danger"></span>
+                            <div class="datetime-error" id="returnTimeError">Часът на връщане трябва да бъде след часа на заминаване</div>
                         </div>
                         
                         <div class="form-row">
@@ -141,7 +141,7 @@
                             </label>
                         </div>
 
-                        <div id="recurrenceFields" class="recurrence-fields" style="display: block;">
+                        <div id="recurrenceFields" class="recurrence-fields" style="display: none;">
                             <p class="recurrence-title">Повтаря се на:</p>
                             <div class="form-row">
                                 <div class="form-group">
@@ -223,33 +223,35 @@
         </div>
     </div>
 </div>
-
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-    
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
     <script>
-        // // Toggle recurrence fields
-        // document.getElementById("isRecurring").addEventListener("change", function() {
-        //     document.getElementById("recurrenceFields").style.display = this.checked ? "block" : "none";
-        // });
-        
+        // Toggle recurrence fields
+        document.getElementById("IsRecurring").addEventListener("change", function() {
+            document.getElementById("recurrenceFields").style.display = this.checked ? "block" : "none";
+        });
+
         // File upload preview
         const actualFileInput = document.getElementById('imageUpload');
         const fileChosen = document.getElementById('file-chosen');
         const imagePreviewContainer = document.getElementById('image-preview-container');
         const imagePreview = document.getElementById('image-preview');
         const removeImageBtn = document.getElementById('remove-image');
-        
+        const submitButton = document.querySelector('button[type="submit"]');
+
         actualFileInput.addEventListener('change', function() {
             if (this.files && this.files[0]) {
                 const file = this.files[0];
                 fileChosen.textContent = file.name;
-                
+
                 const reader = new FileReader();
                 reader.onload = function(e) {
                     imagePreview.src = e.target.result;
                     imagePreviewContainer.style.display = 'block';
-                    
+
                     // Update the preview card image
                     document.getElementById('preview-image').src = e.target.result;
                 }
@@ -259,14 +261,14 @@
                 imagePreviewContainer.style.display = 'none';
             }
         });
-        
+
         removeImageBtn.addEventListener('click', function() {
             actualFileInput.value = '';
             fileChosen.textContent = 'Не е избран файл';
             imagePreviewContainer.style.display = 'none';
             document.getElementById('preview-image').src = '/placeholder.svg?height=200&width=350';
         });
-        
+
         // Live preview updates
         function updatePreview() {
             const startPosition = document.querySelector('[name="StartPosition"]').value || 'Начална позиция';
@@ -275,21 +277,21 @@
             const totalSeats = document.querySelector('[name="TotalSeats"]').value || '0';
             const carModel = document.querySelector('[name="CarModel"]').value || 'Модел на автомобила';
             const plateNumber = document.querySelector('[name="PlateNumber"]').value || 'Рег. номер';
-            
+
             let departureTime = '-';
             const departureInput = document.querySelector('[name="DepartureTime"]').value;
             if (departureInput) {
                 const date = new Date(departureInput);
                 departureTime = date.toLocaleString('bg-BG');
             }
-            
+
             let returnTime = '-';
             const returnInput = document.querySelector('[name="ReturnTime"]').value;
             if (returnInput) {
                 const date = new Date(returnInput);
                 returnTime = date.toLocaleString('bg-BG');
             }
-            
+
             document.getElementById('preview-route').textContent = `${startPosition} → ${destination}`;
             document.getElementById('preview-price').textContent = `${price} лв`;
             document.getElementById('preview-departure').textContent = departureTime;
@@ -299,15 +301,181 @@
             document.getElementById('preview-car-model').textContent = carModel;
             document.getElementById('preview-plate').textContent = plateNumber;
         }
-        
+
         // Add event listeners to all form inputs
         const formInputs = document.querySelectorAll('input[type="text"], input[type="number"], input[type="datetime-local"]');
         formInputs.forEach(input => {
             input.addEventListener('input', updatePreview);
         });
-        
+
         // Initial preview update
         document.addEventListener('DOMContentLoaded', updatePreview);
+
+        // Parse user trips from ViewBag
+        const userTrips = @Html.Raw(ViewBag.UserTrips ?? "[]");
+
+        // DateTime validation
+        const departureTimeInput = document.getElementById('departureTime');
+        const returnTimeInput = document.getElementById('returnTime');
+        const departureTimeError = document.getElementById('departureTimeError');
+        const returnTimeError = document.getElementById('returnTimeError');
+
+        // Function to check if a datetime is within any existing trip
+        function isOverlappingWithExistingTrip(newStart, newEnd) {
+            for (const trip of userTrips) {
+                const tripStart = new Date(trip.start);
+                const tripEnd = new Date(trip.end);
+
+                // Check if there's an overlap
+                if ((newStart >= tripStart && newStart <= tripEnd) ||
+                    (newEnd >= tripStart && newEnd <= tripEnd) ||
+                    (newStart <= tripStart && newEnd >= tripEnd)) {
+                    return {
+                        overlaps: true,
+                        tripStart,
+                        tripEnd,
+                        startPosition: trip.startPosition,
+                        destination: trip.destination
+                    };
+                }
+            }
+
+            return { overlaps: false };
+        }
+
+        // Set min attribute for departure time to current datetime
+        function setMinDepartureTime() {
+            const now = new Date();
+            const year = now.getFullYear();
+            const month = String(now.getMonth() + 1).padStart(2, '0');
+            const day = String(now.getDate()).padStart(2, '0');
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+
+            const minDateTime = `${year}-${month}-${day}T${hours}:${minutes}`;
+            departureTimeInput.setAttribute('min', minDateTime);
+
+            // Validate current value if it exists
+            if (departureTimeInput.value) {
+                validateDepartureTime();
+            }
+        }
+
+        // Validate departure time
+        function validateDepartureTime() {
+            const departureTime = new Date(departureTimeInput.value);
+            const now = new Date();
+
+            if (departureTime < now) {
+                departureTimeInput.classList.add('invalid');
+                departureTimeError.textContent = 'Часът на заминаване не може да бъде в миналото';
+                departureTimeError.classList.add('visible');
+                submitButton.disabled = true;
+                return false;
+            }
+
+            // Check for return time if it exists
+            if (returnTimeInput.value) {
+                const returnTime = new Date(returnTimeInput.value);
+                const overlap = isOverlappingWithExistingTrip(departureTime, returnTime);
+
+                if (overlap.overlaps) {
+                    departureTimeInput.classList.add('invalid');
+                    departureTimeError.textContent = `Имате друго пътуване от ${overlap.startPosition} до ${overlap.destination} между ${overlap.tripStart.toLocaleString('bg-BG')} и ${overlap.tripEnd.toLocaleString('bg-BG')}`;
+                    departureTimeError.classList.add('visible');
+                    submitButton.disabled = true;
+                    return false;
+                }
+            }
+
+            departureTimeInput.classList.remove('invalid');
+            departureTimeError.classList.remove('visible');
+
+             // Only enable submit if both validations pass
+            if (returnTimeInput.value) {
+                const returnValid = validateReturnTime();
+                submitButton.disabled = !returnValid;
+            } else {
+                submitButton.disabled = false;
+            }
+
+            return true;
+        }
+
+        // Validate return time
+        function validateReturnTime() {
+            if (!departureTimeInput.value) {
+                returnTimeInput.classList.add('invalid');
+                returnTimeError.textContent = 'Първо изберете час на заминаване';
+                returnTimeError.classList.add('visible');
+                   submitButton.disabled = true;
+                return false;
+            }
+
+            const departureTime = new Date(departureTimeInput.value);
+            const returnTime = new Date(returnTimeInput.value);
+
+            if (returnTime <= departureTime) {
+                returnTimeInput.classList.add('invalid');
+                returnTimeError.textContent = 'Часът на връщане трябва да бъде след часа на заминаване';
+                returnTimeError.classList.add('visible');
+                   submitButton.disabled = true;
+                return false;
+            }
+
+            // Check for overlapping trips
+            const overlap = isOverlappingWithExistingTrip(departureTime, returnTime);
+            if (overlap.overlaps) {
+                returnTimeInput.classList.add('invalid');
+                returnTimeError.textContent = `Имате друго пътуване от ${overlap.startPosition} до ${overlap.destination} между ${overlap.tripStart.toLocaleString('bg-BG')} и ${overlap.tripEnd.toLocaleString('bg-BG')}`;
+                returnTimeError.classList.add('visible');
+                   submitButton.disabled = true;
+                return false;
+            }
+
+            returnTimeInput.classList.remove('invalid');
+            returnTimeError.classList.remove('visible');
+
+                 // Only enable submit if both validations pass
+            const departureValid = validateDepartureTime();
+            submitButton.disabled = !departureValid;
+
+            return true;
+        }
+
+        // Update return time min attribute when departure time changes
+        departureTimeInput.addEventListener('change', function() {
+            if (validateDepartureTime()) {
+                // Set min attribute for return time to departure time
+                returnTimeInput.setAttribute('min', departureTimeInput.value);
+                validateReturnTime();
+            }
+        });
+
+        returnTimeInput.addEventListener('change', validateReturnTime);
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            setMinDepartureTime();
+            // Update min time every minute
+            setInterval(setMinDepartureTime, 180000);
+        });
+
+        // Form submission validation
+        document.querySelector('form').addEventListener('submit', function(e) {
+            const departureValid = validateDepartureTime();
+            const returnValid = validateReturnTime();
+
+            if (!departureValid || !returnValid) {
+                e.preventDefault();
+                  alert('Моля, коригирайте грешките преди да продължите.');
+                return false;
+            }
+        });
     </script>
 }
+
+
+
+
 

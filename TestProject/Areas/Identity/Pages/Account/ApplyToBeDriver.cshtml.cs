@@ -68,8 +68,13 @@ namespace TestProject.Areas.Identity.Pages.Account
                 user.ImagePath = $"/images/drivers/{uniqueFileName}";
                 await _userManager.UpdateAsync(user);
             }
+            else
+            {
+                user.ImagePath = "/images/drivers/default-image-Driver.jpg";
+                await _userManager.UpdateAsync(user);
+            }
 
-            return RedirectToPage("/Account/Manage/Index");
+                return RedirectToPage("/Account/Manage/Index");
         }
     }
 }

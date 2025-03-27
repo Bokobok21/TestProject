@@ -22,17 +22,23 @@ namespace TestProject.Controllers.UserControllers
         {
             var userId = User.Id(); // Get logged-in user ID
 
-            var requests = _context.Requests
-                            .Where(r => r.UserId == userId && r.StatusRequest == RequestStatus.Pending)
-                            .Include(r => r.Trip)
-                            .ToList();
+            //var requests = _context.Requests
+            //                .Where(r => r.UserId == userId && r.StatusRequest == RequestStatus.Pending)
+            //                .Include(r => r.Trip)
+            //                .ToList();
 
             var trips = _context.Trips
-                                .Where(t => t.Requests.Any(r => r.StatusRequest == RequestStatus.Pending))
+                                .Where(t => t.Requests!.Any(r => r.StatusRequest == RequestStatus.Pending))
                                 .Include(t => t.Requests!.Where(r => r.StatusRequest == RequestStatus.Pending))
                                 .ThenInclude(r => r.User)
                                 .ToList();
 
+            var driverRequest = _context.RequestDrivers
+                                .Where(rd => rd.UserId == userId && rd.StatusRequest == RequestStatus.Pending)
+                                .Include(rd => rd.User)
+                                .ToList();
+
+            ViewBag.IsDriver = driverRequest;
             return View(trips);
         }
 
