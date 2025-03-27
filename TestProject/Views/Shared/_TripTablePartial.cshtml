@@ -10,44 +10,45 @@
 <div class="trips-grid">
     @foreach (var item in Model)
     {
-        <div class="trip-card" >
-           <a asp-action="Details" asp-controller="Trips" asp-route-id="@item.Id" asp-route-returnUrl="@returnUrl"> <div class="trip-image-container" >
-                <img src="@item.ImagePath" alt="Trip Picture" class="trip-image" />
-                @{
-                    string statusClass = "status-default";
+        <div class="trip-card">
+            <a asp-action="Details" asp-controller="Trips" asp-route-id="@item.Id" asp-route-returnUrl="@returnUrl">
+                <div class="trip-image-container">
+                    <img src="@item.ImagePath" alt="Снимка на колата" class="trip-image" onerror="this.onerror=null;this.src='/images/trips/default-image.jpg';" />
+                    @{
+                        string statusClass = "status-default";
 
-                    // Determine status class based on StatusTrip value
+                        // Determine status class based on StatusTrip value
 
-                    string status = item.StatusTrip.ToString().ToLower();
+                        string status = item.StatusTrip.ToString().ToLower();
 
-                    if (item.StatusTrip == TripStatus.Upcoming)
-                    {
-                        statusClass = "status-upcoming";
+                        if (item.StatusTrip == TripStatus.Upcoming)
+                        {
+                            statusClass = "status-upcoming";
+                        }
+                        else if (item.StatusTrip == TripStatus.Finished)
+                        {
+                            statusClass = "status-completed";
+                        }
+                        else if (item.StatusTrip == TripStatus.Ongoing)
+                        {
+                            statusClass = "status-in-progress";
+                        }
+                        else if (item.StatusTrip == TripStatus.Booked)
+                        {
+                            statusClass = "status-full";
+                        }
+
+
+                        // // If free seats are 0, always show as full regardless of status
+                        // if (item.FreeSeats <= 0)
+                        // {
+                        //     statusClass = "status-full";
+                        // }
                     }
-                    else if (item.StatusTrip == TripStatus.Finished)
-                    {
-                        statusClass = "status-completed";
-                    }
-                    else if (item.StatusTrip == TripStatus.Ongoing)
-                    {
-                        statusClass = "status-in-progress";
-                    }
-                    else if (item.StatusTrip == TripStatus.Booked)
-                    {
-                        statusClass = "status-full";
-                    }
 
-
-                    // // If free seats are 0, always show as full regardless of status
-                    // if (item.FreeSeats <= 0)
-                    // {
-                    //     statusClass = "status-full";
-                    // }
-                }
-
-                <div class="trip-status-badge @statusClass">
-                    @Html.DisplayFor(modelItem => item.StatusTrip)
-                </div>
+                    <div class="trip-status-badge @statusClass">
+                        @Html.DisplayFor(modelItem => item.StatusTrip)
+                    </div>
                 </div>
             </a>
             <div class="trip-content">
@@ -111,7 +112,7 @@
                             <input type="hidden" name="id" value="@item.Id" />
                             <input type="hidden" name="returnUrl" value="@returnUrl" />
                             <button type="submit" class="trip-action-btn action-delete"
-                            onclick="return confirm('Сигурен ли си, че искаш да го изтриеш?')">
+                                    onclick="return confirm('Сигурен ли си, че искаш да го изтриеш?')">
                                 <i class="fas fa-trash"></i> Изтрии
                             </button>
                         </form>
@@ -138,7 +139,7 @@
                     @if (item.StatusTrip == TripStatus.Upcoming && item.FreeSeats > 0)
                     {
                         <a asp-action="Details" asp-controller="Trips" asp-route-id="@item.Id" asp-route-returnUrl="@returnUrl"
-                            class="btn btn-primary" style="width: 100%; margin-top: 10px;">
+                           class="btn btn-primary" style="width: 100%; margin-top: 10px;">
                             <i class="fas fa-ticket-alt"></i> Резервирай място
                         </a>
                     }

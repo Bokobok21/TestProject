@@ -39,72 +39,51 @@ public class ListAllUsersController : Controller
         ViewBag.Roles = new SelectList(await _roleManager.Roles.ToListAsync(), "Name", "Name", roleFilter);
         ViewBag.CurrentRoleFilter = roleFilter;
 
-        // //Query users with their roles
-        //var usersQuery = (from u in _context.Users.AsNoTracking()
-        //                  join ur in _context.UserRoles on u.Id equals ur.UserId into userRoles
-        //                 from ur in userRoles.DefaultIfEmpty()
-        //                 join r in _context.Roles on ur.RoleId equals r.Id into userRolesRoles
-        //                 from r in userRolesRoles.DefaultIfEmpty()
-        //                 group r by u into g
-        //                 select new UserViewModel
-        //                 {
-        //                     User = g.Key,
-        //                     Role = g.Select(x => x.Name).FirstOrDefault() ?? "No Role"
-        //                 }).ToList();
-      
+        // Get all users with fresh data
+        var users = await _userManager.Users.AsNoTracking().ToListAsync();
 
-        var usersQuery = _context.ApplicationUsers
-    .AsNoTracking() // Ensure fresh data
-    .GroupJoin(_context.UserRoles, u => u.Id, ur => ur.UserId, (u, userRoles) => new { u, userRoles })
-    .SelectMany(joined => joined.userRoles.DefaultIfEmpty(), (joined, ur) => new { joined.u, ur })
-    .GroupJoin(_context.Roles, temp => temp.ur.RoleId, r => r.Id, (temp, roles) => new { temp.u, roles })
-    .SelectMany(joined => joined.roles.DefaultIfEmpty(), (joined, r) => new { joined.u, Role = r })
-    .GroupBy(x => x.u)
-    .Select(g => new UserViewModel
-    {
-        User = g.Key,
-        Role = g.Select(x => x.Role.Name).FirstOrDefault() ?? "No Role"
-    })
-    .ToList();
+        // Create a list to store user view models
+        var userViewModels = new List<UserViewModel>();
 
+        // For each user, get their current role (this ensures we always have the latest role)
+        foreach (var user in users)
+        {
+            var roles = await _userManager.GetRolesAsync(user);
+            var role = roles.FirstOrDefault() ?? "No Role";
 
+            userViewModels.Add(new UserViewModel
+            {
+                User = user,
+                Role = role
+            });
+        }
 
         // Calculate total users before applying filters
-        var totalUsers = usersQuery.Count();
+        var totalUsers = userViewModels.Count;
+        ViewBag.UserCountMessage = $"Общо потребители: {totalUsers}";
 
-        // Apply role filter (if not "All Roles")
-        if (!string.IsNullOrEmpty(roleFilter) && roleFilter != "All Roles")
+        // Apply role filter
+        if (!string.IsNullOrEmpty(roleFilter))
         {
-            usersQuery = usersQuery.Where(u => u.Role == roleFilter).ToList();
+            userViewModels = userViewModels.Where(u => u.Role == roleFilter).ToList();
+            ViewBag.UserCountMessage = $"Потребитери с роля {roleFilter}: {userViewModels.Count}";
         }
 
-        // Materialize the query into memory
-        var userList = usersQuery.ToList();
-
-        // Set count message in ViewBag
-        if (!string.IsNullOrEmpty(roleFilter) && roleFilter != "All Roles")
-        {
-            ViewBag.UserCountMessage = $"Number of users with role '{roleFilter}': {userList.Count}";
-        }
-        else
-        {
-            ViewBag.UserCountMessage = $"Total Users: {totalUsers}";
-        }
-
-
+        // Apply search filter
         if (!string.IsNullOrEmpty(searchTerm))
         {
-            userList = userList.Where(u =>
-            u.User.UserName.Contains(searchTerm, StringComparison.OrdinalIgnoreCase) || // Search UserName
-            u.User.FirstName.Contains(searchTerm, StringComparison.OrdinalIgnoreCase) || // Search FirstName
-            u.User.LastName.Contains(searchTerm, StringComparison.OrdinalIgnoreCase)).ToList(); // Search LastName
+            userViewModels = userViewModels.Where(u =>
+                u.User.UserName.Contains(searchTerm, StringComparison.OrdinalIgnoreCase) ||
+                u.User.FirstName.Contains(searchTerm, StringComparison.OrdinalIgnoreCase) ||
+                u.User.LastName.Contains(searchTerm, StringComparison.OrdinalIgnoreCase)
+            ).ToList();
         }
 
-        ViewBag.FilteredUserCountMessage = $"Number of users with these filters: {userList.Count}";
+        ViewBag.FilteredUserCountMessage = $"Филтрирани резултати: {userViewModels.Count}";
 
         // Pagination
-        int pageSize = 3;
-        var paginatedUsers = PaginatedList<UserViewModel>.CreateFromList(userList, pageNumber ?? 1, pageSize);
+        int pageSize = 3; // Increased from 3 to 10 for better usability
+        var paginatedUsers = PaginatedList<UserViewModel>.CreateFromList(userViewModels, pageNumber ?? 1, pageSize);
 
         return View(paginatedUsers);
     }

@@ -67,16 +67,21 @@ app.MapRazorPages();
 
 app.Run();
 
+//if you open a page that is restricted make it bulgarian 
 
 // admin panel - listallusers and driverrequests (should i have otherr admin things for things that normally no but for the presentation)
 // user panel - my request - driver and passenger perspective and my trips - driver and passenger perspectives
 
 
-//fix the back to list fucntion
+//fix the back to list fucntion - javascript:history.back()
+// admin should accept trips???
+
+
+// fix the js of create and edit to not sumbit the form when there are errors other that that i think its fine
+// maybe add a pop up calender or something similar (ask v0)
 
 
 // password iziskvaniq are still in english?
-// admin should accept trips???
 // in the list all users admind panel when i tourist just got changed to driver via a request in the panel it isn't reflected and it still shows tourist even though he is a driver now???
 
 // fix foulders and files
