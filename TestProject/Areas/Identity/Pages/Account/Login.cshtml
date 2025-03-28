@@ -7,7 +7,8 @@
 
 <style>
     body {
-        background: url('/images/site/Form.jpg') no-repeat center center fixed;
+        background: no-repeat center center fixed;
+        background-image: linear-gradient(rgba(0, 0, 0, 0.227),rgba(0, 0, 0, 0.2)), url('/images/site/loginRegister.jpg');
         background-size: cover;
         background-blend-mode: darken;
         overflow: hidden;
@@ -81,6 +82,28 @@
     .text-center p {
         color: white;
     }
+
+    .login-input:focus{
+        background-color: rgba(255, 255, 255, 0.1);
+        color: white;
+    }
+
+    /* Apply styles when autofill is triggered */
+    .login-input:-webkit-autofill {
+        background-color: rgba(255, 255, 255, 0.1) !important;
+        color: white !important;
+        transition: background-color 5000s ease-in-out 0s; /* Keeps the color */
+    }
+
+        /* Ensure the text color stays white even when autofilled */
+        .login-input:-webkit-autofill,
+        .login-input:-webkit-autofill:hover,
+        .login-input:-webkit-autofill:focus {
+            background-color: rgba(255, 255, 255, 0.1) !important;
+            color: white !important;
+            -webkit-text-fill-color: white !important;
+        }
+
 </style>
 
 <div class="login-container">
@@ -90,13 +113,13 @@
         <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
 
         <div class="form-floating mb-3">
-            <input asp-for="Input.UserName" class="form-control" autocomplete="username" aria-required="true" placeholder="UserName" />
+            <input asp-for="Input.UserName" class="form-control login-input" autocomplete="username" aria-required="true" placeholder="UserName" />
             <label asp-for="Input.UserName" class="form-label">Потребителско име</label>
             <span asp-validation-for="Input.UserName" class="text-danger"></span>
         </div>
 
         <div class="form-floating mb-3">
-            <input asp-for="Input.Password" type="password" class="form-control" autocomplete="current-password" aria-required="true" placeholder="Password" />
+            <input asp-for="Input.Password" type="password" class="form-control login-input" autocomplete="current-password" aria-required="true" placeholder="Password" />
             <label asp-for="Input.Password" class="form-label">Парола</label>
             <span asp-validation-for="Input.Password" class="text-danger"></span>
         </div>

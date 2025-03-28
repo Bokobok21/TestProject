@@ -80,7 +80,7 @@ namespace TestProject.Areas.Identity.Pages.Account
             ///     directly from your code. This API may change or be removed in future releases.
             /// </summary>
             [Required(ErrorMessage = "Полето е задължително")]
-            [EmailAddress]
+            [CustomEmail]
             [Display(Name = "Email")]
             public string Email { get; set; }
 
@@ -105,7 +105,7 @@ namespace TestProject.Areas.Identity.Pages.Account
             ///     directly from your code. This API may change or be removed in future releases.
             /// </summary>
             [Required(ErrorMessage = "Полето е задължително")]
-            [StringLength(100, ErrorMessage = "{0} трябва да бъде с дължина между {2} и {1} символа.", MinimumLength = 6)]
+            [StringLength(100, ErrorMessage = "Паролата трябва да бъде с дължина между {2} и {1} символа.", MinimumLength = 6)]
 
             [DataType(DataType.Password)]
             [Display(Name = "Password")]
@@ -193,5 +193,9 @@ namespace TestProject.Areas.Identity.Pages.Account
             }
             return (IUserEmailStore<ApplicationUser>)_userStore;
         }
+
+
     }
 }
+
+ 

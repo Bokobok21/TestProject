@@ -35,6 +35,8 @@ public class ListAllUsersController : Controller
     // GET: Admin/Users
     public async Task<IActionResult> Users(string roleFilter, string searchTerm, int? pageNumber)
     {
+        
+
         // Fetch all roles for the dropdown
         ViewBag.Roles = new SelectList(await _roleManager.Roles.ToListAsync(), "Name", "Name", roleFilter);
         ViewBag.CurrentRoleFilter = roleFilter;

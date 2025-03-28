@@ -52,6 +52,11 @@ public class DriverApplicationsController : Controller
             return NotFound();
         }
 
+        var currentRoles = await _userManager.GetRolesAsync(user);
+        _context.RequestDrivers.RemoveRange(request);
+
+        await _userManager.RemoveFromRolesAsync(user, currentRoles);
+
         // Set user role to "Driver"
         await _userManager.AddToRoleAsync(user, "Driver");
 
@@ -65,12 +70,12 @@ public class DriverApplicationsController : Controller
             user.ImagePath = "/images/drivers/default-image-Driver.jpg"; // Default image path
         }
 
-        //added this not sure 
+        //await _signinManager.RefreshSignInAsync(user);
+
         await _userManager.UpdateAsync(user);
 
         await _context.SaveChangesAsync();
 
-        await _signinManager.RefreshSignInAsync(user);
 
         if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
         {

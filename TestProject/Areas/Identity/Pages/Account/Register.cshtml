@@ -6,7 +6,8 @@
 
 <style>
     body {
-        background: url('/images/site/Form.jpg') no-repeat center center fixed;
+        background: no-repeat center center fixed;
+        background-image: linear-gradient(rgba(0, 0, 0, 0.227),rgba(0, 0, 0, 0.2)), url('/images/site/loginRegister.jpg');
         background-size: cover;
         background-blend-mode: darken;
         color: white;
@@ -109,6 +110,28 @@
     .text-center p {
         color: white;
     }
+
+    .login-input:focus {
+        background-color: rgba(255, 255, 255, 0.1);
+        color: white;
+    }
+
+    /* Apply styles when autofill is triggered */
+    .login-input:-webkit-autofill {
+        background-color: rgba(255, 255, 255, 0.1) !important;
+        color: white !important;
+        transition: background-color 5000s ease-in-out 0s; /* Keeps the color */
+    }
+
+        /* Ensure the text color stays white even when autofilled */
+        .login-input:-webkit-autofill,
+        .login-input:-webkit-autofill:hover,
+        .login-input:-webkit-autofill:focus {
+            background-color: rgba(255, 255, 255, 0.1) !important;
+            color: white !important;
+            -webkit-text-fill-color: white !important;
+        }
+
 </style>
 
 <div class="login-container">
@@ -119,37 +142,37 @@
                 <hr />
                 <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
                 <div class="form-floating mb-3">
-                    <input asp-for="Input.FirstName" class="form-control" autocomplete="given-name" aria-required="true" placeholder="FirstName" />
+                <input asp-for="Input.FirstName" class="form-control login-input" autocomplete="given-name" aria-required="true" placeholder="FirstName" />
                     <label asp-for="Input.FirstName">Име</label>
                     <span asp-validation-for="Input.FirstName" class="text-danger"></span>
                 </div>
                 <div class="form-floating mb-3">
-                    <input asp-for="Input.LastName" class="form-control" autocomplete="family-name" aria-required="true" placeholder="LastName" />
+                <input asp-for="Input.LastName" class="form-control login-input" autocomplete="family-name" aria-required="true" placeholder="LastName" />
                     <label asp-for="Input.LastName">Фамилия</label>
                     <span asp-validation-for="Input.LastName" class="text-danger"></span>
                 </div>
                 <div class="form-floating mb-3">
-                    <input asp-for="Input.UserName" class="form-control" aria-required="true" placeholder="UserName" />
+                <input asp-for="Input.UserName" class="form-control login-input" aria-required="true" placeholder="UserName" />
                     <label asp-for="Input.UserName">Потребителско име</label>
                     <span asp-validation-for="Input.UserName" class="text-danger"></span>
                 </div>
                 <div class="form-floating mb-3">
-                    <input asp-for="Input.Email" class="form-control" autocomplete="email" aria-required="true" placeholder="name@example.com" />
+                <input asp-for="Input.Email" class="form-control login-input" autocomplete="email" aria-required="true" placeholder="name@example.com" />
                     <label asp-for="Input.Email">Имейл</label>
                     <span asp-validation-for="Input.Email" class="text-danger"></span>
                 </div>
                 <div class="form-floating mb-3">
-                    <input asp-for="Input.PhoneNumber" class="form-control" autocomplete="tel" aria-required="true" placeholder="+359877388244" />
+                <input asp-for="Input.PhoneNumber" class="form-control login-input" autocomplete="tel" aria-required="true" placeholder="+359877388244" />
                     <label asp-for="Input.PhoneNumber">Телефонен номер</label>
                     <span asp-validation-for="Input.PhoneNumber" class="text-danger"></span>
                 </div>
                 <div class="form-floating mb-3">
-                    <input asp-for="Input.Password" class="form-control" autocomplete="new-password" aria-required="true" placeholder="password" />
+                <input asp-for="Input.Password" class="form-control login-input" autocomplete="new-password" aria-required="true" placeholder="password" />
                     <label asp-for="Input.Password">Парола</label>
                     <span asp-validation-for="Input.Password" class="text-danger"></span>
                 </div>
                 <div class="form-floating mb-3">
-                    <input asp-for="Input.ConfirmPassword" class="form-control" autocomplete="new-password" aria-required="true" placeholder="password" />
+                <input asp-for="Input.ConfirmPassword" class="form-control login-input" autocomplete="new-password" aria-required="true" placeholder="password" />
                     <label asp-for="Input.ConfirmPassword">Потвърди паролата</label>
                     <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
                 </div>

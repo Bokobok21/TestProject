@@ -1383,6 +1383,11 @@ input[type="datetime-local"].invalid {
     gap: 10px;
 }
 
+.alert-danger {
+    background-color: rgba(234, 67, 53, 0.1);
+    color: var(--danger);
+    border: 1px solid var(--danger);
+}
 
 .alert-success {
     background-color: rgba(52, 168, 83, 0.1);

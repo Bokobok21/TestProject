@@ -7,6 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting.Internal;
 using TestProject.Services;
 using static System.Runtime.InteropServices.JavaScript.JSType;
+using Microsoft.Extensions.Options;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -20,13 +21,24 @@ builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 builder.Services.AddHostedService<TripSchedulerService>();
 builder.Services.AddHostedService<TripStatusUpdater>();
 
+
 builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
     .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<ApplicationDbContext>();
 builder.Services.AddControllersWithViews();
 
+builder.Services.Configure<IdentityOptions>(options =>
+{
+    // Password settings.
+    options.Password.RequireDigit = false;
+    options.Password.RequireLowercase = true;
+    options.Password.RequireUppercase = false;
+    options.Password.RequireNonAlphanumeric = false;
+    options.Password.RequiredLength = 6;
 
-
+    options.User.AllowedUserNameCharacters =
+    "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
+});
 
 var app = builder.Build();
 
@@ -67,25 +79,21 @@ app.MapRazorPages();
 
 app.Run();
 
-//if you open a page that is restricted make it bulgarian 
+// add a button to demote yourself from driver to tourist 
 
 // admin panel - listallusers and driverrequests (should i have otherr admin things for things that normally no but for the presentation)
 // user panel - my request - driver and passenger perspective and my trips - driver and passenger perspectives
 
 
 //fix the back to list fucntion - javascript:history.back()
-// admin should accept trips???
-
 
 // fix the js of create and edit to not sumbit the form when there are errors other that that i think its fine
 // maybe add a pop up calender or something similar (ask v0)
 
 
-// password iziskvaniq are still in english?
-// in the list all users admind panel when i tourist just got changed to driver via a request in the panel it isn't reflected and it still shows tourist even though he is a driver now???
 
-// fix foulders and files
 // trips pictures aren't deleted when it is changed in edit form
+// fix foulders and files
 // the role should be passenger not tourist
 
 // AIs and other useful info
@@ -99,6 +107,10 @@ app.Run();
 // give the option to change times on booked as well not only upcoming (ez)
 // i can't join any trips for that matter (should be cap)
 // maybe if i add a calendar it would be better (some chance easier)
+
+// documentation
+// 2.5 2.5 2.5 3 for the left one 30 rows 60 characters per row max 2000 characters
+// format painter (double cliker for not exiting until clicking escape)
 
 
 // - code for the overlapping ->
@@ -186,7 +198,7 @@ app.Run();
 //    if (departureTime < now)
 //    {
 //        departureTimeInput.classList.add('invalid');
-//        departureTimeError.textContent = 'Часът на заминаване не може да бъде в миналото';
+//        departureTimeError.textContent = 'пїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ';
 //        departureTimeError.classList.add('visible');
 //        return false;
 //    }
@@ -200,8 +212,8 @@ app.Run();
 //        if (overlap.overlaps)
 //        {
 //            departureTimeInput.classList.add('invalid');
-//            departureTimeError.textContent = `Имате друго пътуване между ${ overlap.tripStart.toLocaleString('bg-BG')}
-//            и ${ overlap.tripEnd.toLocaleString('bg-BG')}`;
+//            departureTimeError.textContent = `пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ ${ overlap.tripStart.toLocaleString('bg-BG')}
+//            пїЅ ${ overlap.tripEnd.toLocaleString('bg-BG')}`;
 //            departureTimeError.classList.add('visible');
 //            return false;
 //        }
@@ -218,7 +230,7 @@ app.Run();
 //    if (!departureTimeInput.value)
 //    {
 //        returnTimeInput.classList.add('invalid');
-//        returnTimeError.textContent = 'Първо изберете час на заминаване';
+//        returnTimeError.textContent = 'пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ';
 //        returnTimeError.classList.add('visible');
 //        return false;
 //    }
@@ -230,7 +242,7 @@ app.Run();
 //    if (returnTime <= departureTime)
 //    {
 //        returnTimeInput.classList.add('invalid');
-//        returnTimeError.textContent = 'Часът на връщане трябва да бъде след часа на заминаване';
+//        returnTimeError.textContent = 'пїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ';
 //        returnTimeError.classList.add('visible');
 //        return false;
 //    }
@@ -240,8 +252,8 @@ app.Run();
 //    if (overlap.overlaps)
 //    {
 //        returnTimeInput.classList.add('invalid');
-//        returnTimeError.textContent = `Имате друго пътуване между ${ overlap.tripStart.toLocaleString('bg-BG')}
-//        и ${ overlap.tripEnd.toLocaleString('bg-BG')}`;
+//        returnTimeError.textContent = `пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ ${ overlap.tripStart.toLocaleString('bg-BG')}
+//        пїЅ ${ overlap.tripEnd.toLocaleString('bg-BG')}`;
 //        returnTimeError.classList.add('visible');
 //        return false;
 //    }

@@ -3,15 +3,21 @@
     ViewData["Title"] = "Passenger Requests";  
 }  
 @model IEnumerable<TestProject.Models.Trip>  
-<h2>Моите заявки</h2>  
+
+
+<div class="page-header">
+    <h1>Моите Заявки</h1>
+    <a href="/UserPanel" class="btn btn-secondary">
+        <i class="fas fa-arrow-left"></i> Върни се обратно
+    </a>
+</div>
 
 @{
     var IsDriver = ViewBag.IsDriver; 
 
     @if (IsDriver != null && ((List<TestProject.Models.RequestDriver>)IsDriver).Any())
     {
-
-        <div class="card-body">
+        <div class="card-body" style="padding: 0px; padding-bottom: 15px; margin-top: -15px;">
             @foreach (var request in IsDriver)
             {
                 <div class="d-flex align-items-center justify-content-between p-3 border-bottom">
@@ -28,15 +34,12 @@
                     <small class="text-muted">@request.Date.ToString("yyyy-MM-dd HH:mm")</small>
 
                     <form asp-controller="DriverApplications" asp-action="Deny" asp-route-id="@request.Id" asp-route-returnUrl="@Context.Request.Path" method="post">
-                        <button type="submit" class="btn action-delete">Отмени заявката</button>
+                        <button type="submit" class="btn action-delete" onclick="return confirm('Сигурен ли си, че искаш да го изтриеш?')"><i class="fas fa-trash"></i> Отмени заявката</button>
                     </form>
 
                 </div>
             }
         </div>
-
-
     } 
 }
-
 <partial name="_TripTablePartial" model="Model" />

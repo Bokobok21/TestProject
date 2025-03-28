@@ -150,7 +150,19 @@
                 </button>
             }
 
-            <span class="pagination-info1">Страница @Model.PageIndex от @Model.TotalPages</span>
+            @* <span class="pagination-info1">Страница @Model.PageIndex от @Model.TotalPages</span> *@
+            <!-- Page Numbers -->
+            @for (var i = 1; i <= Model.TotalPages; i++)
+
+            {
+                <a asp-action="Users" asp-route-pageNumber="@i"
+                   asp-route-startPosition="@ViewBag.CurrentStartPosition"
+                   asp-route-roleFilter="@ViewBag.CurrentRoleFilter"
+                   asp-route-searchTerm="@ViewContext.HttpContext.Request.Query["searchTerm"]"
+                   class="pagination-btn @(i == Model.PageIndex ? "active" : "")">
+                    @i
+                </a>
+            }
 
             @if (Model.HasNextPage)
             {
