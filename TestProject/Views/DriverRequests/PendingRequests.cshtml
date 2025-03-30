@@ -1,43 +1,58 @@
-﻿
-@{
+﻿@{
     ViewData["Title"] = "Pending Requests";
 }
 
-<div class="page-header">
-    <h1>Заявки за Обработка</h1>
-    <a href="/UserPanel" class="btn btn-secondary">
-        <i class="fas fa-arrow-left"></i> Върни се обратно
-    </a>
-</div>
+<div class="admin-panel">
 
-<div class="card-body" style="padding: 0px; padding-bottom: 15px; margin-top: -15px;">
-    @foreach (var request in Model)
+
+    <div class="page-header">
+        <h1>Чакащи Заявки</h1>
+        <a href="/UserPanel" class="btn btn-secondary">
+            <i class="fas fa-arrow-left"></i> Върни се обратно
+        </a>
+    </div>
+
+    @if (!(Model as IEnumerable<object>)?.Any() ?? true)
     {
-        <div class="d-flex align-items-center justify-content-between p-3 border-bottom">
-            <!-- User -->
-            <div class="d-flex align-items-center">
-                <h6 class="mb-0">@request.User.UserName</h6>
-            </div>
+        <div class="empty-state">
+            <i class="fas fa-clipboard-check"></i>
+            <p>Няма заявки в този момент.</p>
+        </div>
+    }
+    else
+    {
 
-            <!-- Trip -->
-            <a asp-controller="Trips" asp-action="Details" asp-route-id="@request.TripId">
-                @request.Trip.StartPosition - @request.Trip.Destination
-            </a>
 
-            <!-- Status -->
-            <span>@request.StatusRequest</span>
+        <div class="card-body" style="padding: 0px; padding-bottom: 15px; margin-top: -15px;">
+            @foreach (var request in Model)
+            {
+                <div class="d-flex align-items-center justify-content-between p-3 border-bottom">
+                    <!-- User -->
+                    <div class="d-flex align-items-center">
+                        <h6 class="mb-0">@request.User.UserName</h6>
+                    </div>
 
-            <!-- Actions -->
-            <div>
-                <form asp-controller="Requests" asp-action="ApproveRequest" asp-route-requestId="@request.Id" method="post" style="display:inline;">
-                    <input type="hidden" name="returnUrl" value="@ViewBag.ReturnUrl" />
-                    <button type="submit" class="btn btn-success">Потвърди</button>
-                </form>
-                <form asp-controller="Requests" asp-action="DenyRequest" asp-route-requestId="@request.Id" method="post" style="display:inline;">
-                    <input type="hidden" name="returnUrl" value="@ViewBag.ReturnUrl" />
-                    <button type="submit" class="btn btn-danger">Откажи</button>
-                </form>
-            </div>
+                    <!-- Trip -->
+                    <a asp-controller="Trips" asp-action="Details" asp-route-id="@request.TripId">
+                        @request.Trip.StartPosition - @request.Trip.Destination
+                    </a>
+
+                    <!-- Status -->
+                    <span>@request.StatusRequest</span>
+
+                    <!-- Actions -->
+                    <div>
+                        <form asp-controller="Requests" asp-action="ApproveRequest" asp-route-requestId="@request.Id" method="post" style="display:inline;">
+                            <input type="hidden" name="returnUrl" value="@ViewBag.ReturnUrl" />
+                            <button type="submit" class="btn btn-success">Потвърди</button>
+                        </form>
+                        <form asp-controller="Requests" asp-action="DenyRequest" asp-route-requestId="@request.Id" method="post" style="display:inline;">
+                            <input type="hidden" name="returnUrl" value="@ViewBag.ReturnUrl" />
+                            <button type="submit" class="btn btn-danger">Откажи</button>
+                        </form>
+                    </div>
+                </div>
+            }
         </div>
     }
 </div>

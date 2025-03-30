@@ -1,0 +1,58 @@
+﻿ @using TestProject.Extentions
+@{
+    ViewData["Title"] = "Index";
+}
+
+
+<div class="dashboard-container">
+    <div class="dashboard-header">
+        <h1>Табло за Админ</h1>
+        <p class="dashboard-subtitle">Управлявайте вашите потребители</p>
+    </div>
+
+    <div class="dashboard-grid">
+
+        <div class="dashboard-card" onclick="submitForm('myTripsForm')">
+            <div class="card-icon">
+                <i class="fas fa-suitcase"></i>
+            </div>
+            <div class="card-content">
+                <h3>Заявки за шофьори</h3>
+                <p>Преглед на хората, които иска да станат шофьори</p>
+            </div>
+            <div class="card-arrow">
+                <i class="fas fa-chevron-right"></i>
+            </div>
+            <form id="myTripsForm" asp-controller="DriverApplications" asp-action="Index" method="get">
+                <input type="hidden" name="UserId" value="@User.Id()" />
+            </form>
+        </div>
+
+
+
+        <div class="dashboard-card" onclick="submitForm('myRequestsForm')">
+            <div class="card-icon">
+                <i class="fas fa-paper-plane"></i>
+            </div>
+            <div class="card-content">
+                <h3>Всички потребители</h3>
+                <p>Преглед и управление на всички потребители в сайта</p>
+            </div>
+            <div class="card-arrow">
+                <i class="fas fa-chevron-right"></i>
+            </div>
+            <form id="myRequestsForm" asp-controller="ListAllUsers" asp-action="Users" method="get">
+                <input type="hidden" name="UserId" value="@User.Id()" />
+            </form>
+        </div>
+
+        
+    </div>
+</div>
+
+<script>
+    function submitForm(formId) {
+        document.getElementById(formId).submit();
+    }
+</script>
+

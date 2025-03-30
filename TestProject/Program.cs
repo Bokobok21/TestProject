@@ -8,6 +8,7 @@ using Microsoft.Extensions.Hosting.Internal;
 using TestProject.Services;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 using Microsoft.Extensions.Options;
+using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.Blazor;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -82,13 +83,11 @@ app.Run();
 // add a button to demote yourself from driver to tourist 
 
 // admin panel - listallusers and driverrequests (should i have otherr admin things for things that normally no but for the presentation)
-// user panel - my request - driver and passenger perspective and my trips - driver and passenger perspectives
 
 
 //fix the back to list fucntion - javascript:history.back()
 
-// fix the js of create and edit to not sumbit the form when there are errors other that that i think its fine
-// maybe add a pop up calender or something similar (ask v0)
+
 
 
 
@@ -107,6 +106,17 @@ app.Run();
 // give the option to change times on booked as well not only upcoming (ez)
 // i can't join any trips for that matter (should be cap)
 // maybe if i add a calendar it would be better (some chance easier)
+
+
+//fix the calendar
+//and do the same design to the driver requests
+// leave an overall review and the review page needs fix 
+
+// if possible fix the calendar to be red when unpiccable times also to not sumbit the form if there is error
+// and the times to be not to the top of the screen and reserved to be able to edit as well
+
+// promt - for the travel dashboard.make it in bulgarian language.remove the create trip and browse all cards.make only two cards per row because there are now only 4 in total and if the user is not a driver / admin there would only be two so make that be displayed better when there are only two.
+
 
 // documentation
 // 2.5 2.5 2.5 3 for the left one 30 rows 60 characters per row max 2000 characters
@@ -150,7 +160,7 @@ app.Run();
 
 
 
-// js for create/edit
+// js for create/edit ---------------------------------------
 
 //// Add this to both Create.cshtml and Edit.cshtml scripts
 

@@ -4,13 +4,26 @@
     ViewData["Title"] = "Passenger Trips";
 }
 
-<div class="page-header">
-    <h1>Моите Пътувания</h1>
+<div class="admin-panel">
+    <div class="page-header">
+        <h1>Моите Пътешествия</h1>
 
-    <a href="/UserPanel" class="btn btn-secondary">
-        <i class="fas fa-arrow-left"></i> Върни се обратно
-    </a>
+        <a href="/UserPanel" class="btn btn-secondary">
+            <i class="fas fa-arrow-left"></i> Върни се обратно
+        </a>
+    </div>
+
+
+    @if (!(Model as IEnumerable<object>)?.Any() ?? true)
+    {
+        <div class="empty-state">
+            <i class="fas fa-clipboard-check"></i>
+            <p>Няма пътувания в този момент.</p>
+        </div>
+    }
+    else
+    {
+
+        <partial name="_TripTablePartial" model="Model" />
+    }
 </div>
-
-<partial name="_TripTablePartial" model="Model" />
-

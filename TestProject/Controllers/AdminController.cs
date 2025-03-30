@@ -20,6 +20,11 @@ namespace TestProject.Controllers
             _userManager = userManager;
         }
 
+        public IActionResult Index()
+        {
+            return View();
+        }
+
         // GET: Admin/PendingRequests
         public async Task<IActionResult> PendingRequests()
         {   
@@ -32,8 +37,5 @@ namespace TestProject.Controllers
 
             return View(pendingRequests);
         }
-
-
-
     }
 }

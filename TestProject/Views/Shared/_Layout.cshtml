@@ -10,6 +10,29 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
     <link rel="stylesheet" href="~/css/trips.css" /> 
     <link rel="stylesheet" href="~/css/admin.css" />
+    <!-- Add this in the head section of your _Layout.cshtml file -->
+    <link rel="stylesheet" href="~/css/dashboard.css" />
+    <!-- Add this in the head section of your _Layout.cshtml file -->
+    <link rel="stylesheet" href="~/css/driver-applications.css" />
+
+    <!-- Add these in the head section of your _Layout.cshtml file -->
+
+    <script src="https://cdn.jsdelivr.net/npm/dayjs@1.10.7/dayjs.min.js"></script>
+    <script src="~/js/trip-calendar.js"></script>
+
+
+    <!-- Add these in the head section of your _Layout.cshtml file -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/litepicker/dist/css/litepicker.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/litepicker/dist/plugins/mobilefriendly.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/litepicker/dist/plugins/ranges.css" />
+    <script src="https://cdn.jsdelivr.net/npm/litepicker/dist/litepicker.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/litepicker/dist/plugins/mobilefriendly.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/litepicker/dist/plugins/ranges.js"></script>
+
+
+
+
+
 </head>
 <body>
     <header>
@@ -25,17 +48,17 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Trips" asp-action="Index">Пътешествия</a>
                         </li>
-                        <li class="nav-item">
+                       @*  <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="DriverApplications" asp-action="Index">Заявки за шофьори</a>
-                        </li>
+                        </li> *@
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="ListAllUsers" asp-action="Users">Админ Панел</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Admin" asp-action="Index">Админ Панел</a>
                         </li>
                             
                        @if(User.IsInRole("Admin"))
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="ListAllUsers" asp-action="Users">Админ Панел</a>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Admin" asp-action="Index">Админ Панел</a>
                             </li>
                         }
                         @if (User.IsInRole("Driver"))
@@ -57,6 +80,9 @@
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Add this at the end of your body section in _Layout.cshtml -->
+    <script src="~/js/trip-calendar.js"></script>
+
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>

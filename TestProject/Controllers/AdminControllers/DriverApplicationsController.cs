@@ -77,13 +77,14 @@ public class DriverApplicationsController : Controller
         await _context.SaveChangesAsync();
 
 
-        if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
-        {
-            ViewBag.ReturnUrl = returnUrl;
-            return Redirect(returnUrl); // Redirects back to the previous page
-        }
+        //if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
+        //{
+        //    ViewBag.ReturnUrl = returnUrl;
+        //    return Redirect(returnUrl); // Redirects back to the previous page
+        //}
 
-        return RedirectToAction("MyRequests", "PassengerRequests");
+       /* return RedirectToAction("MyRequests", "PassengerRequests")*/;
+        return RedirectToAction("Index");
     }
 
     // POST: DriverApplications/Deny/5
@@ -115,12 +116,14 @@ public class DriverApplicationsController : Controller
 
         await _context.SaveChangesAsync();
 
-        if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
-        {
-            ViewBag.ReturnUrl = returnUrl;
-            return Redirect(returnUrl); // Redirects back to the previous page
-        }
+        //if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
+        //{
+        //    ViewBag.ReturnUrl = returnUrl;
+        //    return Redirect(returnUrl); // Redirects back to the previous page
+        //}
 
-        return RedirectToAction("MyRequests", "PassengerRequests");
+        //return RedirectToAction("MyRequests", "PassengerRequests");
+        return RedirectToAction("Index");
+
     }
 }

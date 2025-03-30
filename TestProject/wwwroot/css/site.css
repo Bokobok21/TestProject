@@ -20,3 +20,16 @@ html {
 body {
   margin-bottom: 60px;
 }
+
+/* Add this to your existing CSS */
+/*.datetime-error {
+    color: var(--danger);
+    font-size: 0.9rem;
+    margin-top: 5px;
+    display: none;
+}
+
+    .datetime-error.visible {
+        display: block;
+    }*/
+

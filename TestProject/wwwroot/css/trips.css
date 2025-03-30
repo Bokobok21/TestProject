@@ -1407,3 +1407,295 @@ button[type="submit"]:disabled {
     opacity: 0.5;
     cursor: not-allowed;
 }
+
+/* Trip Calendar Styles */
+.trip-calendar-wrapper {
+    margin: 20px 0;
+    background-color: var(--white);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 20px;
+    transition: all 0.3s ease;
+    width: 100%;
+}
+
+.trip-calendar-header {
+    margin-bottom: 15px;
+}
+
+    .trip-calendar-header h4 {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 5px;
+        color: var(--primary-dark);
+        font-size: 1.2rem;
+    }
+
+.trip-calendar-instructions {
+    font-size: 0.9rem;
+    color: var(--gray-dark);
+    margin-bottom: 10px;
+}
+
+/* Date-time picker wrapper */
+.trip-datetime-picker-wrapper {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 15px;
+    width: 100%;
+}
+
+.trip-datetime-group {
+    flex: 1;
+}
+
+.trip-datetime-label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: 500;
+    color: var(--gray-dark);
+}
+
+    .trip-datetime-label i {
+        margin-right: 5px;
+        color: var(--primary);
+    }
+
+.trip-datetime-input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid var(--gray-light);
+    border-radius: var(--radius);
+    background-color: var(--white);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+    .trip-datetime-input:hover {
+        border-color: var(--primary-light);
+    }
+
+    .trip-datetime-input:focus {
+        border-color: var(--primary);
+        outline: none;
+        box-shadow: 0 0 0 2px rgba(var(--primary-rgb), 0.2);
+    }
+
+    .trip-datetime-input.invalid {
+        border-color: var(--danger);
+        background-color: rgba(var(--danger-rgb), 0.05);
+    }
+
+/* Calendar container */
+.trip-calendar {
+    border: 1px solid var(--gray-light);
+    border-radius: var(--radius);
+    overflow: hidden;
+    margin-bottom: 15px;
+    width: 100%;
+}
+
+/* Error messages */
+.trip-time-error {
+    color: var(--danger);
+    font-size: 0.9rem;
+    margin-top: 5px;
+    display: none;
+}
+
+    .trip-time-error.visible {
+        display: block;
+    }
+
+/* Time Selection Modal */
+.time-selection-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+}
+
+.time-selection-content {
+    background-color: white;
+    border-radius: var(--radius);
+    padding: 20px;
+    width: 90%;
+    max-width: 400px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.time-selection-header {
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+    .time-selection-header h4 {
+        margin: 0;
+        color: var(--primary-dark);
+        font-size: 1.2rem;
+    }
+
+.time-selection-inputs {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 20px;
+    position: relative;
+}
+
+.time-label {
+    position: absolute;
+    top: -20px;
+    left: 0;
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+}
+
+    .time-label span {
+        font-size: 0.8rem;
+        color: var(--gray-dark);
+    }
+
+.time-select {
+    padding: 10px;
+    border: 1px solid var(--gray-light);
+    border-radius: var(--radius);
+    font-size: 1.2rem;
+    width: 80px;
+    text-align: center;
+}
+
+.time-selection-buttons {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+    .time-selection-buttons button {
+        flex: 1;
+        padding: 10px;
+    }
+
+/* Litepicker customizations */
+.litepicker {
+    font-family: inherit !important;
+    box-shadow: none !important;
+    width: 100% !important;
+}
+
+    .litepicker .container__months {
+        box-shadow: none !important;
+        border-radius: 0 !important;
+        width: 100% !important;
+        display: flex;
+        justify-content: space-between;
+    }
+
+        .litepicker .container__months .month-item {
+            width: 48% !important;
+        }
+
+        .litepicker .container__months .month-item-header {
+            padding: 10px 0 !important;
+            background-color: var(--primary-light) !important;
+            color: var(--primary-dark) !important;
+        }
+
+        .litepicker .container__months .month-item-weekdays-row {
+            color: var(--gray-dark) !important;
+            font-weight: 500 !important;
+        }
+
+    .litepicker .container__days .day-item {
+        color: var(--gray-dark) !important;
+        border-radius: 50% !important;
+        height: 36px !important;
+        width: 36px !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        margin: 2px !important;
+    }
+
+        .litepicker .container__days .day-item:hover {
+            background-color: var(--primary-light) !important;
+            color: var(--primary-dark) !important;
+        }
+
+        .litepicker .container__days .day-item.is-locked {
+            background-color: #ffebee !important;
+            color: #ef9a9a !important;
+            text-decoration: line-through !important;
+            opacity: 0.7 !important;
+            cursor: not-allowed !important;
+        }
+
+        .litepicker .container__days .day-item.is-in-range {
+            background-color: var(--primary-light) !important;
+            color: var(--primary-dark) !important;
+            border-radius: 0 !important;
+        }
+
+        .litepicker .container__days .day-item.is-start-date,
+        .litepicker .container__days .day-item.is-end-date {
+            background-color: var(--primary) !important;
+            color: white !important;
+            border-radius: 50% !important;
+        }
+
+            .litepicker .container__days .day-item.is-start-date.is-end-date {
+                border-radius: 50% !important;
+            }
+
+        .litepicker .container__days .day-item.is-today {
+            border: 1px solid var(--primary) !important;
+        }
+
+    .litepicker .container__footer {
+        padding: 10px !important;
+        background-color: var(--white) !important;
+    }
+
+        .litepicker .container__footer .button-cancel,
+        .litepicker .container__footer .button-apply {
+            padding: 5px 15px !important;
+            border-radius: var(--radius) !important;
+            font-weight: 500 !important;
+        }
+
+        .litepicker .container__footer .button-cancel {
+            background-color: var(--gray-light) !important;
+            color: var(--gray-dark) !important;
+        }
+
+        .litepicker .container__footer .button-apply {
+            background-color: var(--primary) !important;
+            color: white !important;
+        }
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .trip-datetime-picker-wrapper {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .litepicker .container__months {
+        flex-direction: column;
+    }
+
+        .litepicker .container__months .month-item {
+            width: 100% !important;
+        }
+}
+
+
