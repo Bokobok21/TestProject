@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
+using Newtonsoft.Json.Serialization;
 
 namespace TestProject.Models
 {
@@ -18,8 +19,9 @@ namespace TestProject.Models
         [ForeignKey(nameof(UserId))]
         public ApplicationUser User { get; set; }
 
-        // [Required]
-        [Range(1, 5)]
+         //[Required]
+        [Range(1,5, ErrorMessage =("Стойността трябва да е от 1 до 5"))]
+
         public int Score { get; set; }
 
        // [MaxLength(1000)]

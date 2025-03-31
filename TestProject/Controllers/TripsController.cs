@@ -458,13 +458,13 @@ namespace TestProject.Controllers
                     trip.NextRunDate = tripViewModel.DepartureTime.Add(recurrenceInterval);
 
                    
-                    if (trip.FreeSeats == 0)
-                    {
-                        trip.StatusTrip = TripStatus.Booked;
-                    }
-                    else if (trip.FreeSeats == 0 && trip.StatusTrip != tripViewModel.StatusTrip && tripViewModel.StatusTrip != TripStatus.Upcoming)
+                    if (trip.FreeSeats == 0 && trip.StatusTrip != tripViewModel.StatusTrip && tripViewModel.StatusTrip != TripStatus.Upcoming)
                     {
                         trip.StatusTrip = tripViewModel.StatusTrip;
+                    }
+                    else if (trip.FreeSeats == 0)
+                    {
+                        trip.StatusTrip = TripStatus.Booked;
                     }
                     else
                     {

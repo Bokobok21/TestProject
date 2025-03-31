@@ -5,13 +5,21 @@
 
 <div class="dashboard-container">
     <div class="dashboard-header">
-        <h1>Табло за пътувания</h1>
+        <h1>Табло на Потребител</h1>
         <p class="dashboard-subtitle">Управлявайте вашите пътувания и заявки</p>
     </div>
 
+    @{  
+       string style1 = "";  
+       if (!User.IsInRole("Driver") && !User.IsInRole("Admin"))  
+       {  
+           style1 = "height: 240px;";  
+       }  
+    }
+
     <div class="dashboard-grid">
         <!-- My Requests Card -->
-        <div class="dashboard-card" onclick="submitForm('myRequestsForm')">
+        <div class="dashboard-card" onclick="submitForm('myRequestsForm')" style="@style1">
             <div class="card-icon">
                 <i class="fas fa-paper-plane"></i>
             </div>
@@ -28,7 +36,7 @@
         </div>
 
         <!-- Entered Trips Card -->
-        <div class="dashboard-card" onclick="submitForm('myTripsForm')">
+        <div class="dashboard-card" onclick="submitForm('myTripsForm')" style="@style1">
             <div class="card-icon">
                 <i class="fas fa-suitcase"></i>
             </div>
@@ -44,7 +52,7 @@
             </form>
         </div>
 
-    
+
 
         @if (User.IsInRole("Driver") || User.IsInRole("Admin"))
         {

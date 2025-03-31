@@ -1,5 +1,5 @@
 ﻿@{
-    if (ViewData.TryGetValue("ParentLayout", out var parentLayout) && parentLayout !=  null)
+    if (ViewData.TryGetValue("ParentLayout", out var parentLayout) && parentLayout != null)
     {
         Layout = parentLayout.ToString();
     }
@@ -9,16 +9,23 @@
     }
 }
 
-<h1>Моят акаунт</h1>
+<link rel="stylesheet" href="~/css/account-management.css" />
 
-<div>
-    <hr />
+<div class="account-container">
+    <div class="account-header">
+        <h1>Моят акаунт</h1>
+    </div>
+
     <div class="row">
         <div class="col-md-3">
-            <partial name="_ManageNav" />
+            <div class="account-nav">
+                <partial name="_ManageNav" />
+            </div>
         </div>
         <div class="col-md-9">
-            @RenderBody()
+            <div class="account-content">
+                @RenderBody()
+            </div>
         </div>
     </div>
 </div>
@@ -26,3 +33,4 @@
 @section Scripts {
     @RenderSection("Scripts", required: false)
 }
+

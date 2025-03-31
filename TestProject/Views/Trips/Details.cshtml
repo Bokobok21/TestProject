@@ -20,9 +20,21 @@
                 </a>
             }else
             {
-                <a href="javascript:history.back()" class="btn btn-secondary">
-                    <i class="fas fa-arrow-left"></i> Върни се обратно
-                </a>
+                // <a href="javascript:history.back()" class="btn btn-secondary">
+                //     <i class="fas fa-arrow-left"></i> Върни се обратно
+                // </a>
+                if (User.IsInRole("Driver") || User.IsInRole("Admin"))
+                {
+                    <a asp-action="MyDriverTrips" asp-controller="DriverTrips" class="btn btn-secondary">
+                        <i class="fas fa-arrow-left"></i> Върни се обратно
+                    </a>
+                }
+                else
+                {
+                    <a asp-action="Index" asp-controller="Trips" class="btn btn-secondary">
+                        <i class="fas fa-arrow-left"></i> Върни се обратно
+                    </a>
+                }
             }
         }
     </div>
@@ -228,14 +240,14 @@
                         </div>
                     </div>
                 }
-                
+
                 @if (User.Id() == Model.DriversId)
                 {
                     <div class="action-buttons-container">
                         <a asp-controller="Trips" asp-action="Edit" asp-route-id="@Model.Id" asp-route-returnUrl="@Context.Request.Path" asp-route-returnUrlOriginal="@ViewBag.ReturnUrl" class="btn btn-secondary">
                             <i class="fas fa-edit"></i> Редактирай
                         </a>
-                        
+
                         <form asp-controller="Trips" asp-action="Delete" method="post">
                             @Html.AntiForgeryToken()
                             <input type="hidden" name="id" value="@Model.Id" />
@@ -253,9 +265,12 @@
     <!-- Reviews Section -->
     @if (Model.StatusTrip == TripStatus.Finished)
     {
+        var rating1 = Model.Ratings?.Any() == true ? Math.Round(Model.Ratings.Average(r => r.Score), 1) : 0;
+        
+        
         <div class="trip-reviews-container">
             <div class="reviews-header">
-                <h3 class="reviews-title"><i class="fas fa-star"></i> Ревюта</h3>
+                <h3 class="reviews-title"><i class="fas fa-star"></i> Ревюта @(rating1 != 0 ? $"- Оценка: {rating1}" : "")</h3>
 
                 @if (User.Identity.IsAuthenticated)
                 {
@@ -320,12 +335,14 @@
                                 </div>
                                 @if (User.Identity.IsAuthenticated && (User.IsInRole("Admin") || User.Id() == rating.UserId))
                                 {
-                                    <a asp-controller="Ratings"
-                                       asp-action="Delete"
-                                       asp-route-id="@rating.Id"
-                                       class="review-delete" style="text-decoration: none">
-                                        <i class="fas fa-trash"></i> Изтрий
-                                    </a>
+                                    <form asp-controller="Ratings" asp-action="Delete" method="post">
+                                        @Html.AntiForgeryToken()
+                                        <input type="hidden" name="id" value="@rating.Id" />
+                                        <input type="hidden" name="returnUrl" value="@ViewBag.ReturnUrl" />
+                                        <button type="submit" class="review-delete" onclick="return confirm('Сигурен ли си, че искаш да го изтриеш?')">
+                                            <i class="fas fa-trash"></i> Изтрий
+                                        </button>
+                                    </form>
                                 }
                             </div>
                         </div>

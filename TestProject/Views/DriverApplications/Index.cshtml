@@ -6,7 +6,12 @@
 <div class="admin-panel">
     <div class="page-header">
         <h1><i class="fas fa-id-card"></i> Заявки за Шофьори</h1>
+
+        <a href="/Admin" class="btn btn-secondary">
+            <i class="fas fa-arrow-left"></i> Админ панел
+        </a>
     </div>
+
 
     @if (!Model.Any())
     {
@@ -68,13 +73,13 @@
                                     <div class="application-actions">
                                         <form asp-action="Approve" asp-route-id="@request.Id" method="post" class="action-form">
                                             @Html.AntiForgeryToken()
-                                            <button type="submit" class="btn btn-success action-btn">
+                                            <button type="submit" class="btn btn-success action-btn" style="background-color: #00bfae">
                                                 <i class="fas fa-check"></i> Приеми
                                             </button>
                                         </form>
                                         <form asp-action="Deny" asp-route-id="@request.Id" method="post" class="action-form">
                                             @Html.AntiForgeryToken()
-                                            <button type="submit" class="btn btn-danger action-btn"
+                                            <button type="submit" class="btn btn-danger action-btn" style="background-color: #ef5350"
                                                     onclick="return confirm('Сигурен ли си, че искаш да откажеж заявката?')">
                                                 <i class="fas fa-times"></i> Откажи
                                             </button>

@@ -7,9 +7,14 @@
 @using TestProject.Models.ViewModels
 @inject UserManager<ApplicationUser> UserManager
 
+<div class="admin-panel">
 <div class="container">
     <div class="page-header">
         <h1>Управление на Потребителите</h1>
+
+        <a href="/Admin" class="btn btn-secondary">
+            <i class="fas fa-arrow-left"></i> Админ панел
+        </a>
     </div>
 
     <div class="admin-panel">
@@ -208,3 +213,4 @@
     }
 </script>
 
+</div>

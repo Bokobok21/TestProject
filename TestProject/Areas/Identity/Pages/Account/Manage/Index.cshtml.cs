@@ -10,6 +10,8 @@ using System.IO;
 using System.Threading.Tasks;
 using TestProject.Data;
 using TestProject.Models;
+using TestProject.Extentions;
+using System.Net.Sockets;
 
 namespace TestProject.Areas.Identity.Pages.Account.Manage
 {
@@ -21,6 +23,7 @@ namespace TestProject.Areas.Identity.Pages.Account.Manage
         private readonly ApplicationDbContext _context;
 
         public ApplicationUser CurrentUser { get; set; }
+        public Trip Trip { get; set; }
         public bool HasDriverRequest { get; set; }
 
         public IndexModel(
@@ -51,12 +54,30 @@ namespace TestProject.Areas.Identity.Pages.Account.Manage
 
         public async Task<IActionResult> OnGetAsync()
         {
-            
-            CurrentUser = await _userManager.GetUserAsync(User);
+
+            //CurrentUser = await _userManager.GetUserAsync(User);
+
+            CurrentUser =  _context.Users.Include(u => u.RequestDrivers).FirstOrDefault(u => u.Id == User.Id());
+
             if (CurrentUser == null)
             {
                 return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
             }
+
+                
+
+            ViewData["TripCount"] = _context.Trips.Where(t => t.DriversId == User.Id()).ToList().Count;
+            ViewData["TripParticipantCount"] = _context.TripParticipants.Include(tp => tp.Trip).Where(t => t.Trip.DriversId == User.Id()).ToList().Count;
+
+            var ratings = _context.Ratings?
+    .Include(tp => tp.Trip)
+    .Where(t => t.Trip.DriversId == User.Id())
+    .ToList();
+
+            ViewData["Rating"] = ratings != null && ratings.Any()
+                ? ratings.Average(r => r.Score)
+                : 0;  
+
 
             // Ensure ImagePath is set to default if null
             if (string.IsNullOrEmpty(CurrentUser.ImagePath))
@@ -64,14 +85,21 @@ namespace TestProject.Areas.Identity.Pages.Account.Manage
                 CurrentUser.ImagePath = "/images/drivers/default-image-Driver.jpg";
             }
 
+            // Fetch the user's pending driver request
+            var driverRequest = await _context.RequestDrivers
+                .Where(r => r.UserId == User.Id() && r.StatusRequest == RequestStatus.Pending)
+                .FirstOrDefaultAsync();
+
             // Check if the user has a pending driver request
-            HasDriverRequest = await _context.RequestDrivers
-                .AnyAsync(r => r.UserId == CurrentUser.Id && r.StatusRequest == RequestStatus.Pending);
+            HasDriverRequest = driverRequest != null;
 
             // Re-fetch the user's roles to reflect any changes made by the admin
             var roles = await _userManager.GetRolesAsync(CurrentUser);
             // Set the Username property
             Username = await _userManager.GetUserNameAsync(CurrentUser);
+
+            //ViewData["HasRequest"] = HasDriverRequest;
+
 
             await _signInManager.RefreshSignInAsync(CurrentUser);
 

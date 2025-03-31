@@ -2,21 +2,26 @@
     ViewData["Title"] = "Driver Trips";
 }
 
+<style>
+    .container {
+        padding: 0px;
+    }
 
+</style>
 
-<div class="admin-panel">
+<div class="admin-panel" style="padding: 40px;">
+ 
 
-
-    <div class="page-header">
+    <div class="page-header" @* style="padding: 20px;" *@>
         <h1>Моите Пътувания</h1>
 
 
         <a asp-controller="Trips" asp-action="Create" asp-route-returnUrl="@Context.Request.Path" class="create-trip-btn" style="margin-left: 340px;">
-            <i class="fas fa-plus-circle"></i> Създай ново пътешествие
+            <i class="fas fa-plus-circle"></i> Създай ново пътуване
         </a>
 
         <a href="/UserPanel" class="btn btn-secondary">
-            <i class="fas fa-arrow-left"></i> Върни се обратно
+            <i class="fas fa-arrow-left"></i> Потребителски панел
         </a>
     </div>
 
@@ -31,5 +36,5 @@
     else
     {
         <partial name="_TripTablePartial" model="Model" />
-    }
+    } 
 </div>

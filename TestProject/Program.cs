@@ -80,16 +80,18 @@ app.MapRazorPages();
 
 app.Run();
 
-// add a button to demote yourself from driver to tourist 
-
-// admin panel - listallusers and driverrequests (should i have otherr admin things for things that normally no but for the presentation)
-
 
 //fix the back to list fucntion - javascript:history.back()
 
 
+// add a button to demote yourself from driver to tourist or delete your request for driver
+// fix waiting requests, register, calendar
+// pagination buttons
+// trips displaying should have bigger padding
+//fix the calendar and do the same design to the driver requests
 
-
+// if possible fix the calendar to be red when unpiccable times also to not sumbit the form if there is error
+// and the times to be not to the top of the screen and reserved to be able to edit as well
 
 // trips pictures aren't deleted when it is changed in edit form
 // fix foulders and files
@@ -99,23 +101,10 @@ app.Run();
 // v0 ; codepen ; cursor ai ; saveWeb2Zip + b12 website builder ai ; 
 
 
-// prompts
-// v0 - about the time - make it - **Visual Calendar**: Create a calendar view that shows all of a user's trips, making it easier to visualize their schedule.
-// disable the times that are already taken by the user (look for example of the return time can't be before the departure)
-// do not sumbit the form if there are errors - before i couldn't? now i can (if the time is before the current then i can't sumbit it so look how its done there ) 
-// give the option to change times on booked as well not only upcoming (ez)
-// i can't join any trips for that matter (should be cap)
-// maybe if i add a calendar it would be better (some chance easier)
+
+// promts - here is a file with the corresponding files - my tripscontroller, trips-create and edit view pages, trips.css and trip-callendar. now this callendar is the way the user inputs from to which times their trips is going to take place. the important things is that the user can't enter times that have already past and enter times that are already taken up (either by him as a drive or as a passenger (he entered a trip)). the idea is that in this calendar you shouldn't be able to pick these time. what is already done correctly in the code that i gave you is that the past times are crossed out in red and are unpicable by the user. but the same can not be said for the booked times. when you enterd booked times it gives like an error saying that these times are booked from so on and so on but the problem is that you are able to pick them in the first place. look at the code and find where this functionality is done, if the backend needs to pass more or different information then change / do that. if only the front end / javascript needs to be fixed , then do that. make sure that the booked times are unpicable the same way as the past ones. if by any chance a user picks unavalable times then make the form unsumbitable. as of currently the form can be sumbitted even though there is an error like styling for unavaialable times.
 
 
-//fix the calendar
-//and do the same design to the driver requests
-// leave an overall review and the review page needs fix 
-
-// if possible fix the calendar to be red when unpiccable times also to not sumbit the form if there is error
-// and the times to be not to the top of the screen and reserved to be able to edit as well
-
-// promt - for the travel dashboard.make it in bulgarian language.remove the create trip and browse all cards.make only two cards per row because there are now only 4 in total and if the user is not a driver / admin there would only be two so make that be displayed better when there are only two.
 
 
 // documentation

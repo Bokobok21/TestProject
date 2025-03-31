@@ -1,0 +1,235 @@
+﻿/* Rating Page Styles */
+.review-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.review-header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.review-icon {
+    width: 70px;
+    height: 70px;
+    background-color: var(--primary);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 0px 20px 30px;
+    font-size: 2rem;
+    box-shadow: 0 10px 20px rgba(var(--primary-rgb), 0.3);
+}
+
+.review-header h2 {
+    color: var(--primary-dark);
+    margin-bottom: 10px;
+    font-size: 2rem;
+}
+
+.review-subtitle {
+    padding-top: 10px;
+    padding-right: 30px;
+    margin-left: -50px;
+    color: var(--gray-dark);
+    font-size: 1.1rem;
+}
+
+.review-card {
+    background-color: var(--white);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 30px;
+    margin-bottom: 30px;
+}
+
+/* Rating Stars */
+.rating-group {
+    margin-bottom: 30px;
+}
+
+.rating-label {
+    display: block;
+    font-weight: 500;
+    color: var(--gray-dark);
+    margin-bottom: 15px;
+    font-size: 1.1rem;
+}
+
+.star-rating {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.star-container {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.star-item {
+    font-size: 2.5rem;
+    color: #ffc107;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+    .star-item:hover {
+        transform: scale(1.2);
+    }
+
+.rating-text {
+    color: var(--gray-dark);
+    font-size: 1rem;
+    height: 24px;
+    transition: all 0.3s ease;
+}
+
+    .rating-text.selected {
+        color: var(--primary-dark);
+        font-weight: 500;
+    }
+
+/* Comment Area */
+.comment-label {
+    display: block;
+    font-weight: 500;
+    color: var(--gray-dark);
+    margin-bottom: 15px;
+    font-size: 1.1rem;
+}
+
+.comment-container {
+    position: relative;
+    margin-bottom: 10px;
+}
+
+.comment-area {
+    width: 100%;
+    min-height: 150px;
+    padding: 15px;
+    border: 1px solid var(--gray-light);
+    border-radius: var(--radius);
+    resize: vertical;
+    transition: all 0.3s ease;
+}
+
+    .comment-area:focus {
+        border-color: var(--primary);
+        box-shadow: 0 0 0 3px rgba(var(--primary-rgb), 0.1);
+        outline: none;
+    }
+
+.comment-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 10px;
+    padding: 0 5px;
+}
+
+.comment-tips {
+    color: var(--gray);
+    font-size: 0.9rem;
+}
+
+    .comment-tips i {
+        color: #ffc107;
+        margin-right: 5px;
+    }
+
+.character-count {
+    color: var(--gray);
+    font-size: 0.9rem;
+}
+
+/* Action Buttons */
+.review-actions {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 30px;
+}
+
+.btn {
+    padding: 10px 20px;
+    border-radius: var(--radius);
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.3s ease;
+}
+
+.btn-primary {
+    background-color: var(--primary);
+    border-color: var(--primary);
+    color: white;
+}
+
+    .btn-primary:hover {
+        background-color: var(--primary-dark);
+        border-color: var(--primary-dark);
+        transform: translateY(-2px);
+    }
+
+    .btn-primary:disabled {
+        background-color: var(--gray-light);
+        border-color: var(--gray-light);
+        color: var(--gray);
+        cursor: not-allowed;
+        transform: none;
+    }
+
+.btn-outline-secondary {
+    color: var(--gray-dark);
+    border-color: var(--gray-light);
+    background-color: transparent;
+}
+
+    .btn-outline-secondary:hover {
+        background-color: var(--gray-light);
+        color: var(--gray-dark);
+        transform: translateY(-2px);
+    }
+
+/* Animation */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.review-card {
+    animation: fadeIn 0.5s ease forwards;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .review-card {
+        padding: 20px;
+    }
+
+    .star-item {
+        font-size: 2rem;
+    }
+
+    .review-actions {
+        flex-direction: column;
+        gap: 15px;
+    }
+
+        .review-actions .btn {
+            width: 100%;
+            justify-content: center;
+        }
+}

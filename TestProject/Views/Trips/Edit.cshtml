@@ -192,6 +192,9 @@
                 </div>
 
                 <div class="form-actions">
+                    <a href="javascript:history.back()" class="btn btn-secondary" style="margin-right: 270px;">
+                        <i class="fas fa-arrow-left"></i> Върни се обратно
+                    </a>
                     <button type="submit" class="btn btn-primary btn-lg" id="submitButton" onclick="return confirmSubmit()" asp-route-returnUrl="@ViewBag.ReturnUrl">
                         <i class="fas fa-save"></i> Запази промените
                     </button>
@@ -246,7 +249,7 @@
                         <div class="warning-message">Заявките за присъствие ще бъдат изтрити! Сигурни ли сте?</div>
                     </div>
 
-                    <div class="trip-car-info">
+                    <div class="trip-car-info" style=" display: flex; justify-content: center;">
                         <i class="fas fa-car"></i>
                         <div>
                             <span class="trip-car-model" id="preview-car-model">@Model.CarModel</span>
@@ -406,7 +409,7 @@
         // For edit page, we need to check if the trip is already in progress or completed
         const statusSelect = document.querySelector('[name="StatusTrip"]');
         let currentStatus = statusSelect.value;
-        let isUpcoming = currentStatus === '@((int)TestProject.Models.TripStatus.Upcoming)';
+        let isUpcomingOrBooked = currentStatus === '@((int)TestProject.Models.TripStatus.Upcoming)' || currentStatus === '@((int)TestProject.Models.TripStatus.Booked)';
 
         // Initialize trip calendar
         document.addEventListener('DOMContentLoaded', function() {
@@ -431,7 +434,7 @@
 
             // Function to toggle date input fields based on status
             function toggleDateInputs() {
-                if (isUpcoming) {
+                if (isUpcomingOrBooked) {
                     tripCalendar.enable();
                     tripCalendar.validateTimes();
                 } else {
@@ -448,13 +451,13 @@
             // Status change handler
             statusSelect.addEventListener('change', function() {
                 currentStatus = this.value;
-                isUpcoming = currentStatus === '@((int)TestProject.Models.TripStatus.Upcoming)';
+                isUpcomingOrBooked = currentStatus === '@((int)TestProject.Models.TripStatus.Upcoming)'  || currentStatus === '@((int)TestProject.Models.TripStatus.Booked)';
                 toggleDateInputs();
             });
 
             // Form submission validation
             document.querySelector('form').addEventListener('submit', function(e) {
-                if (isUpcoming && !tripCalendar.validateTimes()) {
+                if (isUpcomingOrBooked && !tripCalendar.validateTimes()) {
                     e.preventDefault();
                     return false;
                 }

@@ -28,10 +28,19 @@ namespace TestProject.Controllers.UserControllers
             //                .ToList();
 
             var trips = _context.Trips
-                                .Where(t => t.Requests!.Any(r => r.StatusRequest == RequestStatus.Pending))
-                                .Include(t => t.Requests!.Where(r => r.StatusRequest == RequestStatus.Pending))
-                                .ThenInclude(r => r.User)
-                                .ToList();
+                .Where(t => t.Requests!.Any(r => r.StatusRequest == RequestStatus.Pending && r.UserId == userId)) // Filter trips where THIS user has a pending request
+                .Include(t => t.Requests)
+                    .ThenInclude(r => r.User)
+                .ToList();
+
+            // Now filter requests in memory (keep only those from the current user)
+            foreach (var trip in trips)
+            {
+                trip.Requests = trip.Requests
+                    .Where(r => r.StatusRequest == RequestStatus.Pending && r.UserId == userId)
+                    .ToList();
+            }
+
 
             var driverRequest = _context.RequestDrivers
                                 .Where(rd => rd.UserId == userId && rd.StatusRequest == RequestStatus.Pending)

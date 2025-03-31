@@ -126,12 +126,12 @@ namespace TestProject.Controllers
             }
 
             await _context.SaveChangesAsync();
-            if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
-            {
-                return Redirect(returnUrl); // Redirects back to the previous page
-            }
+            //if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
+            //{
+            //    return Redirect(returnUrl); // Redirects back to the previous page
+            //}
 
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction("Details", "Trips", new { id = rating.TripId, returnUrl = returnUrl});
         }
 
         private bool RatingExists(int id)

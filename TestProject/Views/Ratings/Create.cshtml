@@ -1,28 +1,181 @@
 ﻿@model Rating
 @{
     ViewData["Title"] = "Leave a Review";
+    <link rel="stylesheet" href="~/css/ratings.css" />
 }
 
-<h2>Leave a Review for Trip #@ViewData["TripId"]</h2>
 
-<form asp-action="Create" method="post">
-    <input type="hidden" name="tripId" value="@ViewData["TripId"]" />
-    <input type="hidden" name="returnUrl" value="@ViewBag.ReturnUrl" />
-    <input type="hidden" name="returnUrlOriginal" value="@ViewBag.ReturnUrlOriginal" />
+<div class="review-container">
+    <div class="review-header">
+        <div class="review-icon">
+            <i class="fas fa-star"></i>
+        </div>
+        <h2>Оставете ревю</h2><br /><br />
+        <p class="review-subtitle">Споделете вашето мнение за пътуването</p>
+    </div>
 
-    <div class="form-group">
-        <label asp-for="Score">Рейтинг</label>
-        <input asp-for="Score" class="form-control" />
-        <span asp-validation-for="Score" class="text-danger"></span>
+    <div class="review-card">
+        <form asp-action="Create" method="post">
+            <input type="hidden" name="tripId" value="@ViewData["TripId"]" />
+            <input type="hidden" name="returnUrl" value="@ViewBag.ReturnUrl" />
+            <input type="hidden" name="returnUrlOriginal" value="@ViewBag.ReturnUrlOriginal" />
+            <input type="hidden" asp-for="Score" id="rating-value" />
+
+            <div class="form-group rating-group">
+                <label class="rating-label">Рейтинг</label>
+                <div class="star-rating">
+                    <div class="star-container">
+                        <i class="far fa-star star-item" data-rating="1"></i>
+                        <i class="far fa-star star-item" data-rating="2"></i>
+                        <i class="far fa-star star-item" data-rating="3"></i>
+                        <i class="far fa-star star-item" data-rating="4"></i>
+                        <i class="far fa-star star-item" data-rating="5"></i>
+                    </div>
+                    <div class="rating-text">Изберете рейтинг</div>
+                </div>
+                <span asp-validation-for="Score" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Comment" class="comment-label">Коментар</label>
+                <div class="comment-container">
+                    <textarea asp-for="Comment" class="form-control comment-area" placeholder="Споделете вашето мнение за пътуването..."></textarea>
+                    <div class="comment-footer">
+                        <div class="comment-tips">
+                            <i class="fas fa-lightbulb"></i> Съвет: Опишете какво ви хареса и какво може да се подобри
+                        </div>
+                        <div class="character-count">0/500</div>
+                    </div>
+                </div>
+                <span asp-validation-for="Comment" class="text-danger"></span>
+            </div>
+
+            <div class="review-actions">
+                <a href="javascript:history.back()" class="btn btn-outline-secondary">
+                    <i class="fas fa-arrow-left"></i> Върни се обратно
+                </a>
+                <button type="submit" class="btn btn-primary submit-review">
+                    <i class="fas fa-paper-plane"></i> Изпрати ревю
+                </button>
+            </div>
+        </form>
     </div>
-    <div class="form-group">
-        <label asp-for="Comment">Коментар</label>
-        <textarea asp-for="Comment" class="form-control"></textarea>
-        <span asp-validation-for="Comment" class="text-danger"></span>
-    </div>
-    <button type="submit" class="btn btn-success">Изпрати ревю</button>
-</form>
+</div>
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Star rating functionality
+            const stars = document.querySelectorAll('.star-item');
+            const ratingValue = document.getElementById('rating-value');
+            const ratingText = document.querySelector('.rating-text');
+            const submitButton = document.querySelector('.submit-review');
+
+            // Rating text options
+            const ratingTexts = {
+                1: 'Много лошо',
+                2: 'Лошо',
+                3: 'Средно',
+                4: 'Добро',
+                5: 'Отлично'
+            };
+
+            // Set initial rating if exists
+            const initialRating = parseInt(ratingValue.value);
+            if (initialRating > 0) {
+                updateStars(initialRating);
+            }
+
+            // Add event listeners to stars
+            stars.forEach(star => {
+                // Hover effect
+                star.addEventListener('mouseenter', function() {
+                    const rating = parseInt(this.dataset.rating);
+                    highlightStars(rating);
+                    ratingText.textContent = ratingTexts[rating];
+                });
+
+                // Click to set rating
+                star.addEventListener('click', function() {
+                    const rating = parseInt(this.dataset.rating);
+                    updateStars(rating);
+                    ratingValue.value = rating;
+                    validateForm();
+                });
+            });
+
+            // Reset stars on mouse leave if no rating selected
+            document.querySelector('.star-container').addEventListener('mouseleave', function() {
+                const currentRating = parseInt(ratingValue.value) || 0;
+                if (currentRating > 0) {
+                    highlightStars(currentRating);
+                    ratingText.textContent = ratingTexts[currentRating];
+                } else {
+                    resetStars();
+                    ratingText.textContent = 'Изберете рейтинг';
+                }
+            });
+
+            // Character count for comment
+            const commentArea = document.querySelector('.comment-area');
+            const characterCount = document.querySelector('.character-count');
+
+            commentArea.addEventListener('input', function() {
+                const count = this.value.length;
+                characterCount.textContent = `${count}/500`;
+
+                if (count > 500) {
+                    characterCount.classList.add('text-danger');
+                } else {
+                    characterCount.classList.remove('text-danger');
+                }
+
+                validateForm();
+            });
+
+            // Form validation
+            function validateForm() {
+                const rating = parseInt(ratingValue.value) || 0;
+
+                if (rating > 0) {
+                    submitButton.disabled = false;
+                } else {
+                    submitButton.disabled = true;
+                }
+            }
+
+            // Initialize form validation
+            validateForm();
+
+            // Helper functions
+            function highlightStars(rating) {
+                stars.forEach(star => {
+                    const starRating = parseInt(star.dataset.rating);
+                    if (starRating <= rating) {
+                        star.classList.remove('far');
+                        star.classList.add('fas');
+                    } else {
+                        star.classList.remove('fas');
+                        star.classList.add('far');
+                    }
+                });
+            }
+
+            function updateStars(rating) {
+                highlightStars(rating);
+                ratingText.textContent = ratingTexts[rating];
+                ratingText.classList.add('selected');
+            }
+
+            function resetStars() {
+                stars.forEach(star => {
+                    star.classList.remove('fas');
+                    star.classList.add('far');
+                });
+                ratingText.classList.remove('selected');
+            }
+        });
+    </script>
 }
+

@@ -1,0 +1,310 @@
+﻿/* Modern Navigation Bar Styles */
+.navbar-main {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    z-index: 1000;
+    padding: 0;
+    transition: all 0.3s ease;
+    background-color: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* Add padding to the body to account for fixed navbar */
+body {
+    padding-top: 110px;
+}
+
+/* Brand/logo styling */
+.navbar-brand {
+    font-weight: 700;
+    font-size: 1.4rem;
+    color: var(--primary) !important;
+    padding: 0.5rem 1rem;
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+    .navbar-brand:hover {
+        transform: translateY(-2px);
+    }
+
+    .navbar-brand::after {
+        content: "";
+        position: absolute;
+        bottom: 0;
+        left: 1rem;
+        width: 30px;
+        height: 3px;
+        background-color: var(--primary);
+        transition: all 0.3s ease;
+    }
+
+    .navbar-brand:hover::after {
+        width: calc(100% - 2rem);
+    }
+
+/* Navigation links */
+.navbar-nav .nav-item {
+    position: relative;
+    margin: 0 5px;
+}
+
+.navbar-nav .nav-link {
+    color: var(--gray-dark) !important;
+    font-weight: 500;
+    padding: 1.2rem 1rem !important;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+    .navbar-nav .nav-link:hover {
+        color: var(--primary) !important;
+    }
+
+    .navbar-nav .nav-link::after {
+        content: "";
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        width: 0;
+        height: 3px;
+        background-color: var(--primary);
+        transition: all 0.3s ease;
+        transform: translateX(-50%);
+    }
+
+    .navbar-nav .nav-link:hover::after,
+    .navbar-nav .nav-link.active::after {
+        width: 80%;
+    }
+
+    .navbar-nav .nav-link.active {
+        color: var(--primary) !important;
+        font-weight: 600;
+    }
+
+/* Toggler button for mobile */
+.navbar-toggler {
+    border: none;
+    padding: 0.5rem;
+    outline: none !important;
+    box-shadow: none !important;
+}
+
+    .navbar-toggler:focus {
+        box-shadow: none;
+    }
+
+.navbar-toggler-icon {
+    background-image: none !important;
+    position: relative;
+    width: 24px;
+    height: 24px;
+    transition: all 0.3s ease;
+}
+
+    .navbar-toggler-icon::before,
+    .navbar-toggler-icon::after,
+    .navbar-toggler-icon .toggler-line {
+        content: "";
+        position: absolute;
+        left: 0;
+        width: 100%;
+        height: 2px;
+        background-color: var(--primary);
+        transition: all 0.3s ease;
+    }
+
+    .navbar-toggler-icon::before {
+        top: 5px;
+    }
+
+    .navbar-toggler-icon .toggler-line {
+        top: 11px;
+    }
+
+    .navbar-toggler-icon::after {
+        top: 17px;
+    }
+
+.navbar-toggler[aria-expanded="true"] .navbar-toggler-icon::before {
+    transform: translateY(6px) rotate(45deg);
+}
+
+.navbar-toggler[aria-expanded="true"] .navbar-toggler-icon .toggler-line {
+    opacity: 0;
+}
+
+.navbar-toggler[aria-expanded="true"] .navbar-toggler-icon::after {
+    transform: translateY(-6px) rotate(-45deg);
+}
+
+/* User account section */
+.navbar-user {
+    display: flex;
+    align-items: center;
+}
+
+    .navbar-user .nav-link {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 0.5rem 1rem !important;
+        border-radius: 30px;
+        transition: all 0.3s ease;
+    }
+
+        .navbar-user .nav-link:hover {
+            background-color: rgba(var(--primary-rgb), 0.1);
+        }
+
+        .navbar-user .nav-link i {
+            font-size: 1.1rem;
+        }
+
+/* Login/Register buttons */
+.btn-login,
+.btn-register {
+    padding: 0.5rem 1.2rem;
+    border-radius: 30px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.btn-login {
+    color: var(--primary) !important;
+    border: 1px solid var(--primary);
+    background-color: transparent;
+}
+
+    .btn-login:hover {
+        background-color: rgba(var(--primary-rgb), 0.1);
+        transform: translateY(-2px);
+    }
+
+.btn-register {
+    color: white !important;
+    background-color: var(--primary);
+    border: 1px solid var(--primary);
+}
+
+    .btn-register:hover {
+        background-color: var(--primary-dark);
+        border-color: var(--primary-dark);
+        transform: translateY(-2px);
+    }
+
+/* Dropdown menu */
+.dropdown-menu {
+    border: none;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    padding: 0.5rem;
+    margin-top: 10px;
+    animation: fadeIn 0.3s ease;
+}
+
+.dropdown-item {
+    padding: 0.6rem 1rem;
+    border-radius: 5px;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+    .dropdown-item:hover {
+        background-color: rgba(var(--primary-rgb), 0.1);
+        color: var(--primary);
+    }
+
+    .dropdown-item i {
+        width: 20px;
+        text-align: center;
+    }
+
+.dropdown-divider {
+    margin: 0.5rem 0;
+}
+
+/* Animation */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Scroll behavior */
+.navbar-scrolled {
+    padding: 0;
+    background-color: rgba(255, 255, 255, 0.98);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* Responsive adjustments */
+@media (max-width: 991.98px) {
+    .navbar-collapse {
+        background-color: white;
+        border-radius: 0 0 15px 15px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        padding: 1rem;
+        max-height: calc(100vh - 70px);
+        overflow-y: auto;
+    }
+
+    .navbar-nav .nav-link {
+        padding: 0.8rem 1rem !important;
+    }
+
+        .navbar-nav .nav-link::after {
+            bottom: auto;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 3px;
+            transform: none;
+        }
+
+        .navbar-nav .nav-link:hover::after,
+        .navbar-nav .nav-link.active::after {
+            width: 3px;
+        }
+
+    .navbar-user {
+        flex-direction: column;
+        align-items: flex-start;
+        width: 100%;
+    }
+
+        .navbar-user .nav-item {
+            width: 100%;
+        }
+
+        .navbar-user .nav-link {
+            width: 100%;
+            justify-content: flex-start;
+        }
+
+    .btn-login,
+    .btn-register {
+        width: 100%;
+        justify-content: center;
+        margin: 5px 0;
+    }
+}
+
+

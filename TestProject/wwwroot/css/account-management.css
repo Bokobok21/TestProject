@@ -1,0 +1,1016 @@
+﻿/* Enhanced Driver Application Styles */
+.driver-application-container {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.driver-application-header {
+    text-align: center;
+    margin-bottom: 40px;
+    padding: 20px;
+}
+
+.driver-application-icon {
+    width: 80px;
+    height: 80px;
+    background-color: var(--primary);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 20px;
+    font-size: 2rem;
+    box-shadow: 0 10px 20px rgba(var(--primary-rgb), 0.3);
+}
+
+.driver-application-header h3 {
+    color: var(--primary-dark);
+    font-size: 2rem;
+    margin-bottom: 15px;
+}
+
+.driver-application-header p {
+    color: var(--gray-dark);
+    font-size: 1.1rem;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.driver-application-form {
+    background-color: var(--white);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 30px;
+    margin-bottom: 40px;
+}
+
+.driver-benefits {
+    margin-bottom: 30px;
+}
+
+    .driver-benefits h4 {
+        color: var(--primary-dark);
+        margin-bottom: 20px;
+        text-align: center;
+        font-size: 1.4rem;
+    }
+
+.benefits-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+}
+
+.benefit-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 15px;
+    padding: 15px;
+    border-radius: var(--radius);
+    background-color: rgba(var(--primary-rgb), 0.05);
+    transition: all 0.3s ease;
+}
+
+    .benefit-item:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    }
+
+.benefit-icon {
+    width: 50px;
+    height: 50px;
+    background-color: var(--primary);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.3rem;
+    flex-shrink: 0;
+}
+
+.benefit-content h5 {
+    color: var(--primary-dark);
+    margin-bottom: 5px;
+    font-size: 1.1rem;
+}
+
+.benefit-content p {
+    color: var(--gray-dark);
+    margin-bottom: 0;
+    font-size: 0.9rem;
+}
+
+.application-divider {
+    position: relative;
+    text-align: center;
+    margin: 30px 0;
+}
+
+    .application-divider::before {
+        content: "";
+        position: absolute;
+        top: 50%;
+        left: 0;
+        right: 0;
+        height: 1px;
+        background-color: var(--gray-light);
+    }
+
+    .application-divider span {
+        position: relative;
+        background-color: var(--white);
+        padding: 0 15px;
+        color: var(--gray-dark);
+        font-weight: 500;
+    }
+
+.driver-application-section {
+    margin-bottom: 30px;
+}
+
+    .driver-application-section h4 {
+        color: var(--primary-dark);
+        margin-bottom: 10px;
+        font-size: 1.3rem;
+    }
+
+.section-description {
+    color: var(--gray-dark);
+    margin-bottom: 20px;
+    font-size: 0.95rem;
+}
+
+.image-upload-area {
+    position: relative;
+}
+
+.image-upload-container {
+    border: 2px dashed var(--primary-light);
+    border-radius: var(--radius);
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    min-height: 200px;
+}
+
+    .image-upload-container:hover,
+    .image-upload-container.highlight {
+        border-color: var(--primary);
+        background-color: rgba(var(--primary-rgb), 0.05);
+    }
+
+.image-upload-icon {
+    font-size: 3rem;
+    color: var(--primary);
+    margin-bottom: 15px;
+}
+
+.image-upload-text {
+    text-align: center;
+}
+
+.upload-title {
+    display: block;
+    font-size: 1.2rem;
+    font-weight: 500;
+    color: var(--primary-dark);
+    margin-bottom: 5px;
+}
+
+.upload-subtitle {
+    display: block;
+    color: var(--gray-dark);
+    margin-bottom: 10px;
+}
+
+.upload-formats {
+    display: block;
+    font-size: 0.8rem;
+    color: var(--gray);
+}
+
+.image-preview-container {
+    display: none;
+    text-align: center;
+    margin-top: 20px;
+}
+
+.preview-wrapper {
+    position: relative;
+    display: inline-block;
+    margin-bottom: 10px;
+}
+
+.image-preview {
+    max-width: 100%;
+    max-height: 300px;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+}
+
+.preview-caption {
+    color: var(--gray-dark);
+    font-size: 0.9rem;
+}
+
+.remove-image-btn {
+    background-color: var(--danger);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    top: -10px;
+    right: -10px;
+    cursor: pointer;
+    box-shadow: var(--shadow);
+    transition: all 0.2s ease;
+}
+
+    .remove-image-btn:hover {
+        background-color: #c82333;
+        transform: scale(1.1);
+    }
+
+.driver-application-note {
+    display: flex;
+    align-items: flex-start;
+    gap: 15px;
+    background-color: rgba(var(--primary-rgb), 0.05);
+    border-radius: var(--radius);
+    padding: 20px;
+    margin: 30px 0;
+}
+
+.note-icon {
+    font-size: 2rem;
+    color: var(--primary);
+    flex-shrink: 0;
+}
+
+.note-content h5 {
+    color: var(--primary-dark);
+    margin-bottom: 5px;
+    font-size: 1.1rem;
+}
+
+.note-content p {
+    color: var(--gray-dark);
+    margin-bottom: 0;
+}
+
+.driver-application-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 30px;
+}
+
+/* Enhanced Driver Profile Styles */
+.driver-profile-card {
+    background-color: var(--white);
+    border-radius: var(--radius);
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    margin-bottom: 30px;
+}
+
+.driver-profile-header {
+    background-color: var(--primary);
+    color: white;
+    padding: 15px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.driver-badge {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 500;
+    font-size: 1.1rem;
+}
+
+.driver-since {
+    font-size: 0.9rem;
+    opacity: 0.9;
+}
+
+.driver-profile-content {
+    padding: 30px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 30px;
+}
+
+.driver-profile-image {
+    flex: 1;
+    min-width: 200px;
+    display: flex;
+    justify-content: center;
+}
+
+.profile-image-container {
+    position: relative;
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    overflow: hidden;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+.profile-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: all 0.3s ease;
+}
+
+.profile-image-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    opacity: 0;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+    .profile-image-overlay i {
+        font-size: 2rem;
+        margin-bottom: 10px;
+    }
+
+.profile-image-container:hover .profile-image-overlay {
+    opacity: 1;
+}
+
+.profile-image-container:hover .profile-image {
+    transform: scale(1.05);
+}
+
+.driver-profile-info {
+    flex: 2;
+    min-width: 300px;
+}
+
+.driver-stats {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+.stat-item {
+    flex: 1;
+    min-width: 100px;
+    background-color: rgba(var(--primary-rgb), 0.05);
+    border-radius: var(--radius);
+    padding: 15px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    transition: all 0.3s ease;
+}
+
+    .stat-item:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    }
+
+.stat-icon {
+    width: 50px;
+    height: 50px;
+    background-color: var(--primary);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.3rem;
+    flex-shrink: 0;
+}
+
+.stat-content {
+    display: flex;
+    flex-direction: column;
+}
+
+.stat-value {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--primary-dark);
+}
+
+.stat-label {
+    font-size: 0.9rem;
+    color: var(--gray-dark);
+}
+
+.driver-image-upload {
+    margin-top: 20px;
+}
+
+.driver-profile-footer {
+    padding: 20px 30px;
+    border-top: 1px solid var(--gray-light);
+}
+
+.driver-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 15px;
+}
+
+/* Tourist Profile - Become Driver Card */
+.become-driver-card {
+    display: flex;
+    align-items: center;
+    gap: 30px;
+    background-color: var(--white);
+    border-radius: var(--radius);
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+    padding: 30px;
+    margin-bottom: 30px;
+}
+
+.become-driver-icon {
+    width: 100px;
+    height: 100px;
+    background-color: var(--primary);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 3rem;
+    flex-shrink: 0;
+    box-shadow: 0 10px 20px rgba(var(--primary-rgb), 0.3);
+}
+
+.become-driver-content {
+    flex: 1;
+}
+
+    .become-driver-content h4 {
+        color: var(--primary-dark);
+        margin-bottom: 10px;
+        font-size: 1.4rem;
+    }
+
+    .become-driver-content p {
+        color: var(--gray-dark);
+        margin-bottom: 20px;
+    }
+
+.become-driver-benefits {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+    .become-driver-benefits .benefit-item {
+        background-color: rgba(var(--primary-rgb), 0.05);
+        border-radius: 30px;
+        padding: 8px 15px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 0.9rem;
+        color: var(--primary-dark);
+    }
+
+        .become-driver-benefits .benefit-item i {
+            color: var(--primary);
+        }
+
+/* Pending Request Styles */
+.pending-request-card {
+    display: flex;
+    align-items: flex-start;
+    gap: 30px;
+    background-color: var(--white);
+    border-radius: var(--radius);
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+    padding: 30px;
+    margin-bottom: 30px;
+}
+
+.pending-request-icon {
+    width: 80px;
+    height: 80px;
+    background-color: #f8d7da;
+    color: #721c24;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.5rem;
+    flex-shrink: 0;
+}
+
+.pending-request-content {
+    flex: 1;
+}
+
+    .pending-request-content h4 {
+        color: #721c24;
+        margin-bottom: 10px;
+        font-size: 1.4rem;
+    }
+
+    .pending-request-content p {
+        color: var(--gray-dark);
+        margin-bottom: 20px;
+    }
+
+.request-status {
+    margin-bottom: 20px;
+}
+
+.status-indicator {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.status-dot {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background-color: var(--gray-light);
+    position: relative;
+}
+
+    .status-dot.active {
+        background-color: var(--primary);
+    }
+
+.status-line {
+    flex: 1;
+    height: 3px;
+    background-color: var(--gray-light);
+}
+
+.status-labels {
+    display: flex;
+    justify-content: space-between;
+}
+
+.status-label {
+    width: 33.33%;
+    text-align: center;
+    font-size: 0.9rem;
+    color: var(--gray);
+}
+
+    .status-label.active {
+        color: var(--primary-dark);
+        font-weight: 500;
+    }
+
+.pending-request-note {
+    background-color: #fff3cd;
+    border-radius: var(--radius);
+    padding: 15px;
+    color: #856404;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+    .pending-request-note i {
+        font-size: 1.3rem;
+    }
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .driver-profile-content {
+        flex-direction: column;
+    }
+
+    .driver-profile-image {
+        margin-bottom: 20px;
+    }
+
+    .become-driver-card {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .become-driver-benefits {
+        justify-content: center;
+    }
+
+    .pending-request-card {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .pending-request-icon {
+        margin: 0 auto 20px;
+    }
+
+    .benefits-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Account Management Styles */
+.account-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.account-header {
+    margin-bottom: 30px;
+    border-bottom: 2px solid var(--primary);
+    padding-bottom: 15px;
+}
+
+    .account-header h1 {
+        font-size: 2.2rem;
+        color: var(--primary-dark);
+        margin-bottom: 0;
+    }
+
+/* Navigation Styles */
+.account-nav {
+    background-color: var(--white);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 20px;
+    height: 100%;
+}
+
+    .account-nav .nav-pills .nav-link {
+        color: var(--gray-dark);
+        border-radius: var(--radius);
+        padding: 12px 15px;
+        margin-bottom: 8px;
+        transition: all 0.2s ease;
+        display: flex;
+        align-items: center;
+    }
+
+        .account-nav .nav-pills .nav-link:hover {
+            background-color: var(--primary-light);
+            color: var(--primary-dark);
+        }
+
+        .account-nav .nav-pills .nav-link.active {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .account-nav .nav-pills .nav-link i {
+            margin-right: 10px;
+            font-size: 1.1rem;
+        }
+
+/* Content Area */
+.account-content {
+    background-color: var(--white);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 25px;
+    height: 100%;
+}
+
+    .account-content h3 {
+        color: var(--primary-dark);
+        margin-bottom: 20px;
+        padding-bottom: 15px;
+        border-bottom: 1px solid var(--gray-light);
+        font-size: 1.5rem;
+    }
+
+/* Profile Page Styles */
+.profile-section {
+    margin-bottom: 30px;
+}
+
+.profile-image-container {
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.profile-image {
+    max-width: 200px;
+    border-radius: 50%;
+    border: 5px solid var(--primary-light);
+    box-shadow: var(--shadow);
+    transition: all 0.3s ease;
+}
+
+    .profile-image:hover {
+        transform: scale(1.05);
+    }
+
+.profile-details {
+    margin-bottom: 20px;
+}
+
+.profile-detail-item {
+    margin-bottom: 15px;
+}
+
+.profile-detail-label {
+    font-weight: 500;
+    color: var(--gray-dark);
+    display: block;
+    margin-bottom: 5px;
+}
+
+.profile-detail-value {
+    color: var(--primary-dark);
+    font-size: 1.1rem;
+}
+
+.driver-info {
+    background-color: var(--primary-light);
+    border-radius: var(--radius);
+    padding: 15px;
+    margin-bottom: 20px;
+}
+
+    .driver-info p {
+        margin-bottom: 0;
+        color: var(--primary-dark);
+        font-weight: 500;
+    }
+
+    .driver-info i {
+        margin-right: 8px;
+        color: var(--primary);
+    }
+
+.profile-actions {
+    margin-top: 25px;
+}
+
+/* Apply to be Driver Page */
+.driver-application-container {
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.driver-application-header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+    .driver-application-header h3 {
+        color: var(--primary-dark);
+        margin-bottom: 10px;
+    }
+
+    .driver-application-header p {
+        color: var(--gray-dark);
+    }
+
+.driver-application-form {
+    background-color: var(--white);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 25px;
+}
+
+.driver-application-section {
+    margin-bottom: 25px;
+}
+
+    .driver-application-section h4 {
+        color: var(--primary-dark);
+        margin-bottom: 15px;
+        padding-bottom: 10px;
+        border-bottom: 1px solid var(--gray-light);
+    }
+
+.image-upload-container {
+    border: 2px dashed var(--primary-light);
+    border-radius: var(--radius);
+    padding: 20px;
+    text-align: center;
+    margin-bottom: 20px;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+    .image-upload-container.highlight {
+        border-color: var(--primary);
+        background-color: rgba(var(--primary-rgb), 0.1);
+    }
+
+    .image-upload-container:hover {
+        border-color: var(--primary);
+        background-color: rgba(var(--primary-rgb), 0.05);
+    }
+
+.image-upload-icon {
+    font-size: 3rem;
+    color: var(--primary);
+    margin-bottom: 10px;
+}
+
+.image-upload-text {
+    color: var(--gray-dark);
+    margin-bottom: 10px;
+}
+
+.image-preview-container {
+    margin-top: 20px;
+    text-align: center;
+    display: none;
+}
+
+.image-preview {
+    max-width: 100%;
+    max-height: 200px;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+}
+
+.remove-image-btn {
+    background-color: var(--danger);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    top: -10px;
+    right: -10px;
+    cursor: pointer;
+    box-shadow: var(--shadow);
+}
+
+.driver-application-actions {
+    margin-top: 30px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.driver-application-note {
+    background-color: var(--primary-light);
+    border-radius: var(--radius);
+    padding: 15px;
+    margin-top: 20px;
+}
+
+    .driver-application-note p {
+        margin-bottom: 0;
+        color: var(--primary-dark);
+    }
+
+    .driver-application-note i {
+        margin-right: 8px;
+        color: var(--primary);
+    }
+
+/* Status Message */
+.status-message {
+    padding: 15px;
+    border-radius: var(--radius);
+    margin-bottom: 20px;
+}
+
+    .status-message.success {
+        background-color: #d4edda;
+        color: #155724;
+        border: 1px solid #c3e6cb;
+    }
+
+    .status-message.error {
+        background-color: #f8d7da;
+        color: #721c24;
+        border: 1px solid #f5c6cb;
+    }
+
+    .status-message.info {
+        background-color: #d1ecf1;
+        color: #0c5460;
+        border: 1px solid #bee5eb;
+    }
+
+    .status-message.warning {
+        background-color: #fff3cd;
+        color: #856404;
+        border: 1px solid #ffeeba;
+    }
+
+/* Form Styles */
+.form-floating > label {
+    color: var(--gray-dark);
+}
+
+.form-floating > .form-control:focus ~ label,
+.form-floating > .form-control:not(:placeholder-shown) ~ label {
+    color: var(--primary);
+}
+
+.form-floating > .form-control:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 0.25rem rgba(var(--primary-rgb), 0.25);
+}
+
+.custom-file-upload {
+    position: relative;
+    display: inline-block;
+    width: 100%;
+}
+
+    .custom-file-upload input[type="file"] {
+        position: absolute;
+        left: 0;
+        top: 0;
+        opacity: 0;
+        width: 100%;
+        height: 100%;
+        cursor: pointer;
+    }
+
+    .custom-file-upload label {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 10px 15px;
+        background-color: var(--primary);
+        color: white;
+        border-radius: var(--radius);
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+
+        .custom-file-upload label:hover {
+            background-color: var(--primary-dark);
+        }
+
+        .custom-file-upload label i {
+            margin-right: 8px;
+        }
+
+/* Button Styles */
+.btn-primary {
+    background-color: var(--primary);
+    border-color: var(--primary);
+}
+
+    .btn-primary:hover {
+        background-color: var(--primary-dark);
+        border-color: var(--primary-dark);
+    }
+
+.btn-outline-primary {
+    color: var(--primary);
+    border-color: var(--primary);
+}
+
+    .btn-outline-primary:hover {
+        background-color: var(--primary);
+        border-color: var(--primary);
+    }
+
+.btn-lg {
+    padding: 12px 20px;
+    font-size: 1.1rem;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .account-nav {
+        margin-bottom: 20px;
+    }
+
+    .account-content {
+        padding: 15px;
+    }
+
+    .profile-image {
+        max-width: 150px;
+    }
+}
+
