@@ -75,7 +75,7 @@ namespace TestProject.Areas.Identity.Pages.Account.Manage
     .ToList();
 
             ViewData["Rating"] = ratings != null && ratings.Any()
-                ? ratings.Average(r => r.Score)
+                ? ratings.Average(r => r.Score).ToString("0.00")
                 : 0;  
 
 

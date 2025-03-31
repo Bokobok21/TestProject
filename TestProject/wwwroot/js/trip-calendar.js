@@ -28,6 +28,7 @@ class TripCalendar {
     }
 
     init() {
+        console.log(userTrips)
         // Create container for the calendar
         this.createCalendarContainer()
 
@@ -380,26 +381,40 @@ class TripCalendar {
 
     processUserTrips() {
         const disabledRanges = []
-
         // Add all dates from existing trips to disabled dates
         this.userTrips.forEach((trip) => {
+            console.log(trip)
             // Skip current trip in edit mode
             if (this.isEditMode && trip.id === this.currentTripId) return
 
             const tripStart = new Date(trip.start)
             const tripEnd = new Date(trip.end)
+            console.log(tripStart)
+            console.log(tripEnd)
 
             disabledRanges.push({
-                from: tripStart,
-                to: tripEnd,
-                tooltip: `Пътуване: ${trip.startPosition} → ${trip.destination}`,
+                start: tripStart,
+                end: tripEnd,
             })
         })
 
-        return disabledRanges
+
+        const blockedDates = [];
+
+        disabledRanges.forEach(range => {
+            let currentDate = new Date(range.start);
+
+            while (currentDate <= range.end) {
+                blockedDates.push(currentDate.toISOString().split('T')[0]); // Format YYYY-MM-DD
+                currentDate.setDate(currentDate.getDate() + 1);
+            }
+        });
+
+        return blockedDates
     }
 
     validateTimes() {
+                    console.log('dsa')
         let isValid = true
 
         // Clear previous errors
@@ -411,6 +426,7 @@ class TripCalendar {
         this.returnVisibleInput.classList.remove("invalid")
 
         // Validate departure time
+        //Left Date
         if (this.departureInput.value) {
             const departureTime = new Date(this.departureInput.value)
             const now = new Date()
@@ -423,6 +439,7 @@ class TripCalendar {
             }
 
             // Check for overlapping trips
+            //Right Date
             for (const trip of this.userTrips) {
                 // Skip current trip in edit mode
                 if (this.isEditMode && trip.id === this.currentTripId) continue

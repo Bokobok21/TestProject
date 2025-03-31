@@ -32,10 +32,12 @@ namespace TestProject.Models
 
         [Required(ErrorMessage = "Цената е задължителна")]
         [Range(1, int.MaxValue, ErrorMessage = "Цената трябва да е положително число")]
+       
         public int Price { get; set; }
 
         [Required(ErrorMessage = "Общият брой места е задължителен")]
         [Range(1, int.MaxValue, ErrorMessage = "Броят на местата трябва да е положително число")]
+
         public int TotalSeats { get; set; }
 
         public int FreeSeats { get; set; }

@@ -265,12 +265,12 @@
     <!-- Reviews Section -->
     @if (Model.StatusTrip == TripStatus.Finished)
     {
-        var rating1 = Model.Ratings?.Any() == true ? Math.Round(Model.Ratings.Average(r => r.Score), 1) : 0;
+        var rating1 = Model.Ratings?.Any() == true ? Math.Round(Model.Ratings.Average(r => r.Score), 1).ToString("0.00") : "0";
         
         
         <div class="trip-reviews-container">
             <div class="reviews-header">
-                <h3 class="reviews-title"><i class="fas fa-star"></i> Ревюта @(rating1 != 0 ? $"- Оценка: {rating1}" : "")</h3>
+                <h3 class="reviews-title"><i class="fas fa-star"></i> Ревюта @(rating1 != "0" ? $"- Оценка: {rating1}" : "")</h3>
 
                 @if (User.Identity.IsAuthenticated)
                 {

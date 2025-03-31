@@ -48,7 +48,7 @@
         transform: translate(-50%, -50%);
         margin: 30px 0px;
         overflow: auto; /* Ensure it scrolls if needed */
-        max-height: 90vh; /* Limit height to 90% of the viewport */
+      /*   max-height: auto; */ /* Limit height to 90% of the viewport */
     }
 
     button#registerSubmit {
@@ -139,7 +139,7 @@
  
         <div class="col-md-4">
             <form id="registerForm" asp-route-returnUrl="@Model.ReturnUrl" method="post">
-                <h2>Регистрирай се</h2>
+                <h2>Създай акаунт</h2>
                 <hr />
                 <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
                 <div class="form-floating mb-3">
@@ -177,7 +177,7 @@
                     <label asp-for="Input.ConfirmPassword">Потвърди паролата</label>
                     <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
                 </div>
-                <button id="registerSubmit" type="submit" class="w-100 btn btn-lg btn-primary">Регистрирай</button>
+                <button id="registerSubmit" type="submit" class="w-100 btn btn-lg btn-primary" style="justify-content: center;">Регистрирай се</button>
             </form>
         </div>
 </div>

@@ -181,7 +181,7 @@ body {
 
 .btn-login {
     color: var(--primary) !important;
-    border: 1px solid var(--primary);
+   /* border: 1px solid var(--primary);*/
     background-color: transparent;
 }
 
@@ -193,7 +193,7 @@ body {
 .btn-register {
     color: white !important;
     background-color: var(--primary);
-    border: 1px solid var(--primary);
+  /*  border: 1px solid var(--primary);*/
 }
 
     .btn-register:hover {
