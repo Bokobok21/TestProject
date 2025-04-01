@@ -356,10 +356,22 @@ class TripCalendar {
 
             // Update input values
             if (type === "departure") {
-                this.departureInput.value = date.toISOString().slice(0, 16)
+                const year = date.getFullYear();
+                const month = String(date.getMonth() + 1).padStart(2, "0");
+                const day = String(date.getDate()).padStart(2, "0");
+                const hours = String(date.getHours()).padStart(2, "0");
+                const minutes = String(date.getMinutes()).padStart(2, "0");
+
+                this.departureInput.value = `${year}-${month}-${day}T${hours}:${minutes}`; // ✅ Local time, correct format
                 this.departureVisibleInput.value = this.formatDateTime(date)
             } else {
-                this.returnInput.value = date.toISOString().slice(0, 16)
+                const year = date.getFullYear();
+                const month = String(date.getMonth() + 1).padStart(2, "0");
+                const day = String(date.getDate()).padStart(2, "0");
+                const hours = String(date.getHours()).padStart(2, "0");
+                const minutes = String(date.getMinutes()).padStart(2, "0");
+
+                this.returnInput.value = `${year}-${month}-${day}T${hours}:${minutes}`; // ✅ Local time, correct format
                 this.returnVisibleInput.value = this.formatDateTime(date)
             }
 
@@ -380,41 +392,47 @@ class TripCalendar {
     }
 
     processUserTrips() {
-        const disabledRanges = []
-        // Add all dates from existing trips to disabled dates
-        this.userTrips.forEach((trip) => {
-            console.log(trip)
-            // Skip current trip in edit mode
-            if (this.isEditMode && trip.id === this.currentTripId) return
+        const disabledRanges = [];
 
-            const tripStart = new Date(trip.start)
-            const tripEnd = new Date(trip.end)
-            console.log(tripStart)
-            console.log(tripEnd)
+        // Add all dates from existing trips to disabled ranges
+        this.userTrips.forEach((trip) => {
+            console.log(trip);
+            // Skip current trip in edit mode
+            if (this.isEditMode && trip.id === this.currentTripId) return;
+
+            const tripStart = new Date(trip.start);
+            const tripEnd = new Date(trip.end);
+            console.log(tripStart);
+            console.log(tripEnd);
 
             disabledRanges.push({
                 start: tripStart,
                 end: tripEnd,
-            })
-        })
+            });
+        });
 
-
-        const blockedDates = [];
+        const blockedTimes = []; // 🔥 Now includes times
 
         disabledRanges.forEach(range => {
             let currentDate = new Date(range.start);
 
             while (currentDate <= range.end) {
-                blockedDates.push(currentDate.toISOString().split('T')[0]); // Format YYYY-MM-DD
-                currentDate.setDate(currentDate.getDate() + 1);
+                // Convert to "YYYY-MM-DD HH:mm" format
+                const formattedDateTime = `${currentDate.getFullYear()}-${String(currentDate.getMonth() + 1).padStart(2, "0")}-${String(currentDate.getDate()).padStart(2, "0")} ${String(currentDate.getHours()).padStart(2, "0")}:${String(currentDate.getMinutes()).padStart(2, "0")}`;
+
+                blockedTimes.push(formattedDateTime);
+
+                // Move forward in time by minutes (e.g., block every 30 minutes)
+                currentDate.setMinutes(currentDate.getMinutes() + 30); // 🔥 Adjust interval as needed
             }
         });
 
-        return blockedDates
+      /*  console.log(blockedTimes); // Verify the blocked times*/
+        return blockedTimes; // Now returns full date-time blocks
     }
 
+
     validateTimes() {
-                    console.log('dsa')
         let isValid = true
 
         // Clear previous errors
@@ -568,7 +586,13 @@ document.addEventListener("DOMContentLoaded", function () {
             let picker = this;
             unavailableTimes.forEach(time => {
                 let option = document.createElement("option");
-                option.value = time.toISOString().slice(0, 16);
+                const year = time.getFullYear();
+                const month = String(time.getMonth() + 1).padStart(2, "0");
+                const day = String(time.getDate()).padStart(2, "0");
+                const hours = String(time.getHours()).padStart(2, "0");
+                const minutes = String(time.getMinutes()).padStart(2, "0");
+
+                option.value = `${year}-${month}-${day}T${hours}:${minutes}`; // ✅ Local time, correct format
                 option.textContent = option.value;
                 option.disabled = true;
                 picker.appendChild(option);

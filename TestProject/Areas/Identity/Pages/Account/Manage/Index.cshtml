@@ -155,28 +155,15 @@
                     <div class="pending-request-content">
                         <h4>Заявката ви е в процес на разглеждане</h4>
                         <p>Благодарим ви за интереса да станете шофьор в нашата платформа. Вашата заявка се разглежда от нашия екип.
-
-                  @*           @{
-                                var driverRequest = Model.CurrentUser?.RequestDrivers?
-                                .FirstOrDefault(rd =>  rd.StatusRequest == RequestStatus.Pending);
-                            }
-
-                            @if (driverRequest != null)
-                            {
-                                <form asp-controller="DriverApplications" asp-action="Deny" asp-route-id="@driverRequest.Id" asp-route-returnUrl="@Request.Path" method="post">
-                                    <button type="submit" class="btn action-delete" onclick="return confirm('Сигурен ли си, че искаш да го изтриеш?')">
-                                        <i class="fas fa-trash"></i> Отмени заявката
-                                    </button>
-                                </form>
-                            }
- *@
-
                         </p>
                     </div>
                 </div>
             </div>
         }
     </form>
+@*     <form asp-controller="DriverApplications" asp-action="Deny" asp-route-id="@Model.CurrentUser.RequestDrivers.FirstOrDefault().Id" asp-route-returnUrl="@Request.Path"  method="post">
+        <button type="submit" class="btn action-delete" onclick="return confirm('Сигурен ли си, че искаш да го изтриеш?')"><i class="fas fa-trash"></i> Отмени заявката</button>
+    </form> *@
 </div>
 
 @section Scripts {

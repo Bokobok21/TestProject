@@ -89,7 +89,6 @@ public class DriverApplicationsController : Controller
 
     // POST: DriverApplications/Deny/5
     [HttpPost]
-    [ValidateAntiForgeryToken]
     public async Task<IActionResult> Deny(int id, string? returnUrl)
     {
         var request = await _context.RequestDrivers.FindAsync(id);
