@@ -122,7 +122,7 @@
                 {
                     if (item.StatusTrip == TripStatus.Finished)
                     {
-                        <a asp-controller="Ratings" asp-action="Create" asp-route-tripid="@item.Id" class="btn btn-primary" style="width: 100%; margin-top: 10px; display: flex; justify-content: center;">
+                        <a asp-controller="Ratings" asp-action="Create" asp-route-tripid="@item.Id" asp-route-returlUrl="@Context.Request.Path" class="btn btn-primary" style="width: 100%; margin-top: 10px; display: flex; justify-content: center;">
                             <i class="fa fa-clipboard "></i> Остави ревю @* fa fa-clipboard/star/comment/pen/thumbs-up *@
                         </a>
                     }
@@ -138,10 +138,10 @@
                         var request = item.Requests?
                         .FirstOrDefault(r => r.TripId == item.Id && r.UserId == User.Id())?.Id;
                   
-                        <form method="post" asp-action="DeleteRequest" asp-controller="PassengerRequests">
+                        <form method="post" asp-action="DeleteRequest" asp-controller="PassengerRequests" >
                             <input type="hidden" name="id" value="@request" />
                             <input type="hidden" name="returnUrl" value="@Context.Request.Path" />
-                            <button type="submit" onclick="return confirm('Сигурен ли си, че искаш да го изтриеш?')" class="btn action-delete" style="width: 100%; margin-top: 10px;">
+                            <button type="submit" onclick="return confirm('Сигурен ли си, че искаш да го изтриеш?')" class="btn action-delete" style="width: 100%; margin-top: 10px; justify-content: center;">
                                 <i class="fas fa-trash"></i> Изтрии заявка
                             </button>
                         </form>

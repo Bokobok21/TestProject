@@ -107,12 +107,12 @@ namespace TestProject.Controllers
             {
                 return Redirect($"{returnUrl}?returnUrl={Uri.EscapeDataString(returnUrlOriginal)}"); // Redirects back to the previous page with returnUrl as a query parameter
             }
-            if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
-            {
-                return Redirect(returnUrl);
-            }
+            //if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
+            //{
+            //    return Redirect(returnUrl);
+            //}
+            return RedirectToAction("Details", "Trips", new { id = tripId, returnUrl = returnUrl });
 
-            return RedirectToAction("Details", "Trips", new { id = tripId, returnUrl = returnUrlOriginal });
         }
 
         [HttpPost, ActionName("Delete")]
@@ -131,7 +131,7 @@ namespace TestProject.Controllers
             //    return Redirect(returnUrl); // Redirects back to the previous page
             //}
 
-            return RedirectToAction("Details", "Trips", new { id = rating.TripId, returnUrl = returnUrl});
+            return RedirectToAction("Details", "Trips", new { id = rating.TripId, returnUrl = returnUrl });
         }
 
         private bool RatingExists(int id)

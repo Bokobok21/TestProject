@@ -105,7 +105,9 @@ app.Run();
 // promts - here is a file with the corresponding files - my tripscontroller, trips-create and edit view pages, trips.css and trip-callendar. now this callendar is the way the user inputs from to which times their trips is going to take place. the important things is that the user can't enter times that have already past and enter times that are already taken up (either by him as a drive or as a passenger (he entered a trip)). the idea is that in this calendar you shouldn't be able to pick these time. what is already done correctly in the code that i gave you is that the past times are crossed out in red and are unpicable by the user. but the same can not be said for the booked times. when you enterd booked times it gives like an error saying that these times are booked from so on and so on but the problem is that you are able to pick them in the first place. look at the code and find where this functionality is done, if the backend needs to pass more or different information then change / do that. if only the front end / javascript needs to be fixed , then do that. make sure that the booked times are unpicable the same way as the past ones. if by any chance a user picks unavalable times then make the form unsumbitable. as of currently the form can be sumbitted even though there is an error like styling for unavaialable times.
 
 
-// calendar, delete driver
+// calendar - 3 hours up and time picking should be better, delete driver , review going back buttons, fix recurring trips (they work if the interval is bigger than the length of the trip sheck if that is correct; they are recucring faster (every minute not the set value))
+// mydrivertrips - navbar fix and home page as well, pagination buttons should be invisible 
+
 
 // documentation
 // 2.5 2.5 2.5 3 for the left one 30 rows 60 characters per row max 2000 characters
