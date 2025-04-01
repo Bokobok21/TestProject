@@ -1,8 +1,11 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Identity.Client;
 using System.Data;
+using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using TestProject.Data;
 using TestProject.Models;
@@ -14,13 +17,15 @@ public class DriverApplicationsController : Controller
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly IWebHostEnvironment _webHostEnvironment;
     private readonly SignInManager<ApplicationUser> _signinManager;
+    private readonly RoleManager<IdentityRole> _roleManager;
 
-    public DriverApplicationsController(ApplicationDbContext context, UserManager<ApplicationUser> userManager, IWebHostEnvironment webHostEnvironment, SignInManager<ApplicationUser> signinManager)
+    public DriverApplicationsController(ApplicationDbContext context, UserManager<ApplicationUser> userManager, IWebHostEnvironment webHostEnvironment, SignInManager<ApplicationUser> signinManager, RoleManager<IdentityRole> roleManager)
     {
         _context = context;
         _userManager = userManager;
         _webHostEnvironment = webHostEnvironment;
         _signinManager = signinManager;
+        _roleManager = roleManager;
     }
 
     // GET: DriverApplications
@@ -124,5 +129,52 @@ public class DriverApplicationsController : Controller
         //return RedirectToAction("MyRequests", "PassengerRequests");
         return RedirectToAction("Index");
 
+    }
+
+    // POST: Admin/EditRole
+    public async Task<IActionResult> EditRole(string id)
+    {
+        var user = await _userManager.FindByIdAsync(id);
+        if (user == null) return NotFound();
+     
+        // Remove all existing roles
+        var currentRoles = await _userManager.GetRolesAsync(user);
+
+            user.DateOfDriverAcceptance = null;
+
+            // Check if the current image is not the default image before deleting
+            if (!string.IsNullOrEmpty(user.ImagePath) && !user.ImagePath.Equals("/images/drivers/default-image-Driver.jpg", StringComparison.OrdinalIgnoreCase))
+            {
+                var oldImage = Path.Combine(_webHostEnvironment.WebRootPath, user.ImagePath.TrimStart('/'));
+                if (System.IO.File.Exists(oldImage))
+                {
+                    System.IO.File.Delete(oldImage);
+                }
+            }
+
+            user.ImagePath = null;
+
+            var trips = await _context.Trips.Where(rd => rd.DriversId == user.Id && rd.StatusTrip != TripStatus.Finished).ToListAsync();
+            _context.Trips.RemoveRange(trips);
+
+            var requests = await _context.Requests.Where(r => r.Trip.DriversId == user.Id && r.Trip.StatusTrip != TripStatus.Finished).ToListAsync();
+            _context.Requests.RemoveRange(requests);
+
+            var tripParticipants = await _context.TripParticipants.Where(tp => tp.Trip.DriversId == user.Id && tp.Trip.StatusTrip != TripStatus.Finished).ToListAsync();
+            _context.TripParticipants.RemoveRange(tripParticipants);
+
+        await _userManager.RemoveFromRolesAsync(user, currentRoles);
+
+        // Assign new role
+        await _userManager.AddToRoleAsync(user, "Tourist");
+
+        // Update user position and other properties based on role
+        user.Position = "Tourist";
+
+        // Save changes to user
+        await _userManager.UpdateAsync(user);
+        await _context.SaveChangesAsync();
+
+        return Redirect("/Identity/Account/Manage");
     }
 }

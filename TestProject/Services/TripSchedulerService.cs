@@ -23,13 +23,23 @@ namespace TestProject.Services
 
                 using (var scope = _services.CreateScope())
                 {
+
                     var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
                     var Now = DateTime.Now;
 
-                    // Get due recurring trips
-                    var recurringTrips = await context.Trips
-                        .Where(t => t.IsRecurring && t.RecurrenceInterval != "00:00:00" && t.NextRunDate.HasValue/* && t.NextRunDate <= Now*/)
-                        .ToListAsync();
+                    //// Get due recurring trips
+                    //var recurringTrips = await context.Trips
+                    //    .Where(t => t.IsRecurring && TimeSpan.TryParse(t.RecurrenceInterval, out TimeSpan interval) && t.RecurrenceInterval != "00:00:00" && t.NextRunDate.HasValue && t.CreatedDate.Add(TimeSpan.Parse(t.RecurrenceInterval)) <= Now)
+                    //    .ToListAsync();
+
+                    var allRecurringTrips = await context.Trips
+                     .Where(t => t.IsRecurring && t.RecurrenceInterval != "00:00:00" && t.NextRunDate.HasValue)
+                     .ToListAsync(); // Fetch first
+
+                    var recurringTrips = allRecurringTrips
+                        .Where(t => TimeSpan.TryParse(t.RecurrenceInterval, out TimeSpan interval)
+                         && t.CreatedDate.Add(interval) <= Now)
+                        .ToList();
 
                     foreach (var trip in recurringTrips)
                     {
@@ -40,6 +50,7 @@ namespace TestProject.Services
                         // Create new trip instance
                         var newTrip = new Trip
                         {
+                            Driver = trip.Driver,
                             DriversId = trip.DriversId,
                             StartPosition = trip.StartPosition,
                             Destination = trip.Destination,

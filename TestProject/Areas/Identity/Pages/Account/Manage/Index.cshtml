@@ -106,10 +106,10 @@
 
                 <div class="driver-profile-footer">
                     <div class="driver-actions">
-                        <a asp-controller="DriverTrips" asp-action="MyDriverTrips" class="btn btn-outline-primary">
-                            <i class="fas fa-car"></i> Моите пътувания
+                        <a asp-controller="DriverApplications" asp-action="EditRole" asp-route-id="@Model.CurrentUser.Id" class="btn btn-outline-danger" onclick="return confirm('Сигурен ли си, че искаш да спреш?')">
+                            <i class="fas fa-trash"></i> Спри да бъдеш шофьор 
                         </a>
-
+                            
                         <button id="update-profile-button" type="submit" class="btn btn-primary">
                             <i class="fas fa-save"></i> Запази промените
                         </button>
@@ -138,7 +138,7 @@
                                 <i class="fas fa-leaf"></i> Допринесете за по-чиста околна среда
                             </div>
                         </div>
-                        <a asp-page="/Account/ApplyToBeDriver" class="btn btn-primary btn-lg">
+                        <a asp-page="/Account/ApplyToBeDriver" class="btn btn-primary btn-lg" >
                             <i class="fas fa-car"></i> Заяви да станеш шофьор
                         </a>
                     </div>
@@ -147,23 +147,38 @@
         }
         else if (User.IsInRole("Tourist") && Model.HasDriverRequest)
         {
-            <div class="pending-request-section">
+            <style>
+                .account-content{
+                    padding-bottom: 0px;
+                }
+            </style>
+
+            <div class="pending-request-section" style="padding-top: 15px; margin-bottom: 43px;">
                 <div class="pending-request-card">
                     <div class="pending-request-icon">
                         <i class="fas fa-hourglass-half"></i>
                     </div>
                     <div class="pending-request-content">
                         <h4>Заявката ви е в процес на разглеждане</h4>
-                        <p>Благодарим ви за интереса да станете шофьор в нашата платформа. Вашата заявка се разглежда от нашия екип.
+                        <p>
+                            Благодарим ви за интереса да станете шофьор в нашата платформа. Вашата заявка се разглежда от нашия екип.
                         </p>
                     </div>
                 </div>
             </div>
         }
     </form>
-@*     <form asp-controller="DriverApplications" asp-action="Deny" asp-route-id="@Model.CurrentUser.RequestDrivers.FirstOrDefault().Id" asp-route-returnUrl="@Request.Path"  method="post">
-        <button type="submit" class="btn action-delete" onclick="return confirm('Сигурен ли си, че искаш да го изтриеш?')"><i class="fas fa-trash"></i> Отмени заявката</button>
-    </form> *@
+    @{
+        string style1 = "none";
+        if (User.IsInRole("Tourist") && Model.HasDriverRequest)
+        {
+            style1 = "block";
+        }
+        var requestDriverId = Model.CurrentUser.RequestDrivers?.Where(u => u.StatusRequest == RequestStatus.Pending).FirstOrDefault()?.Id;
+    }
+    <form asp-controller="DriverApplications" asp-action="Deny" asp-route-id="@requestDriverId" asp-route-returnUrl="@Request.Path" method="post" style="display: @style1; height: -20px;">
+        <button type="submit" class="btn action-delete" onclick="return confirm('Сигурен ли си, че искаш да я изтриеш?')" style="color: #721c24; height: 50px;"><i class="fas fa-trash"></i> Отмени заявката</button>
+    </form>
 </div>
 
 @section Scripts {
