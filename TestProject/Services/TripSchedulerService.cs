@@ -120,32 +120,3 @@ namespace TestProject.Services
     }
 }
 
-
-
-//private async Task<List<object>> GetUserOverlappingTrips(string userId, int? excludeTripId = null)
-//{
-//    var query = _context.Trips
-//        .Where(t => t.DriversId == userId &&
-//               (t.StatusTrip == TripStatus.Upcoming || t.StatusTrip == TripStatus.Ongoing));
-
-//    // Exclude current trip in edit mode
-//    if (excludeTripId.HasValue)
-//    {
-//        query = query.Where(t => t.Id != excludeTripId.Value);
-//    }
-
-//    var userTrips = await query
-//        .Select(t => new
-//        {
-//            id = t.Id,
-//            start = t.DepartureTime,
-//            end = t.ReturnTime,
-//            startPosition = t.StartPosition,
-//            destination = t.Destination
-//        })
-//        .ToListAsync();
-
-//    return userTrips.Cast<object>().ToList();
-//}
-//    }
-//}

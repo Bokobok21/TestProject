@@ -107,10 +107,10 @@ namespace TestProject.Controllers
             {
                 return Redirect($"{returnUrl}?returnUrl={Uri.EscapeDataString(returnUrlOriginal)}"); // Redirects back to the previous page with returnUrl as a query parameter
             }
-            //if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
-            //{
-            //    return Redirect(returnUrl);
-            //}
+            if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
+            {
+                return Redirect(returnUrl);
+            }
             return RedirectToAction("Details", "Trips", new { id = tripId, returnUrl = returnUrl });
 
         }

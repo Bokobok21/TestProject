@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -127,39 +128,31 @@ namespace TestProject.Controllers
             return View(tripParticipant);
         }
 
-        // GET: TripParticipants/Delete/5
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var tripParticipant = await _context.TripParticipants
-                .Include(t => t.Trip)
-                .Include(t => t.User)
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (tripParticipant == null)
-            {
-                return NotFound();
-            }
-
-            return View(tripParticipant);
-        }
 
         // POST: TripParticipants/Delete/5
         [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> DeleteConfirmed(int id, string returnUrl, int tripId)
         {
             var tripParticipant = await _context.TripParticipants.FindAsync(id);
             if (tripParticipant != null)
             {
                 _context.TripParticipants.Remove(tripParticipant);
+                await _context.SaveChangesAsync();
             }
 
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
+            {
+                return Redirect(returnUrl); // Redirects back to the previous page
+            }
+
+            var trip = await _context.Trips.FindAsync(tripId);
+            if (trip != null)
+            {
+                trip.FreeSeats++;
+                await _context.SaveChangesAsync();
+            }
+
+            return RedirectToAction("MyRequests", "PassengerRequests");
         }
 
         private bool TripParticipantExists(int id)

@@ -204,7 +204,7 @@
                                 </button>
                             </form>
                         }
-                        else
+                        else if (Model.Requests.Any(r => r.UserId == User.Id() && r.StatusRequest == RequestStatus.Pending))
                         {
                             <div class="request-status">
                                 <div class="request-status-content">
@@ -220,6 +220,23 @@
                                 </form>
                             </div>
                         }
+                        else
+                        {
+                            <div class="request-status">
+                                <div class="request-status-content">
+                                    <i class="fas fa-info-circle"></i>
+                                    <span>Вече сте участник в това пътуване</span>
+                                </div>
+                                <form method="post" asp-action="Delete" asp-controller="TripParticipants">
+                                    <input type="hidden" name="id" value="@Model.TripParticipants.Where(r => r.TripId == Model.Id).FirstOrDefault(r => r.UserId == User.Id())?.Id" />
+                                    <input type="hidden" name="returnUrl" value="@ViewBag.ReturnUrl" />
+                                    <input type="hidden" name="tripId" value="@Model.Id" />
+                                    <button class="trip-action-btn action-delete" type="submit" onclick="return confirm('Сигурен ли си, че искаш да го направиш?')">
+                                        <i class="fas fa-trash"></i> Откажи се
+                                    </button>
+                                </form>
+                            </div>
+                        }
                     }
                     else
                     {
@@ -231,7 +248,16 @@
                         </div>
                     }
                 }
-                else
+                else if (Model.Requests.Any(r => r.UserId == User.Id() && r.StatusRequest == RequestStatus.Accepted) && Model.StatusTrip != TripStatus.Booked)
+                {
+                    <div class="request-status">
+                        <div class="request-status-content">
+                            <i class="fas fa-info-circle"></i>
+                            <span>Благодарим ви, че участвахте</span>
+                        </div>
+                    </div>
+                }
+                else 
                 {
                     <div class="request-status">
                         <div class="request-status-content">

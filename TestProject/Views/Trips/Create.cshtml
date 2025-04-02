@@ -342,51 +342,6 @@
 
 
 
-        // document.addEventListener("DOMContentLoaded", function () {
-        //     let dateTimeInputs = document.querySelectorAll("input[type=datetime-local]");
-        //     let unavailableTimes = getUnavailableTimes(); // Fetch the already selected times
-
-        //     dateTimeInputs.forEach(input => {
-        //         input.addEventListener("change", function () {
-        //             let selectedTime = new Date(this.value);
-        //             if (isTimeUnavailable(selectedTime)) {
-        //                 alert("The selected time overlaps with an existing booking. Please choose another time.");
-        //                 this.value = ""; // Reset the input field
-        //             }
-        //         });
-        //     });
-
-        //     function getUnavailableTimes() {
-        //         let unavailable = [];
-        //         document.querySelectorAll(".unavailable-time").forEach(el => {
-        //             unavailable.push(new Date(el.dataset.time));
-        //         });
-        //         return unavailable;
-        //     }
-
-        //     function isTimeUnavailable(selectedTime) {
-        //         return unavailableTimes.some(time => Math.abs(time - selectedTime) < 3600000); // Assuming 1-hour conflict range
-        //     }
-
-        //     // Disable unavailable times dynamically in input fields
-        //     dateTimeInputs.forEach(input => {
-        //         input.addEventListener("focus", function () {
-        //             let picker = this;
-        //             unavailableTimes.forEach(time => {
-        //                 let option = document.createElement("option");
-        //                 option.value = time.toISOString().slice(0, 16);
-        //                 option.textContent = option.value;
-        //                 option.disabled = true;
-        //                 picker.appendChild(option);
-        //             });
-        //         });
-        //     });
-        // });
-
-
-
-
-
     </script>
 
 }

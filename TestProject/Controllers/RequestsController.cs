@@ -73,7 +73,7 @@ namespace TestProject.Controllers
             if (await HasOverlappingTrips(userId, tripId))
             {
                 TempData["ErrorMessage"] = "Не можете да се присъедините към това пътуване, тъй като имате друго пътуване в този времеви интервал.";
-                
+
                 return RedirectToAction("Details", "Trips", new { id = tripId, returnUrl = returnUrl });
             }
 
@@ -152,27 +152,35 @@ namespace TestProject.Controllers
                 return NotFound(); // No free seats or trip doesn't exist
             }
 
-            // Add user to TripParticipants
-            var tripParticipant = new TripParticipant
+            if (await HasOverlappingTrips(request.User.Id, trip.Id) == false)
             {
-                TripId = request.TripId,
-                UserId = request.UserId
-            };
-            _context.TripParticipants.Add(tripParticipant);
+                // Add user to TripParticipants
+                var tripParticipant = new TripParticipant
+                {
+                    TripId = request.TripId,
+                    UserId = request.UserId
+                };
+                _context.TripParticipants.Add(tripParticipant);
 
-            // Decrement FreeSeats
-            trip.FreeSeats -= 1;
+                // Decrement FreeSeats
+                trip.FreeSeats -= 1;
 
-            // Update trip status if FreeSeats becomes 0
-            if (trip.FreeSeats == 0)
+                // Update trip status if FreeSeats becomes 0
+                if (trip.FreeSeats == 0)
+                {
+                    trip.StatusTrip = TripStatus.Booked;
+                }
+
+                // Update request status
+                request.StatusRequest = RequestStatus.Accepted;
+            }
+            else
             {
-                trip.StatusTrip = TripStatus.Booked;
+                _context.Requests.Remove(request);
             }
 
-            // Update request status
-            request.StatusRequest = RequestStatus.Accepted;
-
             await _context.SaveChangesAsync();
+
             return RedirectToAction("PendingRequests", "DriverRequests");
         }
 

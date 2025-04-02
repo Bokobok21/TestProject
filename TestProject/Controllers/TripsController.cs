@@ -40,10 +40,10 @@ namespace TestProject.Controllers
 
             ViewBag.SortOptions = new List<SelectListItem>
             {
-                new SelectListItem { Value = "departure_time_asc", Text = "Час на тръгване (възходящо)" },
-                new SelectListItem { Value = "departure_time_desc", Text = "Час на тръгване (низходящо)" },
-                new SelectListItem { Value = "return_time_asc", Text = "Час на връщане (възходящо)" },
-                new SelectListItem { Value = "return_time_desc", Text = "Час на връщане (низходящо)" },
+                new SelectListItem { Value = "departure_time_asc", Text = "Час на тръгване (най-ранен)" },
+                new SelectListItem { Value = "departure_time_desc", Text = "Час на тръгване (най-късен)" },
+                new SelectListItem { Value = "return_time_asc", Text = "Час на връщане (най-ранен)" },
+                new SelectListItem { Value = "return_time_desc", Text = "Час на връщане (най-късен)" },
                 new SelectListItem { Value = "price_asc", Text = "Цена (от ниска към висока)" },
                 new SelectListItem { Value = "price_desc", Text = "Цена (от висока към ниска)" },
                 new SelectListItem { Value = "free_seats_asc", Text = "Свободни места (възходящо)" },
@@ -146,7 +146,6 @@ namespace TestProject.Controllers
                 tripSchedule = trip.tripSchedule,
             }).ToList();
 
-            //ViewData["ShowActions"] = true; // should be false
             ViewBag.ReturnUrl = returnUrl;
             // Return view with paginated list
             return View(new PaginatedList<Trip>(paginatedTrips, tripsList.Count, paginatedTrips.PageIndex, pageSize));
@@ -548,17 +547,17 @@ namespace TestProject.Controllers
 
         private async Task<List<object>> GetUserOverlappingTrips(string userId, int? excludeTripId = null)
         {
-            var query = _context.Trips
+            var driverTripsQuery = _context.Trips
                 .Where(t => t.DriversId == userId &&
                        (t.StatusTrip == TripStatus.Upcoming || t.StatusTrip == TripStatus.Ongoing));
 
             // Exclude current trip in edit mode
             if (excludeTripId.HasValue)
             {
-                query = query.Where(t => t.Id != excludeTripId.Value);
+                driverTripsQuery = driverTripsQuery.Where(t => t.Id != excludeTripId.Value);
             }
 
-            var userTrips = await query
+            var driverTrips = await driverTripsQuery
                 .Select(t => new {
                     id = t.Id,
                     start = t.DepartureTime,
@@ -568,8 +567,30 @@ namespace TestProject.Controllers
                 })
                 .ToListAsync();
 
-            return userTrips.Cast<object>().ToList();
+            var passengerTripsQuery = _context.TripParticipants
+                .Where(tp => tp.UserId == userId)
+                .Include(tp => tp.Trip)
+                .Where(tp => tp.Trip.StatusTrip == TripStatus.Upcoming || tp.Trip.StatusTrip == TripStatus.Ongoing);
+
+            if (excludeTripId.HasValue)
+            {
+                passengerTripsQuery = passengerTripsQuery.Where(tp => tp.Trip.Id != excludeTripId.Value);
+            }
+
+            var passengerTrips = await passengerTripsQuery
+                .Select(tp => new {
+                    id = tp.Trip.Id,
+                    start = tp.Trip.DepartureTime,
+                    end = tp.Trip.ReturnTime,
+                    startPosition = tp.Trip.StartPosition,
+                    destination = tp.Trip.Destination
+                })
+                .ToListAsync();
+
+            var userTrips = driverTrips.Concat(passengerTrips).Cast<object>().ToList();
+            return userTrips;
         }
+
 
     }
 }

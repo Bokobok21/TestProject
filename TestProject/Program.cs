@@ -20,8 +20,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 builder.Services.AddHostedService<TripSchedulerService>();
-builder.Services.AddHostedService<TripStatusUpdater>();
-
+builder.Services.AddHostedService<TripStatusUpdaterService>();
 
 builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
     .AddRoles<IdentityRole>()
@@ -83,15 +82,20 @@ app.Run();
 
 //back to list fucntion - javascript:history.back()
 
+// not return time but departing time 
 
 // register form
 // pagination buttons
-// calendar - time picking shouldn't be to the top of the screen - don't block the whole day
-// review going back buttons
+// calendar - time picking shouldn't be to the top of the screen 
 // do the same design to the driver requests from the admin requests
+// add the active navbar on the panels as well 
+
+
+// reserve multiple seats
+
 
 // trips pictures aren't deleted when it is changed in edit form
-// reserve multiple seats
+// add icons from mom
 
 
 
@@ -100,7 +104,7 @@ app.Run();
 // fix the role to be passenger not tourist
 
 // AIs and other useful info
-// v0 ; codepen ; cursor ai ; saveWeb2Zip + b12 website builder ai ; 
+// v0 ; napkin ai ; wireframe ; sonnet-claude ; figma ; eraser ; paper ; codepen ; cursor ai ; bolt(.new) ai ; saveWeb2Zip ; b12 website builder ai ; 
 
 
 // documentation
