@@ -142,7 +142,8 @@ namespace TestProject.Controllers
                 PlateNumber = trip.PlateNumber,
                 ImagePath = trip.ImagePath,
                 StatusTrip = trip.StatusTrip,
-                CreatedDate = trip.CreatedDate
+                CreatedDate = trip.CreatedDate,
+                tripSchedule = trip.tripSchedule,
             }).ToList();
 
             //ViewData["ShowActions"] = true; // should be false
@@ -285,7 +286,8 @@ namespace TestProject.Controllers
                     StatusTrip = tripViewModel.StatusTrip,
                     IsRecurring = tripViewModel.IsRecurring,
                     RecurrenceInterval = recurrenceInterval.ToString(),
-                    NextRunDate = tripViewModel.DepartureTime.Add(recurrenceInterval)
+                    NextRunDate = tripViewModel.DepartureTime.Add(recurrenceInterval),
+                    NextStart = tripViewModel.DepartureTime.Add(recurrenceInterval)
                 };
 
                 _context.Add(trip);
@@ -456,8 +458,9 @@ namespace TestProject.Controllers
                     trip.IsRecurring = tripViewModel.IsRecurring;
                     trip.RecurrenceInterval = recurrenceInterval.ToString();
                     trip.NextRunDate = tripViewModel.DepartureTime.Add(recurrenceInterval);
+                    trip.NextStart = tripViewModel.DepartureTime.Add(recurrenceInterval);
 
-                   
+
                     if (trip.FreeSeats == 0 && trip.StatusTrip != tripViewModel.StatusTrip && tripViewModel.StatusTrip != TripStatus.Upcoming)
                     {
                         trip.StatusTrip = tripViewModel.StatusTrip;

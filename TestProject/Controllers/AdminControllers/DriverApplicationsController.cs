@@ -88,7 +88,8 @@ public class DriverApplicationsController : Controller
         //    return Redirect(returnUrl); // Redirects back to the previous page
         //}
 
-       /* return RedirectToAction("MyRequests", "PassengerRequests")*/;
+        /* return RedirectToAction("MyRequests", "PassengerRequests")*/
+        ;
         return RedirectToAction("Index");
     }
 
@@ -136,32 +137,41 @@ public class DriverApplicationsController : Controller
     {
         var user = await _userManager.FindByIdAsync(id);
         if (user == null) return NotFound();
-     
+
         // Remove all existing roles
         var currentRoles = await _userManager.GetRolesAsync(user);
 
-            user.DateOfDriverAcceptance = null;
+        user.DateOfDriverAcceptance = null;
 
-            // Check if the current image is not the default image before deleting
-            if (!string.IsNullOrEmpty(user.ImagePath) && !user.ImagePath.Equals("/images/drivers/default-image-Driver.jpg", StringComparison.OrdinalIgnoreCase))
+        // Check if the current image is not the default image before deleting
+        if (!string.IsNullOrEmpty(user.ImagePath) && !user.ImagePath.Equals("/images/drivers/default-image-Driver.jpg", StringComparison.OrdinalIgnoreCase))
+        {
+            var oldImage = Path.Combine(_webHostEnvironment.WebRootPath, user.ImagePath.TrimStart('/'));
+            if (System.IO.File.Exists(oldImage))
             {
-                var oldImage = Path.Combine(_webHostEnvironment.WebRootPath, user.ImagePath.TrimStart('/'));
-                if (System.IO.File.Exists(oldImage))
-                {
-                    System.IO.File.Delete(oldImage);
-                }
+                System.IO.File.Delete(oldImage);
             }
+        }
 
-            user.ImagePath = null;
+        user.ImagePath = null;
 
-            var trips = await _context.Trips.Where(rd => rd.DriversId == user.Id && rd.StatusTrip != TripStatus.Finished).ToListAsync();
-            _context.Trips.RemoveRange(trips);
+        var trips = await _context.Trips.Where(rd => rd.DriversId == user.Id && rd.StatusTrip != TripStatus.Finished).ToListAsync();
+        _context.Trips.RemoveRange(trips);
 
-            var requests = await _context.Requests.Where(r => r.Trip.DriversId == user.Id && r.Trip.StatusTrip != TripStatus.Finished).ToListAsync();
-            _context.Requests.RemoveRange(requests);
 
-            var tripParticipants = await _context.TripParticipants.Where(tp => tp.Trip.DriversId == user.Id && tp.Trip.StatusTrip != TripStatus.Finished).ToListAsync();
-            _context.TripParticipants.RemoveRange(tripParticipants);
+        var tripsFinished = await _context.Trips.Where(rd => rd.DriversId == user.Id && rd.StatusTrip == TripStatus.Finished).ToListAsync();
+        foreach (var trip in tripsFinished)
+        {
+            trip.IsRecurring = false;
+        }
+        _context.Trips.UpdateRange(tripsFinished); // update or updateRange?
+
+
+        var requests = await _context.Requests.Where(r => r.Trip.DriversId == user.Id && r.Trip.StatusTrip != TripStatus.Finished).ToListAsync();
+        _context.Requests.RemoveRange(requests);
+
+        var tripParticipants = await _context.TripParticipants.Where(tp => tp.Trip.DriversId == user.Id && tp.Trip.StatusTrip != TripStatus.Finished).ToListAsync();
+        _context.TripParticipants.RemoveRange(tripParticipants);
 
         await _userManager.RemoveFromRolesAsync(user, currentRoles);
 

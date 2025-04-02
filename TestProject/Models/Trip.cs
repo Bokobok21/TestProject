@@ -5,6 +5,7 @@ using TestProject.Controllers;
 
 namespace TestProject.Models
 {
+    using Microsoft.EntityFrameworkCore.Diagnostics;
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
 
@@ -54,6 +55,9 @@ namespace TestProject.Models
         public TripStatus StatusTrip { get; set; }
 
         public DateTime CreatedDate { get; set; } = DateTime.Now;
+
+        public DateTime tripSchedule { get; set; } = DateTime.Now;
+        public DateTime NextStart { get; set; } = DateTime.Now;
 
         public bool IsRecurring { get; set; }
 

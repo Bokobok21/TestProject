@@ -1,6 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.VisualBasic;
+using System.Globalization;
 using TestProject.Data;
 using TestProject.Models;
+using static System.Formats.Asn1.AsnWriter;
 
 namespace TestProject.Services
 {
@@ -38,42 +41,49 @@ namespace TestProject.Services
 
                     var recurringTrips = allRecurringTrips
                         .Where(t => TimeSpan.TryParse(t.RecurrenceInterval, out TimeSpan interval)
-                         && t.CreatedDate.Add(interval) <= Now)
+                         && t.tripSchedule.Add(interval) <= Now)
                         .ToList();
+
+                    // createddate + interval so it doesn't keep reccuring; 
 
                     foreach (var trip in recurringTrips)
                     {
                         _logger.LogInformation("Processing recurring trip {TripId}", trip.Id);
 
-                        var newDepartureTime = trip.NextRunDate.Value;
-
-                        // Create new trip instance
-                        var newTrip = new Trip
-                        {
-                            Driver = trip.Driver,
-                            DriversId = trip.DriversId,
-                            StartPosition = trip.StartPosition,
-                            Destination = trip.Destination,
-                            DepartureTime = newDepartureTime,
-                            ReturnTime = newDepartureTime.Add(trip.ReturnTime - trip.DepartureTime),
-                            Price = trip.Price,
-                            TotalSeats = trip.TotalSeats,
-                            FreeSeats = trip.TotalSeats, // Reset seats
-                            CarModel = trip.CarModel,
-                            PlateNumber = trip.PlateNumber,
-                            ImagePath = trip.ImagePath,
-                            StatusTrip = TripStatus.Upcoming,
-                            CreatedDate = Now,
-                            IsRecurring = false // New trips are not templates
-                        };
-
+                        var newDepartureTime = trip.NextStart;
                         TimeSpan reccurenceInterval = TimeSpan.Parse(trip.RecurrenceInterval);
 
+                        if (await UserHasNoOverlappingTrips(trip))
+                        {
+
+                            // Create new trip instance
+                            var newTrip = new Trip
+                            {
+                                Driver = trip.Driver,
+                                DriversId = trip.DriversId,
+                                StartPosition = trip.StartPosition,
+                                Destination = trip.Destination,
+                                DepartureTime = newDepartureTime,
+                                ReturnTime = newDepartureTime.Add(trip.ReturnTime - trip.DepartureTime),
+                                Price = trip.Price,
+                                TotalSeats = trip.TotalSeats,
+                                FreeSeats = trip.TotalSeats, // Reset seats
+                                CarModel = trip.CarModel,
+                                PlateNumber = trip.PlateNumber,
+                                ImagePath = trip.ImagePath,
+                                StatusTrip = TripStatus.Upcoming,
+                                CreatedDate = Now,
+                                IsRecurring = false // New trips are not templates
+                            };
+                            //trip.NextRunDate = newDepartureTime.Add(reccurenceInterval);
+                            context.Trips.Add(newTrip);
+                        }
+
+                        trip.NextStart = trip.NextStart.Add(reccurenceInterval);
                         // Update next run date
-                        trip.NextRunDate = newDepartureTime.Add(reccurenceInterval);
+                        trip.tripSchedule = trip.tripSchedule.Add(reccurenceInterval);
 
                         // Save to database
-                        context.Trips.Add(newTrip);
                         await context.SaveChangesAsync();
                     }
                 }
@@ -82,5 +92,60 @@ namespace TestProject.Services
                 await Task.Delay(TimeSpan.FromSeconds(30), stoppingToken);
             }
         }
+        private async Task<bool> UserHasNoOverlappingTrips(Trip trip)
+        {
+            using (var scope = _services.CreateScope())
+            {
+                var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+
+                var overlappingTrips = await context.Trips
+                    .Where(t => t.DriversId == trip.DriversId &&
+                                (t.StatusTrip == TripStatus.Upcoming || t.StatusTrip == TripStatus.Ongoing))
+                    .ToListAsync(); // Fetch all relevant trips first
+
+                var NewDepartureTime = trip.NextStart;
+                var NewReturnTime = NewDepartureTime.Add(trip.ReturnTime - trip.DepartureTime);
+
+                // Apply the overlap logic
+                bool hasOverlap = overlappingTrips.Any(t =>
+                    (NewDepartureTime >= t.DepartureTime && NewDepartureTime <= t.ReturnTime) || // New trip starts inside existing trip
+                    (NewReturnTime >= t.DepartureTime && NewReturnTime <= t.ReturnTime) || // New trip ends inside existing trip
+                    (NewDepartureTime <= t.DepartureTime && NewReturnTime >= t.ReturnTime) // New trip fully contains existing trip
+                );
+
+                return !hasOverlap; // Return true if there is NO overlap
+            }
+        }
+
     }
 }
+
+
+
+//private async Task<List<object>> GetUserOverlappingTrips(string userId, int? excludeTripId = null)
+//{
+//    var query = _context.Trips
+//        .Where(t => t.DriversId == userId &&
+//               (t.StatusTrip == TripStatus.Upcoming || t.StatusTrip == TripStatus.Ongoing));
+
+//    // Exclude current trip in edit mode
+//    if (excludeTripId.HasValue)
+//    {
+//        query = query.Where(t => t.Id != excludeTripId.Value);
+//    }
+
+//    var userTrips = await query
+//        .Select(t => new
+//        {
+//            id = t.Id,
+//            start = t.DepartureTime,
+//            end = t.ReturnTime,
+//            startPosition = t.StartPosition,
+//            destination = t.Destination
+//        })
+//        .ToListAsync();
+
+//    return userTrips.Cast<object>().ToList();
+//}
+//    }
+//}

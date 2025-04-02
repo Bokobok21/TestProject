@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TestProject.Data;
 
@@ -11,9 +12,11 @@ using TestProject.Data;
 namespace TestProject.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250401185513_tripSchedule")]
+    partial class tripSchedule
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -367,9 +370,6 @@ namespace TestProject.Migrations
                     b.Property<DateTime?>("NextRunDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("NextStart")
-                        .HasColumnType("datetime2");
-
                     b.Property<string>("PlateNumber")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -393,7 +393,7 @@ namespace TestProject.Migrations
                     b.Property<int>("TotalSeats")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("tripSchedule")
+                    b.Property<DateTime?>("tripSchedule")
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");

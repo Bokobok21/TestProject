@@ -141,11 +141,19 @@ public class ListAllUsersController : Controller
             var trips = await _context.Trips.Where(rd => rd.DriversId == user.Id && rd.StatusTrip != TripStatus.Finished).ToListAsync();
             _context.Trips.RemoveRange(trips);
 
+            var tripsFinished = await _context.Trips.Where(rd => rd.DriversId == user.Id && rd.StatusTrip == TripStatus.Finished).ToListAsync();
+            foreach (var trip in tripsFinished)
+            {
+                trip.IsRecurring = false;
+            }
+            _context.Trips.UpdateRange(tripsFinished); // update or updateRange?
+
             var requests = await _context.Requests.Where(r => r.Trip.DriversId == user.Id && r.Trip.StatusTrip != TripStatus.Finished).ToListAsync();
             _context.Requests.RemoveRange(requests);
 
             var tripParticipants = await _context.TripParticipants.Where(tp => tp.Trip.DriversId == user.Id && tp.Trip.StatusTrip != TripStatus.Finished).ToListAsync();
             _context.TripParticipants.RemoveRange(tripParticipants);
+
         }
 
         await _userManager.RemoveFromRolesAsync(user, currentRoles);
