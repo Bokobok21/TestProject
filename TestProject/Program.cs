@@ -88,8 +88,9 @@ app.Run();
 // pagination buttons
 // calendar - time picking shouldn't be to the top of the screen 
 // do the same design to the driver requests from the admin requests
-// add the active navbar on the panels as well 
 
+// add the active navbar on the panels as well 
+// trips prevew options is a little wonky with the time 
 
 // reserve multiple seats
 
@@ -104,8 +105,8 @@ app.Run();
 // fix the role to be passenger not tourist
 
 // AIs and other useful info
-// v0 ; napkin ai ; wireframe ; sonnet-claude ; figma ; eraser ; paper ; codepen ; cursor ai ; bolt(.new) ai ; saveWeb2Zip ; b12 website builder ai ; 
-
+// v0 ; napkin ai ; wireframe ; sonnet-claude ; heruUi ai ; NotebookLM ; ai agents (gemini) ; figma ; eraser ; paper ; codepen ; cursor ai ; bolt(.new) ai ; saveWeb2Zip ; b12 website builder ai ; 
+// Localend ; ShareX ; TranslucentTB ; Revo Uninstaller ; 
 
 // documentation
 // 2.5 2.5 2.5 3 for the left one 30 rows 60 characters per row max 2000 characters
