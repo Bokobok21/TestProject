@@ -81,23 +81,15 @@ app.Run();
 
 //back to list fucntion - javascript:history.back()
 
-
 // not return time but departing time 
 
 
-// pagination buttons
-// calendar - time picking shouldn't be to the top of the screen 
-
-
-// add the active navbar on the panels as well 
-// trips prevew options is a little wonky with the time 
-
+// view all drivers
 // reserve multiple seats
 
 
 // trips pictures aren't deleted when it is changed in edit form
 // add icons from mom
-
 
 
 // fix foulders and files

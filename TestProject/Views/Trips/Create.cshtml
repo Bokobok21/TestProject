@@ -66,7 +66,7 @@
                                 <label asp-for="Price" class="control-label">
                                     <i class="fas fa-tag"></i> Цена (лв)
                                 </label>
-                                <input asp-for="Price" class="form-control" type="number" step="1" min="0" placeholder="0" />
+                                <input asp-for="Price" class="form-control" type="number" step="1" min="0" max="10000" placeholder="0" />
                                 <span asp-validation-for="Price" class="text-danger"></span>
                             </div>
                             
@@ -184,10 +184,10 @@
                     <img src="/placeholder.svg?height=200&width=350" alt="Trip Preview" class="trip-image" id="preview-image" />
                     <div class="trip-status-badge status-upcoming">Предстоящо</div>
                 </div>
-                <div class="trip-content">
+                <div class="trip-content" style="overflow-y: unset; height: auto">
                     <div class="trip-header">
                         <div>
-                            <h3 class="trip-route" id="preview-route">Начална позиция → Дестинация</h3>
+                            <h3 class="trip-route" id="preview-route" style="padding-bottom: 10px;">Начална позиция → Дестинация</h3>
                             <div class="trip-driver">
                                 <i class="fas fa-user"></i> Вашето име
                             </div>
@@ -195,26 +195,26 @@
                         <div class="trip-price" id="preview-price">0 лв</div>
                     </div>
                     
-                    <div class="trip-details">
+                    <div class="trip-details" style="gap: 0px;">
                         <div class="trip-detail-item">
                             <span class="trip-detail-label">Тръгване</span>
-                            <span class="trip-detail-value" id="preview-departure">-</span>
+                            <span class="trip-detail-value" id="preview-departure" style="padding-right: 20px">-</span>
                         </div>
                         <div class="trip-detail-item">
                             <span class="trip-detail-label">Връщане</span>
-                            <span class="trip-detail-value" id="preview-return">-</span>
+                            <span class="trip-detail-value" id="preview-return" style="padding-right: 20px">-</span>
                         </div>
                         <div class="trip-detail-item">
                             <span class="trip-detail-label">Общо места</span>
-                            <span class="trip-detail-value" id="preview-seats">0</span>
+                            <span class="trip-detail-value" id="preview-seats" style="padding-right: 20px">0</span>
                         </div>
                         <div class="trip-detail-item">
                             <span class="trip-detail-label">Свободни места</span>
-                            <span class="trip-detail-value" id="preview-free-seats">0</span>
+                            <span class="trip-detail-value" id="preview-free-seats" style="padding-right: 20px">0</span>
                         </div>
                     </div>
                     
-                    <div class="trip-car-info" style=" display: flex; justify-content: center;">
+                    <div class="trip-car-info" style=" display: flex; justify-content: center; margin-top: -2px;">
                         <i class="fas fa-car"></i>
                         <div>
                             <span class="trip-car-model" id="preview-car-model">Модел на автомобила</span>

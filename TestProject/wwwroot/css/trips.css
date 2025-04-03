@@ -178,7 +178,7 @@ body {
 .trips-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-    gap: 20px;
+    gap: 24px;
     margin-bottom: 30px;
 }
 
@@ -663,8 +663,9 @@ input:checked + .slider:before {
 
 /* Preview Card */
 .trip-preview-container {
-    position: sticky;
-    top: 20px;
+    height: max-content !important;
+    position: sticky !important;
+    top: 130px !important
 }
 
 .preview-title {
@@ -1293,9 +1294,10 @@ input:checked + .slider:before {
 .trip-preview-container {
     width: 100%;
     max-width: 400px;
+    height: max-content !important;
     margin-top: 20px;
-    position: sticky;
-    top: 20px;
+    position: sticky !important;
+    top: 130px !important;
 }
 
 .preview-title {
@@ -1697,5 +1699,4 @@ button[type="submit"]:disabled {
             width: 100% !important;
         }
 }
-
 

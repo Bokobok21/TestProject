@@ -1,6 +1,7 @@
 ﻿@model PaginatedList<UserViewModel>
 @{
     ViewData["Title"] = "Users Management";
+
 }
 @using Microsoft.AspNetCore.Identity
 @using TestProject.Extentions
@@ -137,55 +138,11 @@
             </table>
         </div>
 
-        <div class="pagination-container1">
-            @if (Model.HasPreviousPage)
-            {
-                <a asp-action="Users"
-                   asp-route-pageNumber="@(Model.PageIndex - 1)"
-                   asp-route-roleFilter="@ViewBag.CurrentRoleFilter"
-                   asp-route-searchTerm="@ViewContext.HttpContext.Request.Query["searchTerm"]"
-                   class="pagination-btn1">
-                    <i class="fas fa-chevron-left"></i> Предишна
-                </a>
-            }
-            else
-            {
-                <button disabled class="pagination-btn1 disabled">
-                    <i class="fas fa-chevron-left"></i> Предишна
-                </button>
-            }
 
-            @* <span class="pagination-info1">Страница @Model.PageIndex от @Model.TotalPages</span> *@
-            <!-- Page Numbers -->
-            @for (var i = 1; i <= Model.TotalPages; i++)
 
-            {
-                <a asp-action="Users" asp-route-pageNumber="@i"
-                   asp-route-startPosition="@ViewBag.CurrentStartPosition"
-                   asp-route-roleFilter="@ViewBag.CurrentRoleFilter"
-                   asp-route-searchTerm="@ViewContext.HttpContext.Request.Query["searchTerm"]"
-                   class="pagination-btn @(i == Model.PageIndex ? "active" : "")">
-                    @i
-                </a>
-            }
 
-            @if (Model.HasNextPage)
-            {
-                <a asp-action="Users"
-                   asp-route-pageNumber="@(Model.PageIndex + 1)"
-                   asp-route-roleFilter="@ViewBag.CurrentRoleFilter"
-                   asp-route-searchTerm="@ViewContext.HttpContext.Request.Query["searchTerm"]"
-                   class="pagination-btn1">
-                    Следваща <i class="fas fa-chevron-right"></i>
-                </a>
-            }
-            else
-            {
-                <button disabled class="pagination-btn1 disabled">
-                    Следваща <i class="fas fa-chevron-right"></i>
-                </button>
-            }
-        </div>
+            <partial name="_UsersPaginationPartial" model="Model" />
+
     </div>
 </div>
 

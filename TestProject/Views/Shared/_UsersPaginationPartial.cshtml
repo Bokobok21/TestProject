@@ -1,0 +1,99 @@
+﻿<div class="pagination">
+    <!-- Previous Button -->
+    @if (Model.HasPreviousPage)
+    {
+        <a asp-action="Users"
+           asp-route-pageNumber="@(Model.PageIndex - 1)"
+           asp-route-roleFilter="@ViewBag.CurrentRoleFilter"
+           asp-route-searchTerm="@ViewContext.HttpContext.Request.Query["searchTerm"]"
+           class="pagination-btn1">
+            <i class="fas fa-chevron-left"></i> Предишна
+        </a>
+    }
+    else
+    {
+        <button disabled class="pagination-btn">
+            <i class="fas fa-chevron-left"></i> Предишна
+        </button>
+    }
+
+    <!-- Page Numbers with Ellipsis -->
+    @{
+        const int maxPagesToShow = 3; // Maximum number of page buttons to show
+        int startPage = Math.Max(1, Model.PageIndex - maxPagesToShow / 2);
+        int endPage = Math.Min(Model.TotalPages, startPage + maxPagesToShow - 1);
+
+        // Adjust start page if we're near the end
+        if (endPage - startPage + 1 < maxPagesToShow && startPage > 1)
+        {
+            startPage = Math.Max(1, endPage - maxPagesToShow + 1);
+        }
+
+        // Show first page if not included in the range
+        if (startPage > 1)
+        {
+            <a asp-action="Users"
+               asp-route-pageNumber="1"
+               asp-route-roleFilter="@ViewBag.CurrentRoleFilter"
+               asp-route-searchTerm="@ViewContext.HttpContext.Request.Query["searchTerm"]"
+               class="pagination-btn @(1 == Model.PageIndex ? "active" : "")">
+                1
+            </a>
+
+            // Show ellipsis if there's a gap
+            if (startPage > 2)
+            {
+                <span class="pagination-ellipsis">...</span>
+            }
+        }
+
+        // Show page numbers
+        for (var i = startPage; i <= endPage; i++)
+        {
+            <a asp-action="Users"
+               asp-route-pageNumber="@i"
+               asp-route-roleFilter="@ViewBag.CurrentRoleFilter"
+               asp-route-searchTerm="@ViewContext.HttpContext.Request.Query["searchTerm"]"
+               class="pagination-btn @(i == Model.PageIndex ? "active" : "")">
+                @i
+            </a>
+        }
+
+        // Show last page if not included in the range
+        if (endPage < Model.TotalPages)
+        {
+            // Show ellipsis if there's a gap
+            if (endPage < Model.TotalPages - 1)
+            {
+                <span class="pagination-ellipsis">...</span>
+            }
+
+            <a asp-action="Users"
+               asp-route-pageNumber="@Model.TotalPages"
+               asp-route-roleFilter="@ViewBag.CurrentRoleFilter"
+               asp-route-searchTerm="@ViewContext.HttpContext.Request.Query["searchTerm"]"
+               class="pagination-btn @(Model.TotalPages == Model.PageIndex ? "active" : "")">
+                @Model.TotalPages
+            </a>
+        }
+    }
+
+    <!-- Next Button -->
+    @if (Model.HasNextPage)
+    {
+        <a asp-action="Users"
+           asp-route-pageNumber="@(Model.PageIndex + 1)"
+           asp-route-roleFilter="@ViewBag.CurrentRoleFilter"
+           asp-route-searchTerm="@ViewContext.HttpContext.Request.Query["searchTerm"]"
+           class="pagination-btn1">
+            Следваща <i class="fas fa-chevron-right"></i>
+        </a>
+    }
+    else
+    {
+        <button disabled class="pagination-btn">
+            Следваща <i class="fas fa-chevron-right"></i>
+        </button>
+    }
+</div>
+
