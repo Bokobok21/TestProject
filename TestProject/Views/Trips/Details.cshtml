@@ -23,18 +23,18 @@
                 // <a href="javascript:history.back()" class="btn btn-secondary">
                 //     <i class="fas fa-arrow-left"></i> Върни се обратно
                 // </a>
-                if (User.IsInRole("Driver") || User.IsInRole("Admin"))
-                {
-                    <a asp-action="MyDriverTrips" asp-controller="DriverTrips" class="btn btn-secondary">
-                        <i class="fas fa-arrow-left"></i> Върни се обратно
-                    </a>
-                }
-                else
-                {
+                // if (User.IsInRole("Driver") || User.IsInRole("Admin"))
+                // {
+                //     <a asp-action="MyDriverTrips" asp-controller="DriverTrips" class="btn btn-secondary">
+                //         <i class="fas fa-arrow-left"></i> Върни се обратно
+                //     </a>
+                // }
+                // else
+                // {
                     <a asp-action="Index" asp-controller="Trips" class="btn btn-secondary">
                         <i class="fas fa-arrow-left"></i> Върни се обратно
                     </a>
-                }
+                // }
             }
         }
     </div>
@@ -194,7 +194,7 @@
                 {
                     @if (Model.FreeSeats > 0)
                     {
-                        if (!Model.Requests.Any(r => r.UserId == User.Id()))
+                        if (!Model.Requests.Any(r => r.UserId == User.Id()) @*  || Model.Requests.Any(r => r.UserId == User.Id() && r.StatusRequest == RequestStatus.Rejected) *@ )
                         {
                             <form asp-controller="Requests" asp-action="SendJoinRequest" method="post">
                                 <input type="hidden" name="returnUrl" value="@ViewBag.ReturnUrl" />
@@ -220,7 +220,7 @@
                                 </form>
                             </div>
                         }
-                        else
+                        else 
                         {
                             <div class="request-status">
                                 <div class="request-status-content">
@@ -229,8 +229,10 @@
                                 </div>
                                 <form method="post" asp-action="Delete" asp-controller="TripParticipants">
                                     <input type="hidden" name="id" value="@Model.TripParticipants.Where(r => r.TripId == Model.Id).FirstOrDefault(r => r.UserId == User.Id())?.Id" />
-                                    <input type="hidden" name="returnUrl" value="@ViewBag.ReturnUrl" />
+                                    <input type="hidden" name="returnUrl" value="@Context.Request.Path" />
+                                    <input type="hidden" name="returnUrlOriginal" value="@ViewBag.ReturnUrl" />
                                     <input type="hidden" name="tripId" value="@Model.Id" />
+                                    <input type="hidden" name="userId" value="@User.Id()" />
                                     <button class="trip-action-btn action-delete" type="submit" onclick="return confirm('Сигурен ли си, че искаш да го направиш?')">
                                         <i class="fas fa-trash"></i> Откажи се
                                     </button>

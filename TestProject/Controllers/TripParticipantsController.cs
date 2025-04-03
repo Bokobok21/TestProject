@@ -131,7 +131,7 @@ namespace TestProject.Controllers
 
         // POST: TripParticipants/Delete/5
         [HttpPost, ActionName("Delete")]
-        public async Task<IActionResult> DeleteConfirmed(int id, string returnUrl, int tripId)
+        public async Task<IActionResult> DeleteConfirmed(int id, string returnUrl, string returnUrlOriginal, int tripId, string userId)
         {
             var tripParticipant = await _context.TripParticipants.FindAsync(id);
             if (tripParticipant != null)
@@ -140,9 +140,11 @@ namespace TestProject.Controllers
                 await _context.SaveChangesAsync();
             }
 
-            if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
+            var request = await _context.Requests.Include(r => r.User).Where(r => r.User.Id == userId && r.TripId == tripId).FirstOrDefaultAsync();
+            if (request != null)
             {
-                return Redirect(returnUrl); // Redirects back to the previous page
+                _context.Requests.Remove(request);
+                await _context.SaveChangesAsync();
             }
 
             var trip = await _context.Trips.FindAsync(tripId);
@@ -150,6 +152,16 @@ namespace TestProject.Controllers
             {
                 trip.FreeSeats++;
                 await _context.SaveChangesAsync();
+            }
+
+
+            if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl) && !string.IsNullOrEmpty(returnUrlOriginal) && Url.IsLocalUrl(returnUrlOriginal))
+            {
+                return Redirect($"{returnUrl}?returnUrl={Uri.EscapeDataString(returnUrlOriginal)}"); // Redirects back to the previous page with returnUrl as a query parameter
+            }
+            if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
+            {
+                return Redirect(returnUrl);
             }
 
             return RedirectToAction("MyRequests", "PassengerRequests");

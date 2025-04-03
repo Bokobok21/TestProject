@@ -140,7 +140,7 @@ namespace TestProject.Controllers
 
         public async Task<IActionResult> ApproveRequest(int requestId)
         {
-            var request = await _context.Requests.FindAsync(requestId);
+            var request = await _context.Requests.Include(r => r.User).FirstOrDefaultAsync(r => r.Id == requestId);
             if (request == null || request.StatusRequest != RequestStatus.Pending)
             {
                 return NotFound();
@@ -181,6 +181,20 @@ namespace TestProject.Controllers
 
             await _context.SaveChangesAsync();
 
+
+            var requests = await _context.Requests.Include(r => r.User).Where(r => r.UserId == request.User.Id && r.StatusRequest == RequestStatus.Pending).ToListAsync();
+
+            foreach (var request1 in requests)
+            {
+                var trip1 = await _context.Trips.FindAsync(request1.TripId);
+
+                if (await HasOverlappingTrips(request1.User.Id, trip1!.Id))
+                {
+                    _context.Requests.Remove(request1);
+                }
+                await _context.SaveChangesAsync();
+            }
+
             return RedirectToAction("PendingRequests", "DriverRequests");
         }
 
@@ -192,11 +206,21 @@ namespace TestProject.Controllers
             {
                 return NotFound();
             }
-
-            var requests = await _context.Requests.Where(r => r.UserId == request.User.Id).ToListAsync();
-            _context.Requests.RemoveRange(requests);
-
+            _context.Requests.Remove(request);
             await _context.SaveChangesAsync();
+
+            var requests = await _context.Requests.Include(r => r.User).Where(r => r.UserId == request.User.Id && r.StatusRequest == RequestStatus.Pending).ToListAsync();
+
+            foreach (var request1 in requests)
+            {
+                var trip1 = await _context.Trips.FindAsync(request1.TripId);
+
+                if (await HasOverlappingTrips(request1.User.Id, trip1!.Id))
+                {
+                    _context.Requests.Remove(request1);
+                }
+                await _context.SaveChangesAsync();
+            }
 
             return RedirectToAction("PendingRequests", "DriverRequests");
         }

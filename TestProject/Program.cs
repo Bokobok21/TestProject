@@ -101,6 +101,6 @@ app.Run();
 // Localend ; ShareX ; TranslucentTB ; Revo Uninstaller ; 
 
 // documentation
-// 2.5 2.5 2.5 3 for the left one 30 rows 60 characters per row max 2000 characters
+// 2.5 2.5 2.5 3 for the left one 30 rows 60 characters per row min 1800 max 2000 characters
 // format painter (double cliker for not exiting until clicking escape)
 
