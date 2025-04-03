@@ -209,19 +209,6 @@ namespace TestProject.Controllers
             _context.Requests.Remove(request);
             await _context.SaveChangesAsync();
 
-            var requests = await _context.Requests.Include(r => r.User).Where(r => r.UserId == request.User.Id && r.StatusRequest == RequestStatus.Pending).ToListAsync();
-
-            foreach (var request1 in requests)
-            {
-                var trip1 = await _context.Trips.FindAsync(request1.TripId);
-
-                if (await HasOverlappingTrips(request1.User.Id, trip1!.Id))
-                {
-                    _context.Requests.Remove(request1);
-                }
-                await _context.SaveChangesAsync();
-            }
-
             return RedirectToAction("PendingRequests", "DriverRequests");
         }
 
