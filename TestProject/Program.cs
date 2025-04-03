@@ -79,15 +79,15 @@ app.MapRazorPages();
 
 app.Run();
 
-
 //back to list fucntion - javascript:history.back()
+
 
 // not return time but departing time 
 
-// register form
+
 // pagination buttons
 // calendar - time picking shouldn't be to the top of the screen 
-// do the same design to the driver requests from the admin requests
+
 
 // add the active navbar on the panels as well 
 // trips prevew options is a little wonky with the time 

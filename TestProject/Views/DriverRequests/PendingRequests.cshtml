@@ -1,58 +1,121 @@
-﻿@{
+﻿@model IEnumerable<TestProject.Models.Request>
+@{
     ViewData["Title"] = "Pending Requests";
 }
 
 <div class="admin-panel">
-
-
     <div class="page-header">
-        <h1>Чакащи Заявки</h1>
+        <h1><i class="fas fa-clipboard-list"></i> Чакащи Заявки</h1>
         <a href="/UserPanel" class="btn btn-secondary">
             <i class="fas fa-arrow-left"></i> Потребителски панел
         </a>
     </div>
 
-    @if (!(Model as IEnumerable<object>)?.Any() ?? true)
+    @if (!(Model?.Any() ?? false))
     {
         <div class="empty-state">
             <i class="fas fa-clipboard-check"></i>
-            <p>Няма заявки в този момент.</p>
+            <p>Няма чакащи заявки в този момент.</p>
         </div>
     }
     else
     {
-
-
-        <div class="card-body" style="padding: 0px; padding-bottom: 15px; margin-top: -15px;">
-            @foreach (var request in Model)
-            {
-                <div class="d-flex align-items-center justify-content-between p-3 border-bottom">
-                    <!-- User -->
-                    <div class="d-flex align-items-center">
-                        <h6 class="mb-0">@request.User.UserName</h6>
-                    </div>
-
-                    <!-- Trip -->
-                    <a asp-controller="Trips" asp-action="Details" asp-route-id="@request.TripId">
-                        @request.Trip.StartPosition - @request.Trip.Destination
-                    </a>
-
-                    <!-- Status -->
-                    <span>@request.StatusRequest</span>
-
-                    <!-- Actions -->
-                    <div>
-                        <form asp-controller="Requests" asp-action="ApproveRequest" asp-route-requestId="@request.Id" method="post" style="display:inline;">
-                            <input type="hidden" name="returnUrl" value="@ViewBag.ReturnUrl" />
-                            <button type="submit" class="btn btn-success">Потвърди</button>
-                        </form>
-                        <form asp-controller="Requests" asp-action="DenyRequest" asp-route-requestId="@request.Id" method="post" style="display:inline;">
-                            <input type="hidden" name="returnUrl" value="@ViewBag.ReturnUrl" />
-                            <button type="submit" class="btn btn-danger">Откажи</button>
-                        </form>
-                    </div>
-                </div>
-            }
+        <div class="requests-container">
+            <div class="requests-table-container">
+                <table class="requests-table">
+                    <thead>
+                        <tr>
+                            <th>Пътник</th>
+                            <th>Информация за пътуването</th>
+                            <th>Действия</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var request in Model)
+                        {
+                            <tr>
+                                <td class="passenger-cell">
+                                    <div class="passenger-info">
+                                        <div class="passenger-avatar">
+                                            <i class="fas fa-user-circle"></i>
+                                        </div>
+                                        <div class="passenger-details">
+                                            <span class="passenger-name">@request.User.UserName</span>
+                                            <div class="contact-info">
+                                                @if (!string.IsNullOrEmpty(request.User.Email))
+                                                {
+                                                    <div class="contact-item">
+                                                        <i class="fas fa-envelope"></i>
+                                                        <span>@request.User.Email</span>
+                                                    </div>
+                                                }
+                                                @if (!string.IsNullOrEmpty(request.User.PhoneNumber))
+                                                {
+                                                    <div class="contact-item">
+                                                        <i class="fas fa-phone"></i>
+                                                        <span>@request.User.PhoneNumber</span>
+                                                    </div>
+                                                }
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="trip-info-cell">
+                                    <div class="trip-info">
+                                        <div class="trip-route">
+                                            <i class="fas fa-route"></i>
+                                            <a asp-controller="Trips" asp-action="Details" asp-route-id="@request.TripId">
+                                                @request.Trip.StartPosition → @request.Trip.Destination
+                                            </a>
+                                        </div>
+                                        <div class="trip-times">
+                                            <div class="trip-time">
+                                                <i class="fas fa-plane-departure"></i>
+                                                <span>Тръгване: @request.Trip.DepartureTime.ToString("dd.MM.yyyy HH:mm")</span>
+                                            </div>
+                                            <div class="trip-time">
+                                                <i class="fas fa-plane-arrival"></i>
+                                                <span>Връщане: @request.Trip.ReturnTime.ToString("dd.MM.yyyy HH:mm")</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="actions-cell">
+                                    <div class="request-actions">
+                                        <form asp-controller="Requests" asp-action="ApproveRequest" asp-route-requestId="@request.Id" method="post" class="action-form">
+                                            <input type="hidden" name="returnUrl" value="@ViewBag.ReturnUrl" />
+                                            <button type="submit" class="btn btn-success action-btn" style="background-color: #00bfae">
+                                                <i class="fas fa-check"></i> Потвърди
+                                            </button>
+                                        </form>
+                                        <form asp-controller="Requests" asp-action="DenyRequest" asp-route-requestId="@request.Id" method="post" class="action-form">
+                                            <input type="hidden" name="returnUrl" value="@ViewBag.ReturnUrl" />
+                                            <button type="submit" class="btn btn-danger action-btn"
+                                                    onclick="return confirm('Сигурни ли сте, че искате да откажете тази заявка?')" style="background-color: #ef5350">
+                                                <i class="fas fa-times"></i> Откажи
+                                            </button>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
         </div>
     }
 </div>
+
+@functions {
+    public string GetStatusClass(TestProject.Models.RequestStatus status)
+    {
+        return status.ToString().ToLower() switch
+        {
+            "pending" => "status-pending",
+            "approved" => "status-approved",
+            "denied" => "status-denied",
+            _ => "status-default"
+        };
+    }
+}
+

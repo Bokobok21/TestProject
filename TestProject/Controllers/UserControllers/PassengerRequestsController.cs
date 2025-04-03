@@ -29,6 +29,7 @@ namespace TestProject.Controllers.UserControllers
 
             var trips = _context.Trips
                 .Where(t => t.Requests!.Any(r => r.StatusRequest == RequestStatus.Pending && r.UserId == userId)) // Filter trips where THIS user has a pending request
+                .Include( t => t.Driver)?
                 .Include(t => t.Requests)
                     .ThenInclude(r => r.User)
                 .ToList();
