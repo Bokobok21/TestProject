@@ -20,7 +20,7 @@
 
     <!-- Page Numbers with Ellipsis -->
     @{
-        const int maxPagesToShow = 4; // Maximum number of page buttons to show
+        const int maxPagesToShow = 3; // Maximum number of page buttons to show
         int startPage = Math.Max(1, Model.PageIndex - maxPagesToShow / 2);
         int endPage = Math.Min(Model.TotalPages, startPage + maxPagesToShow - 1);
 

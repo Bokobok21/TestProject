@@ -280,7 +280,7 @@
                             @Html.AntiForgeryToken()
                             <input type="hidden" name="id" value="@Model.Id" />
                             <input type="hidden" name="returnUrl" value="@ViewBag.ReturnUrl" />
-                            <button type="submit" class="btn btn-danger" onclick="return confirm('Сигурен ли си, че искаш да го изтриеш?')">
+                            <button type="submit" class="btn action-delete" onclick="return confirm('Сигурен ли си, че искаш да го изтриеш?')">
                                 <i class="fas fa-trash"></i> Изтрий
                             </button>
                         </form>

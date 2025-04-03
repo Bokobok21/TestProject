@@ -104,14 +104,14 @@
                         <a asp-controller="Trips" asp-action="Edit" asp-route-id="@item.Id" asp-route-returnUrl="@returnUrl" class="trip-action-btn action-edit" style=" text-decoration: none;">
                             <i class="fas fa-edit"></i> Промени
                         </a>
-                        <a asp-controller="Trips" asp-action="Details" asp-route-id="@item.Id" asp-route-returnUrl="@returnUrl" class="trip-action-btn action-details" style=" text-decoration: none;">
+                    @*     <a asp-controller="Trips" asp-action="Details" asp-route-id="@item.Id" asp-route-returnUrl="@returnUrl" class="trip-action-btn action-details" style=" text-decoration: none;">
                             <i class="fas fa-info-circle"></i> Детайли
-                        </a>
+                        </a> *@
                         <form asp-controller="Trips" asp-action="Delete" method="post" style="flex: 1;">
                             @Html.AntiForgeryToken()
                             <input type="hidden" name="id" value="@item.Id" />
                             <input type="hidden" name="returnUrl" value="@returnUrl" />
-                            <button type="submit" class="trip-action-btn action-delete"
+                            <button type="submit" class="trip-action-btn action-delete" style="width: 100%;"
                                     onclick="return confirm('Сигурен ли си, че искаш да го изтриеш?')">
                                 <i class="fas fa-trash"></i> Изтрии
                             </button>

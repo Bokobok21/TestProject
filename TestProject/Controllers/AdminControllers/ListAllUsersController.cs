@@ -84,7 +84,7 @@ public class ListAllUsersController : Controller
         ViewBag.FilteredUserCountMessage = $"Филтрирани резултати: {userViewModels.Count}";
 
         // Pagination
-        int pageSize = 3; // Increased from 3 to 10 for better usability
+        int pageSize = 5; // Increased from 3 to 10 for better usability
         var paginatedUsers = PaginatedList<UserViewModel>.CreateFromList(userViewModels, pageNumber ?? 1, pageSize);
 
         return View(paginatedUsers);
