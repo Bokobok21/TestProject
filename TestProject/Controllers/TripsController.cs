@@ -25,18 +25,16 @@ namespace TestProject.Controllers
 
 
         // GET: Trips
-        public async Task<IActionResult> Index(string sortOrder, string startPosition, string destination, int? pageNumber, string? returnUrl)
+        public async Task<IActionResult> Index(string sortOrder, string startPosition, string destination, int? pageNumber, string? returnUrl, string driverId)
         {
-            if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
-            {
-                return Redirect(returnUrl); // Redirects back to the previous page
-            }
 
             sortOrder ??= "departure_time_asc"; // Default sorting
 
             ViewBag.CurrentSortOrder = sortOrder;
             ViewBag.CurrentStartPosition = startPosition;
             ViewBag.CurrentDestination = destination;
+            ViewBag.CurrentDriverId = driverId;
+            ViewBag.ReturnUrl = returnUrl;
 
             ViewBag.SortOptions = new List<SelectListItem>
             {
@@ -54,9 +52,35 @@ namespace TestProject.Controllers
                 new SelectListItem { Value = "created_date_asc", Text = "Най-стари" },
             };
 
+
+            // Get all drivers for the dropdown
+            var drivers = await _context.ApplicationUsers
+                .Where(u => u.Position == "Driver")
+                .Select(d => new SelectListItem
+                {
+                    Value = d.Id,
+                    Text = $"{d.FirstName} {d.LastName} ({d.UserName})"
+                })
+                .ToListAsync();
+
+            ViewBag.Drivers = new SelectList(drivers, "Value", "Text", driverId);
+
             // Fetch trips from the database
             IQueryable<Trip> trips = _context.Trips.Include(t => t.Driver);
 
+            // Apply driver filter if provided
+            if (!string.IsNullOrEmpty(driverId))
+            {
+                trips = trips.Where(t => t.DriversId == driverId);
+
+                // Get driver name for display
+                var driver = await _context.ApplicationUsers.FindAsync(driverId);
+
+                if (driver != null)
+                {
+                    ViewBag.DriverName = $"{driver.FirstName} {driver.LastName}";
+                }
+            }
 
             var tripsList = await trips.ToListAsync();
 

@@ -92,8 +92,8 @@ app.Run();
 // fix foulders and files
 // fix the project name
 // fix the role to be passenger not tourist
-
 // trips pictures aren't deleted when it is changed in edit form
+
 //back to list fucntion - javascript:history.back()
 
 // AIs and other useful info
