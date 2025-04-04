@@ -136,8 +136,26 @@ namespace TestProject.Controllers
             var tripParticipant = await _context.TripParticipants.FindAsync(id);
             if (tripParticipant != null)
             {
+                // Store the number of seats before removing the participant
+                int seatsToReturn = tripParticipant.NumberOfSeats;
+
                 _context.TripParticipants.Remove(tripParticipant);
                 await _context.SaveChangesAsync();
+
+                // Return the seats to the trip
+                var trip = await _context.Trips.FindAsync(tripId);
+                if (trip != null)
+                {
+                    trip.FreeSeats += seatsToReturn;
+
+                    // If the trip was fully booked before, update its status
+                    if (trip.StatusTrip == TripStatus.Booked && trip.FreeSeats > 0)
+                    {
+                        trip.StatusTrip = TripStatus.Upcoming;
+                    }
+
+                    await _context.SaveChangesAsync();
+                }
             }
 
             var request = await _context.Requests.Include(r => r.User).Where(r => r.User.Id == userId && r.TripId == tripId).FirstOrDefaultAsync();
@@ -147,12 +165,12 @@ namespace TestProject.Controllers
                 await _context.SaveChangesAsync();
             }
 
-            var trip = await _context.Trips.FindAsync(tripId);
-            if (trip != null)
-            {
-                trip.FreeSeats++;
-                await _context.SaveChangesAsync();
-            }
+            //var trip = await _context.Trips.FindAsync(tripId);
+            //if (trip != null)
+            //{
+            //    trip.FreeSeats++;
+            //    await _context.SaveChangesAsync();
+            //}
 
 
             if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl) && !string.IsNullOrEmpty(returnUrlOriginal) && Url.IsLocalUrl(returnUrlOriginal))

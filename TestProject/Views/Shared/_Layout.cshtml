@@ -54,6 +54,12 @@
                                 <i class="fas fa-tachometer-alt"></i> Потребителски Панел
                             </a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link @(ViewContext.RouteData.Values["Controller"]?.ToString() == "Drivers" ? "active" : "")"
+                               asp-area="" asp-controller="Drivers" asp-action="Index">
+                                <i class="fas fa-user-tie"></i> Шофьори
+                            </a>
+                        </li>
                    @*      @if (User.IsInRole("Admin"))
                         { *@
 

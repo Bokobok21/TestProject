@@ -52,7 +52,7 @@
                             <span>Заявка за шофьор</span>
 
                             <!-- Request Date -->
-                            <small class="text-muted">@request.Date.ToString("yyyy-MM-dd HH:mm")</small>
+                            <small class="text-muted">@request.Date.ToString("dd-MM-yyyy HH:mm")</small>
 
                             <form asp-controller="DriverApplications" asp-action="Deny" asp-route-id="@request.Id" asp-route-returnUrl="@Context.Request.Path" method="post">
                                 <button type="submit" class="btn action-delete" onclick="return confirm('Сигурен ли си, че искаш да го изтриеш?')"><i class="fas fa-trash"></i> Отмени заявката</button>

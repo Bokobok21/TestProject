@@ -1226,6 +1226,7 @@ input:checked + .slider:before {
 }
 
 .request-status-content {
+    font-size: 1rem !important;
     display: flex;
     align-items: center;
     gap: 8px;

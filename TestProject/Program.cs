@@ -81,12 +81,11 @@ app.Run();
 
 // display information : not return time but departing time ; time display orientation ; registration full name
 // authentication
+// change the order of the user panel?
 
 // add icons from mom
-
-
-// reserve multiple seats
-
+// view all drivers
+    
 
 
 // fix titles
@@ -94,7 +93,6 @@ app.Run();
 // fix the project name
 // fix the role to be passenger not tourist
 
-// view all drivers
 // trips pictures aren't deleted when it is changed in edit form
 //back to list fucntion - javascript:history.back()
 

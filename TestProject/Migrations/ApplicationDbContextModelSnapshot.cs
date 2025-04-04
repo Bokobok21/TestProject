@@ -286,6 +286,9 @@ namespace TestProject.Migrations
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
 
+                    b.Property<int>("NumberOfSeats")
+                        .HasColumnType("int");
+
                     b.Property<int>("StatusRequest")
                         .HasColumnType("int");
 
@@ -410,6 +413,9 @@ namespace TestProject.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("NumberOfSeats")
+                        .HasColumnType("int");
 
                     b.Property<int>("TripId")
                         .HasColumnType("int");

@@ -3,6 +3,24 @@
     ViewData["Title"] = "Pending Requests";
 }
 
+
+<style>
+    .seats-cell {
+        text-align: center;
+    }
+
+    .seats-count {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        font-weight: 500;
+        color: var(--primary-dark);
+        background-color: var(--primary-light);
+        padding: 5px 10px;
+        border-radius: 20px;
+    }
+</style>
+
 <div class="admin-panel">
     <div class="page-header">
         <h1><i class="fas fa-clipboard-list"></i> Чакащи Заявки</h1>
@@ -27,6 +45,7 @@
                         <tr>
                             <th>Пътник</th>
                             <th>Информация за пътуването</th>
+                            <th>Брой места</th>
                             <th>Действия</th>
                         </tr>
                     </thead>
@@ -64,7 +83,7 @@
                                     <div class="trip-info">
                                         <div class="trip-route">
                                             <i class="fas fa-route"></i>
-                                            <a asp-controller="Trips" asp-action="Details" asp-route-id="@request.TripId">
+                                            <a asp-controller="Trips" asp-action="Details" asp-route-id="@request.TripId" asp-route-returnUrl="@Context.Request.Path">
                                                 @request.Trip.StartPosition → @request.Trip.Destination
                                             </a>
                                         </div>
@@ -79,6 +98,11 @@
                                             </div>
                                         </div>
                                     </div>
+                                </td>
+                                <td class="seats-cell">
+                                    <span class="seats-count">
+                                        <i class="fas fa-chair"></i> @request.NumberOfSeats / @request.Trip.FreeSeats
+                                    </span>
                                 </td>
                                 <td class="actions-cell">
                                     <div class="request-actions">

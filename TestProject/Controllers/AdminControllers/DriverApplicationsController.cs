@@ -18,14 +18,16 @@ public class DriverApplicationsController : Controller
     private readonly IWebHostEnvironment _webHostEnvironment;
     private readonly SignInManager<ApplicationUser> _signinManager;
     private readonly RoleManager<IdentityRole> _roleManager;
+    private readonly SignInManager<ApplicationUser> _signInManager;
 
-    public DriverApplicationsController(ApplicationDbContext context, UserManager<ApplicationUser> userManager, IWebHostEnvironment webHostEnvironment, SignInManager<ApplicationUser> signinManager, RoleManager<IdentityRole> roleManager)
+    public DriverApplicationsController(ApplicationDbContext context, UserManager<ApplicationUser> userManager, IWebHostEnvironment webHostEnvironment, SignInManager<ApplicationUser> signinManager, RoleManager<IdentityRole> roleManager, SignInManager<ApplicationUser> signInManager)
     {
         _context = context;
         _userManager = userManager;
         _webHostEnvironment = webHostEnvironment;
         _signinManager = signinManager;
         _roleManager = roleManager;
+        _signInManager = signInManager;
     }
 
     // GET: DriverApplications
@@ -81,7 +83,9 @@ public class DriverApplicationsController : Controller
 
         await _context.SaveChangesAsync();
 
-
+        // Sign the user out and back in to refresh the role
+        await _signInManager.SignOutAsync();
+        await _signInManager.SignInAsync(user, isPersistent: false);
         //if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
         //{
         //    ViewBag.ReturnUrl = returnUrl;
@@ -184,6 +188,10 @@ public class DriverApplicationsController : Controller
         // Save changes to user
         await _userManager.UpdateAsync(user);
         await _context.SaveChangesAsync();
+
+        // Sign the user out and back in to refresh the role
+        await _signInManager.SignOutAsync();
+        await _signInManager.SignInAsync(user, isPersistent: false);
 
         return Redirect("/Identity/Account/Manage");
     }

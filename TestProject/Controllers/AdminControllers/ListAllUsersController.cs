@@ -19,17 +19,20 @@ public class ListAllUsersController : Controller
     private readonly RoleManager<IdentityRole> _roleManager;
     private readonly ApplicationDbContext _context;
     private readonly IWebHostEnvironment _webHostEnvironment;
+    private readonly SignInManager<ApplicationUser> _signInManager;
 
     public ListAllUsersController(
         UserManager<ApplicationUser> userManager,
         RoleManager<IdentityRole> roleManager,
         ApplicationDbContext context,
-        IWebHostEnvironment webHostEnvironment)
+        IWebHostEnvironment webHostEnvironment,
+        SignInManager<ApplicationUser> signInManager)
     {
         _userManager = userManager;
         _roleManager = roleManager;
         _context = context;
         _webHostEnvironment = webHostEnvironment;
+        _signInManager = signInManager;
     }
 
     // GET: Admin/Users
@@ -167,6 +170,10 @@ public class ListAllUsersController : Controller
         // Save changes to user
         await _userManager.UpdateAsync(user);
         await _context.SaveChangesAsync();
+
+        // Sign the user out and back in to refresh the role
+        await _signInManager.SignOutAsync();
+        await _signInManager.SignInAsync(user, isPersistent: false);
 
         return RedirectToAction(nameof(Users));
     }

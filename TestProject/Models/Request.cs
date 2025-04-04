@@ -23,6 +23,9 @@ namespace TestProject.Models
         public RequestStatus StatusRequest { get; set; } 
 
         public DateTime Date { get; set; }
-  
+
+        [Range(1, int.MaxValue, ErrorMessage = "Броят места трябва да бъде поне 1")]
+        public int NumberOfSeats { get; set; } = 1; // Default to 1 seat
+
     }
 }

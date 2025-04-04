@@ -363,8 +363,8 @@ namespace TestProject.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Admin,Driver")]
+        //[ValidateAntiForgeryToken]
+        //[Authorize(Roles = "Admin,Driver")]
         public async Task<IActionResult> Edit(int id, TripViewModel tripViewModel, string? returnUrl, string? returnUrlOriginal)
         {
             if (id != tripViewModel.Id)
@@ -464,9 +464,17 @@ namespace TestProject.Controllers
                     {
                         trip.StatusTrip = tripViewModel.StatusTrip;
                     }
+                    else if (trip.FreeSeats == 0 && trip.StatusTrip == tripViewModel.StatusTrip && trip.StatusTrip != TripStatus.Upcoming)
+                    {
+
+                    }
                     else if (trip.FreeSeats == 0)
                     {
                         trip.StatusTrip = TripStatus.Booked;
+                    }
+                    else if (trip.FreeSeats > 0 && trip.StatusTrip == tripViewModel.StatusTrip && trip.StatusTrip == TripStatus.Booked)
+                    {
+                        trip.StatusTrip = TripStatus.Upcoming;
                     }
                     else
                     {

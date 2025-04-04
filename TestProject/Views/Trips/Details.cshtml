@@ -9,6 +9,38 @@
     ViewData["Title"] = "Детайли за пътуването";
 }
 
+
+<style>
+    .join-request-form {
+        display: flex;
+        align-items: center;
+        gap: 0px;
+    }
+
+    .seats-selection {
+        width: 300px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .seats-dropdown {
+        width: 70px;
+    }
+
+    /*   media (max-width: 576px) {
+        .join-request-form
+
+        {
+        flex-direction: column;
+        align-items: flex-start;
+        }
+
+        } */
+</style>
+
+
+
 <div class="container">
     <div class="page-header">
         <h1>Детайли за пътуването</h1>
@@ -18,7 +50,8 @@
                 <a href="@ViewBag.ReturnUrl" class="btn btn-secondary">
                     <i class="fas fa-arrow-left"></i> Върни се обратно
                 </a>
-            }else
+            }
+            else
             {
                 // <a href="javascript:history.back()" class="btn btn-secondary">
                 //     <i class="fas fa-arrow-left"></i> Върни се обратно
@@ -31,9 +64,9 @@
                 // }
                 // else
                 // {
-                    <a asp-action="Index" asp-controller="Trips" class="btn btn-secondary">
-                        <i class="fas fa-arrow-left"></i> Върни се обратно
-                    </a>
+                <a asp-action="Index" asp-controller="Trips" class="btn btn-secondary">
+                    <i class="fas fa-arrow-left"></i> Върни се обратно
+                </a>
                 // }
             }
         }
@@ -98,10 +131,10 @@
                     <h2>@Model.StartPosition → @Model.Destination</h2>
                     <div class="trip-details-times">
                         <div class="trip-time">
-                            <i class="fas fa-hourglass-start"></i> Тръгване: @Model.DepartureTime.ToString("yyyy-MM-dd HH:mm")
+                            <i class="fas fa-hourglass-start"></i> Тръгване: @Model.DepartureTime.ToString("dd-MM-yyyy HH:mm")
                         </div>
                         <div class="trip-time">
-                            <i class="fas fa-hourglass-end"></i> Връщане: @Model.ReturnTime.ToString("yyyy-MM-dd HH:mm")
+                            <i class="fas fa-hourglass-end"></i> Връщане: @Model.ReturnTime.ToString("dd-MM-yyyy HH:mm")
                         </div>
                     </div>
                 </div>
@@ -125,7 +158,7 @@
                         </div>
                         <div class="details-item">
                             <span class="details-label">Шофьор от</span>
-                            <span class="details-value">@(Model.Driver?.DateOfDriverAcceptance?.ToString("yyyy-MM-dd") ?? "Вече не съществува")</span>
+                            <span class="details-value">@(Model.Driver?.DateOfDriverAcceptance?.ToString("dd-MM-yyyy") ?? "Вече не съществува")</span>
                         </div>
                     </div>
                 </div>
@@ -181,7 +214,7 @@
                             </div>
                             <div class="details-item">
                                 <span class="details-label">Следваща дата</span>
-                                <span class="details-value">@Model.NextRunDate?.ToString("yyyy-MM-dd HH:mm")</span>
+                                <span class="details-value">@Model.NextRunDate?.ToString("dd-MM-yyyy HH:mm")</span>
                             </div>
                         </div>
                     </div>
@@ -190,89 +223,126 @@
 
             <!-- Actions Section -->
             <div class="trip-details-actions">
-                @if (Model.StatusTrip == TripStatus.Upcoming)
+                @if (User.Id() != Model.DriversId)
                 {
-                    @if (Model.FreeSeats > 0)
+
+
+                    @if (Model.StatusTrip == TripStatus.Upcoming)
                     {
-                        if (!Model.Requests.Any(r => r.UserId == User.Id()) @*  || Model.Requests.Any(r => r.UserId == User.Id() && r.StatusRequest == RequestStatus.Rejected) *@ )
+                        @if (Model.FreeSeats > 0)
                         {
-                            <form asp-controller="Requests" asp-action="SendJoinRequest" method="post">
-                                <input type="hidden" name="returnUrl" value="@ViewBag.ReturnUrl" />
+                            if (!Model.Requests.Any(r => r.UserId == User.Id()) @*  || Model.Requests.Any(r => r.UserId == User.Id() && r.StatusRequest == RequestStatus.Rejected) *@ )
+                            {
+                                <form asp-controller="Requests" asp-action="SendJoinRequest" class="join-request-form" method="post">
+                                    <input type="hidden" name="returnUrl" value="@ViewBag.ReturnUrl" />
+                                    <input type="hidden" name="tripId" value="@Model.Id" />
+
+                                    <div class="seats-selection">
+                                        <label for="numberOfSeats">Брой места:</label>
+                                        <select name="numberOfSeats" id="numberOfSeats" class="form-control seats-dropdown">
+                                            @for (int i = 1; i <= Math.Min(Model.FreeSeats, 10); i++)
+                                            {
+                                                <option value="@i">@i</option>
+                                            }
+                                        </select>
+                                    </div>
+
+                                    <button type="submit" class="btn btn-primary">
+                                        <i class="fas fa-ticket-alt"></i> Заяви място
+                                    </button>
+                                </form>
+                            }
+                            else if (Model.Requests.Any(r => r.UserId == User.Id() && r.StatusRequest == RequestStatus.Pending))
+                            {
+                                var userRequest = Model.Requests.FirstOrDefault(r => r.UserId == User.Id() && r.StatusRequest == RequestStatus.Pending);
+                                <div class="request-status">
+                                    <div class="request-status-content">
+                                        <i class="fas fa-info-circle"></i>
+                                        <span>Вече имате заявка за @userRequest.NumberOfSeats места за това пътуване</span>
+                                    </div>
+                                    <form method="post" asp-action="DeleteRequest" asp-controller="PassengerRequests">
+                                        <input type="hidden" name="id" value="@Model.Requests.Where(r => r.TripId == Model.Id).FirstOrDefault(r => r.UserId == User.Id())?.Id" />
+                                        <input type="hidden" name="returnUrl" value="@Context.Request.Path" />
+                                        <button class="trip-action-btn action-delete" type="submit" onclick="return confirm('Сигурен ли си, че искаш да го изтриеш?')">
+                                            <i class="fas fa-trash"></i> Премахни
+                                        </button>
+                                    </form>
+                                </div>
+                            }
+                            else
+                            {
+                                var tripParticipant = Model.TripParticipants.FirstOrDefault(tp => tp.UserId == User.Id());
+                                <div class="request-status">
+                                    <div class="request-status-content">
+                                        <i class="fas fa-info-circle"></i>
+                                        <span>Вече сте участник в това пътуване (@tripParticipant.NumberOfSeats места)</span>
+                                    </div>
+                                    <form method="post" asp-action="Delete" asp-controller="TripParticipants">
+                                        <input type="hidden" name="id" value="@Model.TripParticipants.Where(r => r.TripId == Model.Id).FirstOrDefault(r => r.UserId == User.Id())?.Id" />
+                                        <input type="hidden" name="returnUrl" value="@Context.Request.Path" />
+                                        <input type="hidden" name="returnUrlOriginal" value="@ViewBag.ReturnUrl" />
+                                        <input type="hidden" name="tripId" value="@Model.Id" />
+                                        <input type="hidden" name="userId" value="@User.Id()" />
+                                        <button class="trip-action-btn action-delete" type="submit" onclick="return confirm('Сигурен ли си, че искаш да го направиш?')">
+                                            <i class="fas fa-trash"></i> Откажи се
+                                        </button>
+                                    </form>
+                                </div>
+                            }
+                        }
+                        else
+                        {
+                            <div class="request-status">
+                                <div class="request-status-content">
+                                    <i class="fas fa-ban"></i>
+                                    <span>Няма свободни места</span>
+                                </div>
+                            </div>
+                        }
+                    }
+                    else if (Model.Requests.Any(r => r.UserId == User.Id() && r.StatusRequest == RequestStatus.Accepted) && Model.StatusTrip != TripStatus.Booked)
+                    {
+                        <div class="request-status">
+                            <div class="request-status-content">
+                                <i class="fas fa-info-circle"></i>
+                                <span>Благодарим ви, че участвахте</span>
+                            </div>
+                        </div>
+                    }
+                    else if (Model.Requests.Any(r => r.UserId == User.Id() && r.StatusRequest == RequestStatus.Accepted) && Model.StatusTrip == TripStatus.Booked)
+                    {
+                        var tripParticipant = Model.TripParticipants.FirstOrDefault(tp => tp.UserId == User.Id());
+                        <div class="request-status">
+                            <div class="request-status-content">
+                                <i class="fas fa-info-circle"></i>
+                                <span>Вече сте участник в това пътуване (@tripParticipant.NumberOfSeats места)</span>
+                            </div>
+                            <form method="post" asp-action="Delete" asp-controller="TripParticipants">
+                                <input type="hidden" name="id" value="@Model.TripParticipants.Where(r => r.TripId == Model.Id).FirstOrDefault(r => r.UserId == User.Id())?.Id" />
+                                <input type="hidden" name="returnUrl" value="@Context.Request.Path" />
+                                <input type="hidden" name="returnUrlOriginal" value="@ViewBag.ReturnUrl" />
                                 <input type="hidden" name="tripId" value="@Model.Id" />
-                                <button type="submit" class="btn btn-primary">
-                                    <i class="fas fa-ticket-alt"></i> Заяви място
+                                <input type="hidden" name="userId" value="@User.Id()" />
+                                <button class="trip-action-btn action-delete" type="submit" onclick="return confirm('Сигурен ли си, че искаш да го направиш?')">
+                                    <i class="fas fa-trash"></i> Откажи се
                                 </button>
                             </form>
-                        }
-                        else if (Model.Requests.Any(r => r.UserId == User.Id() && r.StatusRequest == RequestStatus.Pending))
-                        {
-                            <div class="request-status">
-                                <div class="request-status-content">
-                                    <i class="fas fa-info-circle"></i>
-                                    <span>Вече имате заявка за това пътуване</span>
-                                </div>
-                                <form method="post" asp-action="DeleteRequest" asp-controller="PassengerRequests">
-                                    <input type="hidden" name="id" value="@Model.Requests.Where(r => r.TripId == Model.Id).FirstOrDefault(r => r.UserId == User.Id())?.Id" />
-                                    <input type="hidden" name="returnUrl" value="@Context.Request.Path" />
-                                    <button class="trip-action-btn action-delete" type="submit" onclick="return confirm('Сигурен ли си, че искаш да го изтриеш?')">
-                                        <i class="fas fa-trash"></i> Премахни
-                                    </button>
-                                </form>
-                            </div>
-                        }
-                        else 
-                        {
-                            <div class="request-status">
-                                <div class="request-status-content">
-                                    <i class="fas fa-info-circle"></i>
-                                    <span>Вече сте участник в това пътуване</span>
-                                </div>
-                                <form method="post" asp-action="Delete" asp-controller="TripParticipants">
-                                    <input type="hidden" name="id" value="@Model.TripParticipants.Where(r => r.TripId == Model.Id).FirstOrDefault(r => r.UserId == User.Id())?.Id" />
-                                    <input type="hidden" name="returnUrl" value="@Context.Request.Path" />
-                                    <input type="hidden" name="returnUrlOriginal" value="@ViewBag.ReturnUrl" />
-                                    <input type="hidden" name="tripId" value="@Model.Id" />
-                                    <input type="hidden" name="userId" value="@User.Id()" />
-                                    <button class="trip-action-btn action-delete" type="submit" onclick="return confirm('Сигурен ли си, че искаш да го направиш?')">
-                                        <i class="fas fa-trash"></i> Откажи се
-                                    </button>
-                                </form>
-                            </div>
-                        }
+                        </div>
                     }
                     else
                     {
                         <div class="request-status">
                             <div class="request-status-content">
-                                <i class="fas fa-ban"></i>
-                                <span>Няма свободни места</span>
+                                <i class="fas fa-info-circle"></i>
+                                <span>Времето за записване приключи</span>
                             </div>
                         </div>
                     }
                 }
-                else if (Model.Requests.Any(r => r.UserId == User.Id() && r.StatusRequest == RequestStatus.Accepted) && Model.StatusTrip != TripStatus.Booked)
-                {
-                    <div class="request-status">
-                        <div class="request-status-content">
-                            <i class="fas fa-info-circle"></i>
-                            <span>Благодарим ви, че участвахте</span>
-                        </div>
-                    </div>
-                }
-                else 
-                {
-                    <div class="request-status">
-                        <div class="request-status-content">
-                            <i class="fas fa-info-circle"></i>
-                            <span>Времето за записване приключи</span>
-                        </div>
-                    </div>
-                }
-
-                @if (User.Id() == Model.DriversId)
+                else
                 {
                     <div class="action-buttons-container">
-                        <a asp-controller="Trips" asp-action="Edit" asp-route-id="@Model.Id" asp-route-returnUrl="@Context.Request.Path" asp-route-returnUrlOriginal="@ViewBag.ReturnUrl" class="btn btn-secondary">
+                        <a asp-controller="Trips" asp-action="Edit" asp-route-id="@Model.Id" asp-route-returnUrl="@Context.Request.Path" asp-route-returnUrlOriginal="@ViewBag.ReturnUrl" class="trip-action-btn action-edit" style="text-decoration: none;">
                             <i class="fas fa-edit"></i> Редактирай
                         </a>
 
@@ -294,8 +364,8 @@
     @if (Model.StatusTrip == TripStatus.Finished)
     {
         var rating1 = Model.Ratings?.Any() == true ? Math.Round(Model.Ratings.Average(r => r.Score), 1).ToString("0.00") : "0";
-        
-        
+
+
         <div class="trip-reviews-container">
             <div class="reviews-header">
                 <h3 class="reviews-title"><i class="fas fa-star"></i> Ревюта @(rating1 != "0" ? $"- Оценка: {rating1}" : "")</h3>
@@ -359,7 +429,7 @@
                             </div>
                             <div class="review-footer">
                                 <div class="review-date">
-                                    <i class="far fa-calendar-alt"></i> @rating.Date.ToString("yyyy-MM-dd")
+                                    <i class="far fa-calendar-alt"></i> @rating.Date.ToString("dd-MM-yyyy")
                                 </div>
                                 @if (User.Identity.IsAuthenticated && (User.IsInRole("Admin") || User.Id() == rating.UserId))
                                 {

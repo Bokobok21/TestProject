@@ -26,15 +26,27 @@ namespace TestProject.Controllers
 
         [HttpPost]
         [Authorize]
-        public async Task<IActionResult> SendJoinRequest(int tripId, string? returnUrl)
+        public async Task<IActionResult> SendJoinRequest(int tripId, string? returnUrl, int numberOfSeats)
         {
             //var userId = _userManager.GetUserId(User); // Get the current user's ID
             var userId = User.Id();
             var trip = await _context.Trips.FindAsync(tripId);
 
-            if (trip == null || trip.FreeSeats <= 0)
+            if (trip == null)
             {
                 return NotFound(); // No free seats or trip doesn't exist
+            }
+
+            if (numberOfSeats <= 0)
+            {
+                TempData["ErrorMessage"] = "Броят места трябва да бъде поне 1.";
+                return RedirectToAction("Details", "Trips", new { id = tripId, returnUrl = returnUrl });
+            }
+
+            if (trip.FreeSeats < numberOfSeats)
+            {
+                TempData["ErrorMessage"] = $"Няма достатъчно свободни места. Налични: {trip.FreeSeats}.";
+                return RedirectToAction("Details", "Trips", new { id = tripId, returnUrl = returnUrl });
             }
 
             // Check if the user has already sent a request for this trip
@@ -83,7 +95,8 @@ namespace TestProject.Controllers
                 TripId = tripId,
                 UserId = userId,
                 StatusRequest = RequestStatus.Pending,
-                Date = DateTime.Now
+                Date = DateTime.Now,
+                NumberOfSeats = numberOfSeats 
             };
 
             _context.Requests.Add(request);
@@ -147,9 +160,14 @@ namespace TestProject.Controllers
             }
 
             var trip = await _context.Trips.FindAsync(request.TripId);
-            if (trip == null || trip.FreeSeats <= 0)
+            if (trip == null || trip.FreeSeats < request.NumberOfSeats)
             {
-                return NotFound(); // No free seats or trip doesn't exist
+                // Not enough seats available anymore
+                TempData["ErrorMessage"] = $"Няма достатъчно свободни места за тази заявка. Заявката е отказана.";
+                _context.Requests.Remove(request);
+                await _context.SaveChangesAsync();
+
+                return RedirectToAction("PendingRequests", "DriverRequests");
             }
 
             if (await HasOverlappingTrips(request.User.Id, trip.Id) == false)
@@ -158,12 +176,13 @@ namespace TestProject.Controllers
                 var tripParticipant = new TripParticipant
                 {
                     TripId = request.TripId,
-                    UserId = request.UserId
+                    UserId = request.UserId,
+                    NumberOfSeats = request.NumberOfSeats
                 };
                 _context.TripParticipants.Add(tripParticipant);
 
                 // Decrement FreeSeats
-                trip.FreeSeats -= 1;
+                trip.FreeSeats -= request.NumberOfSeats;
 
                 // Update trip status if FreeSeats becomes 0
                 if (trip.FreeSeats == 0)
@@ -181,6 +200,17 @@ namespace TestProject.Controllers
 
             await _context.SaveChangesAsync();
 
+
+            // Check and remove any requests that can no longer be fulfilled due to insufficient seats
+            var pendingRequests = await _context.Requests
+                .Where(r => r.TripId == trip.Id && r.StatusRequest == RequestStatus.Pending && r.NumberOfSeats > trip.FreeSeats)
+                .ToListAsync();
+
+            foreach (var pendingRequest in pendingRequests)
+            {
+                _context.Requests.Remove(pendingRequest);
+                await _context.SaveChangesAsync();
+            }
 
             var requests = await _context.Requests.Include(r => r.User).Where(r => r.UserId == request.User.Id && r.StatusRequest == RequestStatus.Pending).ToListAsync();
 

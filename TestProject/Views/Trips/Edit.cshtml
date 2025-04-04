@@ -214,7 +214,7 @@
                         @Model.StatusTrip
                     </div>
                 </div>
-                <div class="trip-content">
+                <div class="trip-content" style="overflow-y: unset; height: auto">
                     <div class="trip-header">
                         <div>
                             <h3 class="trip-route" id="preview-route">@Model.StartPosition → @Model.Destination</h3>
@@ -225,22 +225,22 @@
                         <div class="trip-price" id="preview-price">@Model.Price лв</div>
                     </div>
 
-                    <div class="trip-details">
+                    <div class="trip-details" style="gap: 0px;">
                         <div class="trip-detail-item">
                             <span class="trip-detail-label">Тръгване</span>
-                            <span class="trip-detail-value" id="preview-departure">@Model.DepartureTime.ToString("yyyy-MM-dd HH:mm")</span>
+                            <span class="trip-detail-value" id="preview-departure" style="padding-right: 20px">@Model.DepartureTime.ToString("dd-MM-yyyy HH:mm")</span>
                         </div>
                         <div class="trip-detail-item">
                             <span class="trip-detail-label">Връщане</span>
-                            <span class="trip-detail-value" id="preview-return">@Model.ReturnTime.ToString("yyyy-MM-dd HH:mm")</span>
+                            <span class="trip-detail-value" id="preview-return" style="padding-right: 20px">@Model.ReturnTime.ToString("dd-MM-yyyy HH:mm")</span>
                         </div>
                         <div class="trip-detail-item">
                             <span class="trip-detail-label">Общо места</span>
-                            <span class="trip-detail-value" id="preview-seats">@Model.TotalSeats</span>
+                            <span class="trip-detail-value" id="preview-seats" style="padding-right: 20px">@Model.TotalSeats</span>
                         </div>
                         <div class="trip-detail-item">
                             <span class="trip-detail-label">Свободни места</span>
-                            <span class="trip-detail-value" id="preview-free-seats">@Model.FreeSeats</span>
+                            <span class="trip-detail-value" id="preview-free-seats" style="padding-right: 20px">@Model.FreeSeats</span>
                         </div>
                     </div>
 
@@ -249,7 +249,7 @@
                         <div class="warning-message">Заявките за присъствие ще бъдат изтрити! Сигурни ли сте?</div>
                     </div>
 
-                    <div class="trip-car-info" style=" display: flex; justify-content: center;">
+                    <div class="trip-car-info" style=" display: flex; justify-content: center; margin-top: -2px;">
                         <i class="fas fa-car"></i>
                         <div>
                             <span class="trip-car-model" id="preview-car-model">@Model.CarModel</span>
@@ -338,14 +338,14 @@
                 document.getElementById('preview-free-seats').innerHTML = `<span style="color: ${textColor};">${newFreeSeats}</span>`;
             }
 
-            let departureTime = '@Model.DepartureTime.ToString("yyyy-MM-dd HH:mm")';
+            let departureTime = '@Model.DepartureTime.ToString("dd-MM-yyyy HH:mm")';
             const departureInput = document.querySelector('[name="DepartureTime"]').value;
             if (departureInput) {
                 const date = new Date(departureInput);
                 departureTime = date.toLocaleString('bg-BG');
             }
 
-            let returnTime = '@Model.ReturnTime.ToString("yyyy-MM-dd HH:mm")';
+            let returnTime = '@Model.ReturnTime.ToString("dd-MM-yyyy HH:mm")';
             const returnInput = document.querySelector('[name="ReturnTime"]').value;
             if (returnInput) {
                 const date = new Date(returnInput);
