@@ -48,6 +48,13 @@ namespace TestProject.Controllers
                 });
             }
 
+            double ratingWeight = 0.7;
+            double tripCountWeight = 0.3;
+
+            driverViewModels = driverViewModels
+            .OrderByDescending(d => (ratingWeight * d.AverageRating) + (tripCountWeight * d.TripCount)) // Sort by weighted score
+            .ToList();
+
             return View(driverViewModels);
         }
     }

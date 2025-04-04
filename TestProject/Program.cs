@@ -79,14 +79,12 @@ app.MapRazorPages();
 
 app.Run();
 
-// display information : not return time but departing time ; time display orientation ; registration full name
+// registration full name
 // authentication
 // change the order of the user panel?
 
 // add icons from mom
-// view all drivers
     
-
 
 // fix titles
 // fix foulders and files
