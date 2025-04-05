@@ -48,7 +48,8 @@
 
                     <div class="driver-profile-info">
                         <div class="driver-stats">
-                            <div class="stat-item" style="padding: 0px; padding-top: 15px;">
+                            <a asp-controller="DriverTrips" asp-action="MyDriverTrips" style="text-decoration: none;">
+                                <div class="stat-item" style="padding: 0px; padding-top: 15px;">
                                 <div class="stat-icon">
                                     <i class="fas fa-route"></i>
                                 </div>
@@ -57,7 +58,7 @@
                                     <span class="stat-value">@ViewData["TripCount"]</span>
                                     <span class="stat-label">Пътувания</span>
                                 </div>
-                            </div>
+                            </div></a>
                             <div class="stat-item" style="padding: 0px; padding-top: 15px;">
                                 <div class="stat-icon">
                                     <i class="fas fa-users"></i>

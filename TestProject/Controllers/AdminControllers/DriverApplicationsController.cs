@@ -82,9 +82,8 @@ public class DriverApplicationsController : Controller
 
         await _context.SaveChangesAsync();
 
-        // Sign the user out and back in to refresh the role
-        await _signinManager.SignOutAsync();
-        await _signinManager.SignInAsync(user, isPersistent: false);
+        
+      
         //if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
         //{
         //    ViewBag.ReturnUrl = returnUrl;

@@ -79,12 +79,7 @@ app.MapRazorPages();
 
 app.Run();
 
-// registration full name
-// authentication
-
 // add icons from mom
-
-
 // fix titles
 // fix foulders and files
 // fix the project name
