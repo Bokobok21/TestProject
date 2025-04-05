@@ -171,10 +171,6 @@ public class ListAllUsersController : Controller
         await _userManager.UpdateAsync(user);
         await _context.SaveChangesAsync();
 
-        // Sign the user out and back in to refresh the role
-        await _signInManager.SignOutAsync();
-        await _signInManager.SignInAsync(user, isPersistent: false);
-
         return RedirectToAction(nameof(Users));
     }
 
