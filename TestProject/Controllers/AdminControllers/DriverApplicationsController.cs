@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 using TestProject.Data;
 using TestProject.Models;
 
-//[Authorize(Roles = "Admin")]
+[Authorize(Roles = "Admin")]
 public class DriverApplicationsController : Controller
 {
     private readonly ApplicationDbContext _context;
@@ -18,16 +18,14 @@ public class DriverApplicationsController : Controller
     private readonly IWebHostEnvironment _webHostEnvironment;
     private readonly SignInManager<ApplicationUser> _signinManager;
     private readonly RoleManager<IdentityRole> _roleManager;
-    private readonly SignInManager<ApplicationUser> _signInManager;
 
-    public DriverApplicationsController(ApplicationDbContext context, UserManager<ApplicationUser> userManager, IWebHostEnvironment webHostEnvironment, SignInManager<ApplicationUser> signinManager, RoleManager<IdentityRole> roleManager, SignInManager<ApplicationUser> signInManager)
+    public DriverApplicationsController(ApplicationDbContext context, UserManager<ApplicationUser> userManager, IWebHostEnvironment webHostEnvironment, SignInManager<ApplicationUser> signinManager, RoleManager<IdentityRole> roleManager)
     {
         _context = context;
         _userManager = userManager;
         _webHostEnvironment = webHostEnvironment;
         _signinManager = signinManager;
         _roleManager = roleManager;
-        _signInManager = signInManager;
     }
 
     // GET: DriverApplications
@@ -62,7 +60,7 @@ public class DriverApplicationsController : Controller
         var currentRoles = await _userManager.GetRolesAsync(user);
         _context.RequestDrivers.RemoveRange(request);
 
-        await _userManager.RemoveFromRolesAsync(user, currentRoles);
+      //  await _userManager.RemoveFromRolesAsync(user, currentRoles);
 
         // Set user role to "Driver"
         await _userManager.AddToRoleAsync(user, "Driver");
@@ -70,8 +68,9 @@ public class DriverApplicationsController : Controller
         // Update RequestDriver status
         request.StatusRequest = RequestStatus.Accepted;
         user.DateOfDriverAcceptance = DateTime.Now;
-        user.Position = "Driver";
 
+        user.Position = "Driver";
+        
         if (string.IsNullOrEmpty(user.ImagePath))
         {
             user.ImagePath = "/images/drivers/default-image-Driver.jpg"; // Default image path
@@ -84,8 +83,8 @@ public class DriverApplicationsController : Controller
         await _context.SaveChangesAsync();
 
         // Sign the user out and back in to refresh the role
-        await _signInManager.SignOutAsync();
-        await _signInManager.SignInAsync(user, isPersistent: false);
+        await _signinManager.SignOutAsync();
+        await _signinManager.SignInAsync(user, isPersistent: false);
         //if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
         //{
         //    ViewBag.ReturnUrl = returnUrl;
@@ -99,6 +98,7 @@ public class DriverApplicationsController : Controller
 
     // POST: DriverApplications/Deny/5
     [HttpPost]
+    [AllowAnonymous]
     public async Task<IActionResult> Deny(int id, string? returnUrl)
     {
         var request = await _context.RequestDrivers.FindAsync(id);
@@ -118,6 +118,7 @@ public class DriverApplicationsController : Controller
 
             user.ImagePath = null;
             await _userManager.UpdateAsync(user);
+            await _signinManager.RefreshSignInAsync(user);
         }
 
         // Update RequestDriver status
@@ -125,18 +126,19 @@ public class DriverApplicationsController : Controller
 
         await _context.SaveChangesAsync();
 
-        //if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
-        //{
-        //    ViewBag.ReturnUrl = returnUrl;
-        //    return Redirect(returnUrl); // Redirects back to the previous page
-        //}
+        if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
+        {
+            ViewBag.ReturnUrl = returnUrl;
+            return Redirect(returnUrl); // Redirects back to the previous page
+        }
 
         //return RedirectToAction("MyRequests", "PassengerRequests");
         return RedirectToAction("Index");
 
     }
-
-    // POST: Admin/EditRole
+   
+    // POST: EditRole
+    [AllowAnonymous]
     public async Task<IActionResult> EditRole(string id)
     {
         var user = await _userManager.FindByIdAsync(id);
@@ -177,21 +179,28 @@ public class DriverApplicationsController : Controller
         var tripParticipants = await _context.TripParticipants.Where(tp => tp.Trip.DriversId == user.Id && tp.Trip.StatusTrip != TripStatus.Finished).ToListAsync();
         _context.TripParticipants.RemoveRange(tripParticipants);
 
-        await _userManager.RemoveFromRolesAsync(user, currentRoles);
+        await _userManager.RemoveFromRoleAsync(user, "Driver");
 
         // Assign new role
         await _userManager.AddToRoleAsync(user, "Tourist");
 
         // Update user position and other properties based on role
-        user.Position = "Tourist";
+        if (currentRoles.Contains("Admin"))
+        {
+            user.Position = "Admin";
+        }
+        else
+        {
+            user.Position = "Tourist";
+        }
 
         // Save changes to user
         await _userManager.UpdateAsync(user);
         await _context.SaveChangesAsync();
 
         // Sign the user out and back in to refresh the role
-        await _signInManager.SignOutAsync();
-        await _signInManager.SignInAsync(user, isPersistent: false);
+        await _signinManager.SignOutAsync();
+        await _signinManager.SignInAsync(user, isPersistent: false);
 
         return Redirect("/Identity/Account/Manage");
     }

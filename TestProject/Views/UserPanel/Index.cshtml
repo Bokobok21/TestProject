@@ -11,7 +11,7 @@
 
     @{  
        string style1 = "";  
-       if (!User.IsInRole("Driver") && !User.IsInRole("Admin"))  
+       if (!User.IsInRole("Driver"))  
        {  
            style1 = "height: 240px;";  
        }  
@@ -54,7 +54,7 @@
 
 
 
-        @if (User.IsInRole("Driver") || User.IsInRole("Admin"))
+        @if (User.IsInRole("Driver"))
         {
             <!-- My Driver Trips Card -->
             <div class="dashboard-card" onclick="submitForm('myDriverTripsForm')">

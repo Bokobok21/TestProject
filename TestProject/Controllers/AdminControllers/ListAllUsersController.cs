@@ -12,7 +12,7 @@ using TestProject.Models;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.CodeAnalysis.Elfie.Model.Strings;
 
-//[Authorize(Roles = "Admin")]
+[Authorize(Roles = "Admin")]
 public class ListAllUsersController : Controller
 {
     private readonly UserManager<ApplicationUser> _userManager;

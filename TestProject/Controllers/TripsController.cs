@@ -14,6 +14,7 @@ using TestProject.Models.ViewModels;
 
 namespace TestProject.Controllers
 {
+    [Authorize]
     public class TripsController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -25,6 +26,7 @@ namespace TestProject.Controllers
 
 
         // GET: Trips
+        [AllowAnonymous]
         public async Task<IActionResult> Index(string sortOrder, string startPosition, string destination, int? pageNumber, string? returnUrl, string driverId)
         {
 
@@ -388,7 +390,7 @@ namespace TestProject.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         //[ValidateAntiForgeryToken]
-        //[Authorize(Roles = "Admin,Driver")]
+        [Authorize(Roles = "Admin,Driver")]
         public async Task<IActionResult> Edit(int id, TripViewModel tripViewModel, string? returnUrl, string? returnUrlOriginal)
         {
             if (id != tripViewModel.Id)

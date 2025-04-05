@@ -106,7 +106,6 @@ namespace TestProject.Areas.Identity.Pages.Account
             /// </summary>
             [Required(ErrorMessage = "Полето е задължително")]
             [StringLength(100, ErrorMessage = "Паролата трябва да бъде с дължина между {2} и {1} символа.", MinimumLength = 6)]
-
             [DataType(DataType.Password)]
             [Display(Name = "Password")]
             public string Password { get; set; }
@@ -118,6 +117,7 @@ namespace TestProject.Areas.Identity.Pages.Account
             [DataType(DataType.Password)]
             [Display(Name = "Confirm password")]
             [Compare("Password", ErrorMessage = "Паролите не съвпадат")]
+            [Required(ErrorMessage = "Полето е задължително")]
             public string ConfirmPassword { get; set; }
         }
 

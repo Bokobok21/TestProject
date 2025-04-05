@@ -20,7 +20,7 @@
         <div class="drivers-grid">
             @foreach (var item in Model)
             {
-                <div class="driver-card">
+                <div class="driver-card" style="border-radius: 15px;">
                     <a asp-controller="Trips" asp-action="Index" asp-route-driverId="@item.Driver.Id" asp-route-returnUrl="@Context.Request.Path">
                         <div class="driver-image-container">
                             <img src="@(string.IsNullOrEmpty(item.Driver.ImagePath) ? "/images/drivers/default-image-Driver.jpg" : item.Driver.ImagePath)"

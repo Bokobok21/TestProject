@@ -12,31 +12,31 @@
 
 <style>
     .join-request-form {
-        display: flex;
-        align-items: center;
-        gap: 0px;
+    display: flex;
+    align-items: center;
+    gap: 0px;
     }
 
     .seats-selection {
-        width: 300px;
-        display: flex;
-        align-items: center;
-        gap: 10px;
+    width: 300px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
     }
 
     .seats-dropdown {
-        width: 70px;
+    width: 70px;
     }
 
     /*   media (max-width: 576px) {
-        .join-request-form
+    .join-request-form
 
-        {
-        flex-direction: column;
-        align-items: flex-start;
-        }
+    {
+    flex-direction: column;
+    align-items: flex-start;
+    }
 
-        } */
+    } */
 </style>
 
 
@@ -158,7 +158,7 @@
                         </div>
                         <div class="details-item">
                             <span class="details-label">Шофьор от</span>
-                            <span class="details-value">@(Model.Driver?.DateOfDriverAcceptance?.ToString("dd-MM-yyyy") ?? "Вече не съществува")</span>
+                            <span class="details-value">@(Model.Driver?.DateOfDriverAcceptance?.ToString("dd-MM-yyyy") ?? "Вече не е шофьор")</span>
                         </div>
                     </div>
                 </div>
@@ -172,7 +172,7 @@
                             <span class="details-value">@Model.CarModel</span>
                         </div>
                         <div class="details-item">
-                            <span class="details-label">Рег. номер</span>
+                            <span class="details-label">Регистрационен номер</span>
                             <span class="details-value">@Model.PlateNumber</span>
                         </div>
                     </div>
@@ -254,11 +254,17 @@
                             }
                             else if (Model.Requests.Any(r => r.UserId == User.Id() && r.StatusRequest == RequestStatus.Pending))
                             {
+                                string word = "места";
                                 var userRequest = Model.Requests.FirstOrDefault(r => r.UserId == User.Id() && r.StatusRequest == RequestStatus.Pending);
+                                if (userRequest?.NumberOfSeats == 1)
+                                {
+                                    word = "място";
+                                }
+
                                 <div class="request-status">
                                     <div class="request-status-content">
                                         <i class="fas fa-info-circle"></i>
-                                        <span>Вече имате заявка за @userRequest.NumberOfSeats места за това пътуване</span>
+                                        <span>Вече имате заявка за @userRequest.NumberOfSeats @word за това пътуване</span>
                                     </div>
                                     <form method="post" asp-action="DeleteRequest" asp-controller="PassengerRequests">
                                         <input type="hidden" name="id" value="@Model.Requests.Where(r => r.TripId == Model.Id).FirstOrDefault(r => r.UserId == User.Id())?.Id" />

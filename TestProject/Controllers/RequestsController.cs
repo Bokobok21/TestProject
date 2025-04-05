@@ -15,6 +15,7 @@ using TestProject.Models.ViewModels;
 
 namespace TestProject.Controllers
 {
+    [Authorize]
     public class RequestsController : Controller
     {
         private readonly ApplicationDbContext _context;

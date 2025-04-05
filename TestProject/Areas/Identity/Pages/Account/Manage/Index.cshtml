@@ -23,7 +23,7 @@
         <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
 
 
-        @if (User.IsInRole("Driver") || User.IsInRole("Admin"))
+        @if (User.IsInRole("Driver"))
         {
             <div class="driver-profile-card">
                 <div class="driver-profile-header">
@@ -176,7 +176,7 @@
         }
         var requestDriverId = Model.CurrentUser.RequestDrivers?.Where(u => u.StatusRequest == RequestStatus.Pending).FirstOrDefault()?.Id;
     }
-    <form asp-controller="DriverApplications" asp-action="Deny" asp-route-id="@requestDriverId" asp-route-returnUrl="@Request.Path" method="post" style="display: @style1; height: -20px;">
+    <form asp-controller="DriverApplications" asp-action="Deny" asp-route-id="@requestDriverId" asp-route-returnUrl="@HttpContext.Request.Path" method="post" style="display: @style1; height: -20px;">
         <button type="submit" class="btn action-delete" onclick="return confirm('Сигурен ли си, че искаш да я изтриеш?')" style="color: #721c24; height: 50px;"><i class="fas fa-trash"></i> Отмени заявката</button>
     </form>
 </div>

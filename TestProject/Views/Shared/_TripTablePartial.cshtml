@@ -10,7 +10,7 @@
 <div class="trips-grid">
     @foreach (var item in Model)
     {
-        <div class="trip-card">
+        <div class="trip-card" style="border-radius: 10px;">
             <a asp-action="Details" asp-controller="Trips" asp-route-id="@item.Id" asp-route-returnUrl="@returnUrl">
                 <div class="trip-image-container">
                     <img src="@item.ImagePath" alt="Снимка на колата" class="trip-image" onerror="this.onerror=null;this.src='/images/trips/default-image.jpg';" />

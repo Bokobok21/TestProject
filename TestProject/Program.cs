@@ -81,10 +81,9 @@ app.Run();
 
 // registration full name
 // authentication
-// change the order of the user panel?
 
 // add icons from mom
-    
+
 
 // fix titles
 // fix foulders and files

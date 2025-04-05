@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using TestProject.Data;
 using TestProject.Extentions;
@@ -6,6 +7,7 @@ using TestProject.Models;
 
 namespace TestProject.Controllers.UserControllers
 {
+    [Authorize]
     public class DriverRequestsController : Controller
     {
         private readonly ApplicationDbContext _context;
