@@ -88,19 +88,14 @@ app.MapRazorPages();
 app.Run();
 
 // add icons from mom
-// fix titles
+
 // fix foulders and files
 // fix the project name
 // fix the role to be passenger not tourist
-// trips pictures aren't deleted when it is changed in edit form
 
+// trips pictures aren't deleted when it is changed in edit form
 //back to list fucntion - javascript:history.back()
 
 // AIs and other useful info
 // v0 ; napkin ai ; wireframe ; sonnet-claude ; heruUi ai ; NotebookLM ; ai agents (gemini) ; figma ; eraser ; paper ; codepen ; cursor ai ; bolt(.new) ai ; saveWeb2Zip ; b12 website builder ai ; 
 // Localend ; ShareX ; TranslucentTB ; Revo Uninstaller ; Obuntu ; JavaScript ; 
-
-// documentation
-// 2.5 2.5 2.5 3 for the left one 30 rows 60 characters per row min 1800 max 2000 characters
-// format painter (double cliker for not exiting until clicking escape)
-

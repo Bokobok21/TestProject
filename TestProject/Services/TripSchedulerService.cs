@@ -26,25 +26,17 @@ namespace TestProject.Services
 
                 using (var scope = _services.CreateScope())
                 {
-
                     var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
                     var Now = DateTime.Now;
 
-                    //// Get due recurring trips
-                    //var recurringTrips = await context.Trips
-                    //    .Where(t => t.IsRecurring && TimeSpan.TryParse(t.RecurrenceInterval, out TimeSpan interval) && t.RecurrenceInterval != "00:00:00" && t.NextRunDate.HasValue && t.CreatedDate.Add(TimeSpan.Parse(t.RecurrenceInterval)) <= Now)
-                    //    .ToListAsync();
-
                     var allRecurringTrips = await context.Trips
                      .Where(t => t.IsRecurring && t.RecurrenceInterval != "00:00:00" && t.NextRunDate.HasValue)
-                     .ToListAsync(); // Fetch first
+                     .ToListAsync(); 
 
                     var recurringTrips = allRecurringTrips
                         .Where(t => TimeSpan.TryParse(t.RecurrenceInterval, out TimeSpan interval)
                          && t.tripSchedule.Add(interval) <= Now)
                         .ToList();
-
-                    // createddate + interval so it doesn't keep reccuring; 
 
                     foreach (var trip in recurringTrips)
                     {
@@ -55,8 +47,6 @@ namespace TestProject.Services
 
                         if (await UserHasNoOverlappingTrips(trip))
                         {
-
-                            // Create new trip instance
                             var newTrip = new Trip
                             {
                                 Driver = trip.Driver,
@@ -67,28 +57,23 @@ namespace TestProject.Services
                                 ReturnTime = newDepartureTime.Add(trip.ReturnTime - trip.DepartureTime),
                                 Price = trip.Price,
                                 TotalSeats = trip.TotalSeats,
-                                FreeSeats = trip.TotalSeats, // Reset seats
+                                FreeSeats = trip.TotalSeats,
                                 CarModel = trip.CarModel,
                                 PlateNumber = trip.PlateNumber,
                                 ImagePath = trip.ImagePath,
                                 StatusTrip = TripStatus.Upcoming,
                                 CreatedDate = Now,
-                                IsRecurring = false // New trips are not templates
+                                IsRecurring = false 
                             };
-                            //trip.NextRunDate = newDepartureTime.Add(reccurenceInterval);
                             context.Trips.Add(newTrip);
                         }
 
                         trip.NextStart = trip.NextStart.Add(reccurenceInterval);
-                        // Update next run date
                         trip.tripSchedule = trip.tripSchedule.Add(reccurenceInterval);
 
-                        // Save to database
                         await context.SaveChangesAsync();
                     }
                 }
-
-                // Run every minute (adjust as needed)
                 await Task.Delay(TimeSpan.FromSeconds(30), stoppingToken);
             }
         }
@@ -101,19 +86,18 @@ namespace TestProject.Services
                 var overlappingTrips = await context.Trips
                     .Where(t => t.DriversId == trip.DriversId &&
                                 (t.StatusTrip == TripStatus.Upcoming || t.StatusTrip == TripStatus.Ongoing))
-                    .ToListAsync(); // Fetch all relevant trips first
+                    .ToListAsync(); 
 
                 var NewDepartureTime = trip.NextStart;
                 var NewReturnTime = NewDepartureTime.Add(trip.ReturnTime - trip.DepartureTime);
 
-                // Apply the overlap logic
                 bool hasOverlap = overlappingTrips.Any(t =>
-                    (NewDepartureTime >= t.DepartureTime && NewDepartureTime <= t.ReturnTime) || // New trip starts inside existing trip
-                    (NewReturnTime >= t.DepartureTime && NewReturnTime <= t.ReturnTime) || // New trip ends inside existing trip
-                    (NewDepartureTime <= t.DepartureTime && NewReturnTime >= t.ReturnTime) // New trip fully contains existing trip
+                    (NewDepartureTime >= t.DepartureTime && NewDepartureTime <= t.ReturnTime) || 
+                    (NewReturnTime >= t.DepartureTime && NewReturnTime <= t.ReturnTime) || 
+                    (NewDepartureTime <= t.DepartureTime && NewReturnTime >= t.ReturnTime) 
                 );
 
-                return !hasOverlap; // Return true if there is NO overlap
+                return !hasOverlap; 
             }
         }
 

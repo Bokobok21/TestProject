@@ -6,6 +6,13 @@
 <div class="container">
     <div class="page-header">
         <h1>Шофьори</h1>
+
+        @if(!User.IsInRole("Driver"))
+        {
+        <a href="/Identity/Account/Manage" class="create-trip-btn">
+            <i class="fas fa-id-card"></i> Стани Шофьор
+        </a>
+        }
     </div>
 
     @if (!Model.Any())
@@ -20,7 +27,7 @@
         <div class="drivers-grid">
             @foreach (var item in Model)
             {
-                <div class="driver-card" style="border-radius: 15px;">
+                <div class="driver-card" style="border-radius: 10px;">
                     <a asp-controller="Trips" asp-action="Index" asp-route-driverId="@item.Driver.Id" asp-route-returnUrl="@Context.Request.Path">
                         <div class="driver-image-container">
                             <img src="@(string.IsNullOrEmpty(item.Driver.ImagePath) ? "/images/drivers/default-image-Driver.jpg" : item.Driver.ImagePath)"

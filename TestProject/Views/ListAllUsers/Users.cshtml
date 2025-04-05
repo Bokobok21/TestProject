@@ -1,6 +1,6 @@
 ﻿@model PaginatedList<UserViewModel>
 @{
-    ViewData["Title"] = "Users Management";
+    ViewData["Title"] = "Управление на Потребителите";
 
 }
 @using Microsoft.AspNetCore.Identity
@@ -69,79 +69,86 @@
                 </div>
             </div>
 
-            <div class="users-table-container">
-                <table class="users-table">
-                    <thead>
-                        <tr>
-                            <th>Име</th>
-                            <th>Потребителско име</th>
-                            <th>Роля</th>
-                            <th>Опции</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var item in Model)
-                        {
+            @if (!Model.Any())
+            {
+                <div class="empty-state">
+                    <i class="fas fa-clipboard-check"></i>
+                    <p>Няма намерени потребители в този момент.</p>
+                </div>
+            }
+            else
+            {
+                <div class="users-table-container">
+                    <table class="users-table">
+                        <thead>
                             <tr>
-                                <td>@($"{item.User.FirstName} {item.User.LastName}")</td>
-                                <td>@item.User.UserName</td>
-                                <td>
-                                    <span class="role-badge @GetRoleBadgeClass(item.Role)">
-                                        @item.Role
-                                    </span>
-                                </td>
-                                @if (item.User.UserName != "Админ")
-                                {
-                                    <td class="actions-cell">
-                                        <div class="user-actions">
-                                            <!-- Role Edit Form -->
-                                            <form asp-action="EditRole" method="post" class="role-edit-form">
-                                                <input type="hidden" name="userId" value="@item.User.Id" />
-                                                <div class="role-select-group">
-                                                    <select name="newRole" class="form-control">
-                                                        @foreach (var role in ViewBag.Roles as SelectList)
-                                                        {
-                                                            <option value="@role.Value" selected="@(role.Value == item.Role)">
-                                                                @role.Text
-                                                            </option>
-                                                        }
-                                                    </select>
-                                                    <button type="submit" class="btn btn-primary">
-                                                        <i class="fas fa-save"></i> Редактирай
-                                                    </button>
-                                                </div>
-                                            </form>
-
-                                            <!-- Delete User Form -->
-                                            <form asp-action="DeleteUser" method="post" class="delete-user-form">
-                                                @Html.AntiForgeryToken()
-                                                <input type="hidden" name="id" value="@item.User.Id" />
-                                                <button type="submit" class="btn action-delete"
-                                                        onclick="return confirm('Сигурен ли си, че искаш да го изтриеш?')">
-                                                    <i class="fas fa-trash"></i> Изтрии
-                                                </button>
-                                            </form>
-                                        </div>
-                                    </td>
-                                }
-                                else
-                                {
-                                    <td class="actions-cell">
-                                        <div class="admin-protected">
-                                            <i class="fas fa-lock"></i> Защитен Админ
-                                        </div>
-                                    </td>
-                                }
+                                <th>Име</th>
+                                <th>Потребителско име</th>
+                                <th>Роля</th>
+                                <th>Опции</th>
                             </tr>
-                        }
-                    </tbody>
-                </table>
-            </div>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>@($"{item.User.FirstName} {item.User.LastName}")</td>
+                                    <td>@item.User.UserName</td>
+                                    <td>
+                                        <span class="role-badge @GetRoleBadgeClass(item.Role)">
+                                            @item.Role
+                                        </span>
+                                    </td>
+                                    @if (item.User.UserName != "Админ")
+                                    {
+                                        <td class="actions-cell">
+                                            <div class="user-actions">
+                                                <!-- Role Edit Form -->
+                                                <form asp-action="EditRole" method="post" class="role-edit-form">
+                                                    <input type="hidden" name="userId" value="@item.User.Id" />
+                                                    <div class="role-select-group">
+                                                        <select name="newRole" class="form-control">
+                                                            @foreach (var role in ViewBag.Roles as SelectList)
+                                                            {
+                                                                <option value="@role.Value" selected="@(role.Value == item.Role)">
+                                                                    @role.Text
+                                                                </option>
+                                                            }
+                                                        </select>
+                                                        <button type="submit" class="btn btn-primary">
+                                                            <i class="fas fa-save"></i> Редактирай
+                                                        </button>
+                                                    </div>
+                                                </form>
 
+                                                <!-- Delete User Form -->
+                                                <form asp-action="DeleteUser" method="post" class="delete-user-form">
+                                                    @Html.AntiForgeryToken()
+                                                    <input type="hidden" name="id" value="@item.User.Id" />
+                                                    <button type="submit" class="btn action-delete"
+                                                            onclick="return confirm('Сигурен ли си, че искаш да го изтриеш?')">
+                                                        <i class="fas fa-trash"></i> Изтрии
+                                                    </button>
+                                                </form>
+                                            </div>
+                                        </td>
+                                    }
+                                    else
+                                    {
+                                        <td class="actions-cell">
+                                            <div class="admin-protected">
+                                                <i class="fas fa-lock"></i> Защитен Админ
+                                            </div>
+                                        </td>
+                                    }
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
 
-
-
-            <partial name="_UsersPaginationPartial" model="Model" />
+                <partial name="_UsersPaginationPartial" model="Model" />
+            }
 
         </div>
     </div>

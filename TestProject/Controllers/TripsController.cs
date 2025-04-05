@@ -46,10 +46,10 @@ namespace TestProject.Controllers
                 new SelectListItem { Value = "return_time_desc", Text = "Час на връщане (най-късен)" },
                 new SelectListItem { Value = "price_asc", Text = "Цена (от ниска към висока)" },
                 new SelectListItem { Value = "price_desc", Text = "Цена (от висока към ниска)" },
-                new SelectListItem { Value = "free_seats_asc", Text = "Свободни места (възходящо)" },
-                new SelectListItem { Value = "free_seats_desc", Text = "Свободни места (низходящо)" },
-                new SelectListItem { Value = "total_seats_asc", Text = "Общо места (възходящо)" },
-                new SelectListItem { Value = "total_seats_desc", Text = "Общо места (низходящо)" },
+                new SelectListItem { Value = "free_seats_asc", Text = "Свободни места (най-малко първо)" },
+                new SelectListItem { Value = "free_seats_desc", Text = "Свободни места (най-много първо)" },
+                new SelectListItem { Value = "total_seats_asc", Text = "Общо места (най-малко първо)" },
+                new SelectListItem { Value = "total_seats_desc", Text = "Общо места (най-много първо)" },
                 new SelectListItem { Value = "created_date_desc", Text = "Най-нови" },
                 new SelectListItem { Value = "created_date_asc", Text = "Най-стари" },
             };
@@ -172,7 +172,7 @@ namespace TestProject.Controllers
                 tripSchedule = trip.tripSchedule,
             }).ToList();
 
-            ViewBag.ReturnUrl = returnUrl;
+            ViewBag.TripCount = tripsList.Count;
             // Return view with paginated list
             return View(new PaginatedList<Trip>(paginatedTrips, tripsList.Count, paginatedTrips.PageIndex, pageSize));
         }

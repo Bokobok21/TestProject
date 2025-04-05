@@ -31,7 +31,6 @@ public class TripStatusUpdaterService : BackgroundService
 
                     var now = DateTime.Now;
 
-                    // Update trips that should now be "Ongoing"
                     var ongoingTrips = context.Trips
                         .Where(t => t.DepartureTime <= now && t.StatusTrip == TripStatus.Upcoming)
                         .ToList();
@@ -41,7 +40,6 @@ public class TripStatusUpdaterService : BackgroundService
                         trip.StatusTrip = TripStatus.Ongoing;
                     }
 
-                    // Update trips that should now be "Finished"
                     var finishedTrips = context.Trips
                         .Where(t => t.ReturnTime <= now && t.StatusTrip == TripStatus.Ongoing)
                         .ToList();
@@ -63,7 +61,6 @@ public class TripStatusUpdaterService : BackgroundService
                 _logger.LogError(ex, "Промяната на статуса на пътешествието не беше успешна.");
             }
 
-            // Wait for 5 minutes before checking again
             await Task.Delay(TimeSpan.FromSeconds(30), stoppingToken);
         }
     }
