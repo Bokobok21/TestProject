@@ -7,11 +7,17 @@
     <div class="page-header">
         <h1>Шофьори</h1>
 
-        @if(!User.IsInRole("Driver"))
+        @if (User.IsInRole("Driver"))
         {
-        <a href="/Identity/Account/Manage" class="create-trip-btn">
-            <i class="fas fa-id-card"></i> Стани Шофьор
-        </a>
+            <a asp-controller="Trips" asp-action="Create" asp-route-returnUrl="@Context.Request.Path" class="create-trip-btn">
+                <i class="fas fa-plus-circle"></i> Създай ново пътешествие
+            </a>
+        }
+        else
+        {
+            <a href="/Identity/Account/Manage" class="create-trip-btn">
+                <i class="fas fa-id-card"></i> Стани Шофьор
+            </a>
         }
     </div>
 

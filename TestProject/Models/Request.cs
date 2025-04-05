@@ -10,12 +10,10 @@ namespace TestProject.Models
         [Key]
         public int Id { get; set; }
 
-       // [Required]
         public int TripId { get; set; }
         [ForeignKey(nameof(TripId))]
         public Trip Trip { get; set; } 
 
-     //   [Required]
         public string UserId { get; set; }
         [ForeignKey(nameof(UserId))]
         public ApplicationUser User { get; set; } 
@@ -25,7 +23,6 @@ namespace TestProject.Models
         public DateTime Date { get; set; }
 
         [Range(1, int.MaxValue, ErrorMessage = "Броят места трябва да бъде поне 1")]
-        public int NumberOfSeats { get; set; } = 1; // Default to 1 seat
-
+        public int NumberOfSeats { get; set; } = 1; 
     }
 }

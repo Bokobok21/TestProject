@@ -38,7 +38,7 @@
                 <div class="driver-profile-content">
                     <div class="driver-profile-image">
                         <div class="profile-image-container">
-                            <img src="@Model.CurrentUser.ImagePath" alt="Profile Picture" class="profile-image" />
+                            <img src="@Model.CurrentUser.ImagePath" alt="Profile Picture" class="profile-image" onerror="this.onerror=null;this.src='/images/drivers/default-image-Driver.jpg';" />
                             <div class="profile-image-overlay">
                                 <i class="fas fa-camera"></i>
                                 <span>Промени</span>
