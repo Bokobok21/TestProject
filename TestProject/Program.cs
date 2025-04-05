@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using TestProject.Data;
-using TestProject.Data.SeedDb;
 using TestProject.Models;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting.Internal;
@@ -9,7 +8,6 @@ using TestProject.Services;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 using Microsoft.Extensions.Options;
 using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.Blazor;
-
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -42,13 +40,23 @@ builder.Services.Configure<IdentityOptions>(options =>
 
 var app = builder.Build();
 
-
 using (var scope = app.Services.CreateScope())
 {
-    var serviceProvider = scope.ServiceProvider;
-    await SeedRoles.Initialize(serviceProvider);
-}
+    var services = scope.ServiceProvider;
+    try
+    {
+        var context = services.GetRequiredService<ApplicationDbContext>();
+        var userManager = services.GetRequiredService<UserManager<ApplicationUser>>();
+        var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
 
+        await ApplicationDbSeed.SeedDataAsync(context, userManager, roleManager);
+    }
+    catch (Exception ex)
+    {
+        var logger = services.GetRequiredService<ILogger<Program>>();
+        logger.LogError(ex, "An error occurred while seeding the database.");
+    }
+}
 
 
 // Configure the HTTP request pipeline.

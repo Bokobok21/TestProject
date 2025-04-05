@@ -7,6 +7,7 @@
            asp-route-destination="@ViewBag.CurrentDestination"
            asp-route-sortOrder="@ViewBag.CurrentSortOrder"
            asp-route-driverId="@ViewBag.CurrentDriverId"
+           asp-route-returnUrl="@ViewBag.ReturnUrl"
            asp-route-pageNumber="@(Model.PageIndex - 1)"
            class="pagination-btn1">
             <i class="fas fa-chevron-left"></i> Предишна
@@ -21,7 +22,7 @@
 
     <!-- Page Numbers with Ellipsis -->
     @{
-        const int maxPagesToShow = 3; // Maximum number of page buttons to show
+        const int maxPagesToShow = 5; // Maximum number of page buttons to show
         int startPage = Math.Max(1, Model.PageIndex - maxPagesToShow / 2);
         int endPage = Math.Min(Model.TotalPages, startPage + maxPagesToShow - 1);
 
@@ -39,6 +40,7 @@
                asp-route-startPosition="@ViewBag.CurrentStartPosition"
                asp-route-destination="@ViewBag.CurrentDestination"
                asp-route-driverId="@ViewBag.CurrentDriverId"
+               asp-route-returnUrl="@ViewBag.ReturnUrl"
                asp-route-sortOrder="@ViewBag.CurrentSortOrder"
                class="pagination-btn @(1 == Model.PageIndex ? "active" : "")">
                 1
@@ -59,6 +61,7 @@
                asp-route-startPosition="@ViewBag.CurrentStartPosition"
                asp-route-destination="@ViewBag.CurrentDestination"
                asp-route-driverId="@ViewBag.CurrentDriverId"
+               asp-route-returnUrl="@ViewBag.ReturnUrl"
                asp-route-sortOrder="@ViewBag.CurrentSortOrder"
                class="pagination-btn @(i == Model.PageIndex ? "active" : "")">
                 @i
@@ -78,6 +81,7 @@
                asp-route-pageNumber="@Model.TotalPages"
                asp-route-startPosition="@ViewBag.CurrentStartPosition"
                asp-route-destination="@ViewBag.CurrentDestination"
+               asp-route-returnUrl="@ViewBag.ReturnUrl"
                asp-route-driverId="@ViewBag.CurrentDriverId"
                asp-route-sortOrder="@ViewBag.CurrentSortOrder"
                class="pagination-btn @(Model.TotalPages == Model.PageIndex ? "active" : "")">
@@ -92,6 +96,7 @@
         <a asp-action="Index"
            asp-route-startPosition="@ViewBag.CurrentStartPosition"
            asp-route-destination="@ViewBag.CurrentDestination"
+           asp-route-returnUrl="@ViewBag.ReturnUrl"
            asp-route-driverId="@ViewBag.CurrentDriverId"
            asp-route-pageNumber="@(Model.PageIndex + 1)"
            asp-route-sortOrder="@ViewBag.CurrentSortOrder"
