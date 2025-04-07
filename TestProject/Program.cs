@@ -35,7 +35,7 @@ builder.Services.Configure<IdentityOptions>(options =>
     options.Password.RequiredLength = 6;
 
     options.User.AllowedUserNameCharacters =
-    "àáâãäåæçèéêëìíîïğñòóôõö÷øùúüşÿÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏĞÑÒÓÔÕÖ×ØÙÚÜŞß0123456789-._@+";
+   "àáâãäåæçèéêëìíîïğñòóôõö÷øùúüşÿÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏĞÑÒÓÔÕÖ×ØÙÚÜŞßabcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
 });
 
 var app = builder.Build();
@@ -89,6 +89,7 @@ app.Run();
 
 // add icons from mom
 
+// backgruond service for removing request that can't be accepted anymore (trip is in progress or finished)
 // fix foulders and files
 // fix the project name
 // fix the role to be passenger not tourist

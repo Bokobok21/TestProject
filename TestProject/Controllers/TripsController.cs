@@ -55,7 +55,6 @@ namespace TestProject.Controllers
             };
 
 
-            // Get all drivers for the dropdown
             var drivers = await _context.ApplicationUsers
                 .Where(u => u.Position == "Driver")
                 .Select(d => new SelectListItem
@@ -67,15 +66,12 @@ namespace TestProject.Controllers
 
             ViewBag.Drivers = new SelectList(drivers, "Value", "Text", driverId);
 
-            // Fetch trips from the database
             IQueryable<Trip> trips = _context.Trips.Include(t => t.Driver);
 
-            // Apply driver filter if provided
             if (!string.IsNullOrEmpty(driverId))
             {
                 trips = trips.Where(t => t.DriversId == driverId);
 
-                // Get driver name for display
                 var driver = await _context.ApplicationUsers.FindAsync(driverId);
 
                 if (driver != null)
@@ -86,7 +82,6 @@ namespace TestProject.Controllers
 
             var tripsList = await trips.ToListAsync();
 
-            // Apply search filters
             if (!string.IsNullOrEmpty(startPosition))
             {
                 tripsList = tripsList.Where(t => t.StartPosition.Contains(startPosition, StringComparison.OrdinalIgnoreCase)).ToList();
@@ -97,11 +92,9 @@ namespace TestProject.Controllers
                 tripsList = tripsList.Where(t => t.Destination.Contains(destination, StringComparison.OrdinalIgnoreCase)).ToList();
             }
 
-            // Start with OrderBy()
             IOrderedEnumerable<Trip> orderedTrips = tripsList.OrderBy(t => t.StatusTrip != TripStatus.Upcoming);
             orderedTrips = orderedTrips.ThenBy(t => t.StatusTrip);
 
-            // Apply the selected sort order as secondary sort
             switch (sortOrder)
             {
                 case "created_date_asc":
@@ -252,7 +245,6 @@ namespace TestProject.Controllers
         [Authorize(Roles = "Admin,Driver")]
         public async Task<IActionResult> Create(TripViewModel tripViewModel, string? returnUrl)
         {
-
             tripViewModel.DriversId = User.Id();
             tripViewModel.StatusTrip = TripStatus.Upcoming;
 
@@ -260,21 +252,17 @@ namespace TestProject.Controllers
               .Add(TimeSpan.FromHours(tripViewModel.RecurrenceIntervalHours ?? 0))
               .Add(TimeSpan.FromMinutes(tripViewModel.RecurrenceIntervalMinutes ?? 0));
 
-
             if (tripViewModel.IsRecurring && recurrenceInterval == TimeSpan.Zero)
             {
                 ModelState.AddModelError("", "Интервалът трябва да е по-голям от нула.");
             }
 
-
             if (ModelState.IsValid)
             {
-
                 if (tripViewModel.ImageFile != null && tripViewModel.ImageFile.Length > 0)
                 {
                     string uploadsFolder = Path.Combine("wwwroot", "images", "trips");
 
-                    // Ensure the directory exists
                     if (!Directory.Exists(uploadsFolder))
                     {
                         Directory.CreateDirectory(uploadsFolder);
@@ -557,18 +545,13 @@ namespace TestProject.Controllers
                         System.IO.File.Delete(filePath);
                     }
                 }
-
-
-
                 _context.Trips.Remove(trip);
             }
-
             await _context.SaveChangesAsync();
             if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
             {
-                return Redirect(returnUrl); // Redirects back to the previous page
+                return Redirect(returnUrl); 
             }
-
 
             return RedirectToAction("MyDriverTrips", "DriverTrips");
 
@@ -585,7 +568,6 @@ namespace TestProject.Controllers
                 .Where(t => t.DriversId == userId &&
                        (t.StatusTrip == TripStatus.Upcoming || t.StatusTrip == TripStatus.Ongoing));
 
-            // Exclude current trip in edit mode
             if (excludeTripId.HasValue)
             {
                 driverTripsQuery = driverTripsQuery.Where(t => t.Id != excludeTripId.Value);

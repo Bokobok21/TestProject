@@ -54,13 +54,32 @@ public class ListAllUsersController : Controller
         foreach (var user in users)
         {
             var roles = await _userManager.GetRolesAsync(user);
-            var role = roles.FirstOrDefault() ?? "No Role";
+            //var role = roles.FirstOrDefault() ?? "No Role";
+            var role = "";
 
-            userViewModels.Add(new UserViewModel
+            if (roles.Contains("Admin"))
             {
-                User = user,
-                Role = role
-            });
+                role = "Admin";
+            }
+            else if (roles.Contains("Driver"))
+            {
+                role = "Driver";
+            }
+            else if (roles.Contains("Tourist"))
+            {
+                role = "Tourist";
+            }
+            else
+            {
+                role = "No Role";
+            }
+
+
+                userViewModels.Add(new UserViewModel
+                {
+                    User = user,
+                    Role = role
+                });
         }
 
         // Calculate total users before applying filters
