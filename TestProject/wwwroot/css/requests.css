@@ -1,0 +1,305 @@
+﻿/* Pending Requests Styles */
+.requests-container {
+    margin-bottom: 30px;
+}
+
+.requests-table-container {
+    overflow-x: auto;
+    background-color: var(--white);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+}
+
+.requests-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+    .requests-table th {
+        background-color: var(--primary-light);
+        color: var(--primary-dark);
+        text-align: left;
+        padding: 15px;
+        font-weight: 600;
+        border-bottom: 2px solid var(--primary);
+    }
+
+    .requests-table td {
+        padding: 15px;
+        border-bottom: 1px solid var(--gray-light);
+        vertical-align: middle;
+    }
+
+    .requests-table tr:last-child td {
+        border-bottom: none;
+    }
+
+    .requests-table tr:hover {
+        background-color: rgba(0, 0, 0, 0.02);
+    }
+
+/* Passenger Cell */
+.passenger-cell {
+    min-width: 200px;
+}
+
+.passenger-info {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+}
+
+.passenger-avatar {
+    width: 40px;
+    height: 40px;
+    background-color: var(--primary-light);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--primary);
+    font-size: 1.5rem;
+    flex-shrink: 0;
+}
+
+.passenger-details {
+    display: flex;
+    flex-direction: column;
+}
+
+.passenger-name {
+    font-weight: 500;
+    color: var(--gray-dark);
+    margin-bottom: 5px;
+}
+
+/* Contact Info */
+.contact-info {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.contact-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.85rem;
+    color: var(--gray);
+}
+
+    .contact-item i {
+        color: var(--primary);
+        width: 16px;
+    }
+
+/* Trip Info Cell */
+.trip-info-cell {
+    min-width: 300px;
+}
+
+.trip-info {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.trip-route {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 500;
+}
+
+    .trip-route i {
+        color: var(--primary);
+    }
+
+    .trip-route a {
+        color: var(--primary-dark);
+        text-decoration: none;
+        transition: color 0.2s ease;
+    }
+
+        .trip-route a:hover {
+            color: var(--primary);
+            text-decoration: underline;
+        }
+
+.trip-times {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.trip-time {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.9rem;
+    color: var(--gray-dark);
+}
+
+    .trip-time i {
+        color: var(--primary);
+        width: 16px;
+    }
+
+/* Request Status */
+.request-status {
+    display: inline-block;
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 500;
+}
+
+.status-pending {
+    background-color: #fff3cd;
+    color: #856404;
+}
+
+.status-approved {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+.status-denied {
+    background-color: #f8d7da;
+    color: #721c24;
+}
+
+.status-default {
+    background-color: #e2e3e5;
+    color: #383d41;
+}
+
+/* Actions Cell */
+.actions-cell {
+    min-width: 220px;
+}
+
+.request-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.action-form {
+    flex: 1;
+}
+
+.action-btn {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    padding: 8px 15px;
+    border-radius: var(--radius);
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+.btn-success {
+    background-color: #43a047;
+    color: white;
+    border: none;
+}
+
+    .btn-success:hover {
+        background-color: #388e3c;
+    }
+
+.btn-danger {
+    background-color: #e53935;
+    color: white;
+    border: none;
+}
+
+    .btn-danger:hover {
+        background-color: #d32f2f;
+    }
+
+/* Empty State */
+.empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 50px 20px;
+    background-color: var(--white);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    text-align: center;
+}
+
+    .empty-state i {
+        font-size: 3rem;
+        color: var(--gray);
+        margin-bottom: 15px;
+    }
+
+    .empty-state p {
+        font-size: 1.1rem;
+        color: var(--gray-dark);
+    }
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .request-actions {
+        flex-direction: column;
+    }
+
+    .passenger-info {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 5px;
+    }
+
+    .passenger-avatar {
+        margin-bottom: 5px;
+    }
+
+    .requests-table {
+        display: block;
+    }
+
+        .requests-table thead {
+            display: none;
+        }
+
+        .requests-table tbody {
+            display: block;
+        }
+
+        .requests-table tr {
+            display: block;
+            margin-bottom: 15px;
+            border: 1px solid var(--gray-light);
+            border-radius: var(--radius);
+        }
+
+        .requests-table td {
+            display: block;
+            text-align: right;
+            padding: 10px 15px;
+            position: relative;
+            border-bottom: 1px solid var(--gray-light);
+        }
+
+            .requests-table td:before {
+                content: attr(data-label);
+                float: left;
+                font-weight: 600;
+                color: var(--gray-dark);
+            }
+
+            .requests-table td:last-child {
+                border-bottom: none;
+            }
+
+    .passenger-info,
+    .trip-info {
+        text-align: left;
+    }
+}

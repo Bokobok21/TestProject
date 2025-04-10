@@ -7,24 +7,74 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/TestProject.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
+    <link rel="stylesheet" href="~/css/trips.css" />
+    <link rel="stylesheet" href="~/css/admin.css" />
+    <link rel="stylesheet" href="~/css/dashboard.css" />
+    <link rel="stylesheet" href="~/css/driver-applications.css" />
+    <link rel="stylesheet" href="~/css/navbar.css" />
+    <link rel="stylesheet" href="~/css/ratings.css" />
+    <link rel="stylesheet" href="~/css/requests.css" />
+
+    <script src="https://cdn.jsdelivr.net/npm/dayjs@1.10.7/dayjs.min.js"></script>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/litepicker/dist/css/litepicker.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/litepicker/dist/plugins/mobilefriendly.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/litepicker/dist/plugins/ranges.css" />
+    <script src="https://cdn.jsdelivr.net/npm/litepicker/dist/litepicker.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/litepicker/dist/plugins/mobilefriendly.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/litepicker/dist/plugins/ranges.js"></script>
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">TestProject</a>
+        <nav class="navbar navbar-expand-lg navbar-light navbar-main">
+            <div class="container" style="margin: 0px; max-width: 100%">
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">
+                    <i class="fas fa-car-side"></i> Споделено Пътуване
+                </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
+                <div class="navbar-collapse collapse d-lg-inline-flex justify-content-between">
+                    <ul class="navbar-nav">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                            <a class="nav-link @(ViewContext.RouteData.Values["Controller"]?.ToString() == "Trips" && ViewContext.RouteData.Values["Action"]?.ToString() == "Index" ? "active" : "")"
+                               asp-area="" asp-controller="Trips" asp-action="Index">
+                                <i class="fas fa-route"></i> Пътешествия
+                            </a>
                         </li>
+                        @{
+                            string currentPage1 = ViewContext.RouteData.Values["Controller"]?.ToString();
+                            var activePages1 = new List<string> { "PassengerRequests", "PassengerTrips", "DriverTrips", "DriverRequests", "UserPanel" }; // Add more controllers
+                        }
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                            <a class="nav-link @(ViewContext.RouteData.Values["Controller"]?.ToString() == "Drivers" ? "active" : "")"
+                               asp-area="" asp-controller="Drivers" asp-action="Index">
+                                <i class="fas fa-user-tie"></i> Шофьори
+                            </a>
                         </li>
+                        @if (User.IsInRole("Tourist") || User.IsInRole("Driver") || User.IsInRole("Admin"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link @(activePages1.Contains(currentPage1) ? "active" : "")"
+                                   asp-area="" asp-controller="UserPanel" asp-action="Index">
+                                    <i class="fas fa-tachometer-alt"></i> Потребителски Панел
+                                </a>
+                            </li>
+                        }
+                        @if (User.IsInRole("Admin"))
+                        {
+                            string currentPage = ViewContext.RouteData.Values["Controller"]?.ToString();
+                            var activePages = new List<string> { "DriverApplications", "ListAllUsers", "Admin" }; // Add more controllers
+
+                            <li class="nav-item">
+                                <a class="nav-link @(activePages.Contains(currentPage) ? "active" : "")"
+                                   asp-area="" asp-controller="Admin" asp-action="Index">
+                                    <i class="fas fa-users-cog"></i> Админ Панел
+                                </a>
+                            </li>
+                        }
                     </ul>
                     <partial name="_LoginPartial" />
                 </div>
@@ -37,14 +87,38 @@
         </main>
     </div>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2025 - TestProject - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-        </div>
-    </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/trip-calendar.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+
+    <script>
+        // Add scroll behavior to navbar
+        document.addEventListener('DOMContentLoaded', function() {
+            const navbar = document.querySelector('.navbar-main');
+
+            window.addEventListener('scroll', function() {
+                if (window.scrollY > 10) {
+                    navbar.classList.add('navbar-scrolled');
+                } else {
+                    navbar.classList.remove('navbar-scrolled');
+                }
+            });
+
+            // Set active class based on current page
+            const currentPath = window.location.pathname;
+            const navLinks = document.querySelectorAll('.navbar-nav .nav-link');
+
+            navLinks.forEach(link => {
+                const linkPath = link.getAttribute('href');
+                if (currentPath === linkPath) {
+                    link.classList.add('active');
+                }
+            });
+        });
+    </script>
+
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
+

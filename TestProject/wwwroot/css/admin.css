@@ -1,0 +1,255 @@
+﻿/* Admin Panel Styles */
+.admin-panel {
+    background-color: var(--white);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 20px;
+    margin-bottom: 30px;
+}
+
+/* Filter Section */
+.filter-section {
+    margin-bottom: 20px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--gray-light);
+}
+
+.search-filter-form .form-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    align-items: flex-end;
+}
+
+.search-filter-form .form-group {
+    flex: 1;
+    min-width: 250px;
+}
+
+.search-filter-form label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+    color: var(--gray-dark);
+}
+
+.search-input-group {
+    display: flex;
+    gap: 10px;
+}
+
+    .search-input-group input {
+        flex: 1;
+    }
+
+.search-buttons {
+    display: flex;
+    gap: 8px;
+}
+
+/* Stats Section */
+.stats-section {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+}
+
+.stat-card {
+    background-color: var(--primary-light);
+    border-radius: var(--radius);
+    padding: 15px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    flex: 1;
+    min-width: 250px;
+}
+
+    .stat-card i {
+        font-size: 2rem;
+        color: var(--primary);
+    }
+
+.stat-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.stat-label {
+    font-size: 0.9rem;
+    color: var(--gray-dark);
+}
+
+.stat-value {
+    font-size: 1.1rem;
+    font-weight: 500;
+}
+
+/* Users Table */
+.users-table-container {
+    overflow-x: auto;
+    margin-bottom: 20px;
+}
+
+.users-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+    .users-table th {
+        background-color: var(--primary-light);
+        color: var(--primary-dark);
+        text-align: left;
+        padding: 12px 15px;
+        font-weight: 600;
+    }
+
+    .users-table td {
+        padding: 12px 15px;
+        border-bottom: 3px solid var(--gray-light);
+        vertical-align: middle;
+    }
+
+    .users-table tr:hover {
+        background-color: rgba(0, 0, 0, 0.02);
+    }
+
+/* Role Badges */
+.role-badge {
+    display: inline-block;
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 500;
+}
+
+.role-admin {
+    background-color: #ef5350;
+    color: white;
+}
+
+.role-driver {
+    background-color: #00bfae;
+    color: white;
+}
+
+.role-tourist {
+    background-color: #1e88e5;
+    color: white;
+}
+
+.role-none {
+    background-color: #757575;
+    color: white;
+}
+
+.role-default {
+    background-color: #9e9e9e;
+    color: white;
+}
+
+/* Actions Cell */
+.actions-cell {
+    min-width: 250px;
+}
+
+.user-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.role-edit-form {
+    width: 100%;
+}
+
+.role-select-group {
+    display: flex;
+    gap: 10px;
+}
+
+    .role-select-group select {
+        flex: 1;
+    }
+
+.delete-user-form {
+    width: 100%;
+}
+
+    .delete-user-form button {
+        width: 100%;
+    }
+
+.admin-protected {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 8px;
+    background-color: #f5f5f5;
+    border-radius: var(--radius);
+    color: var(--gray-dark);
+    font-style: italic;
+}
+
+/* Pagination */
+.pagination-container1 {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.pagination-btn1 {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 8px 15px;
+    background-color: var(--primary);
+    color: white;
+    border-radius: var(--radius);
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+    font-weight: 500;
+}
+
+    .pagination-btn1:hover {
+        background-color: var(--primary-dark);
+        color: white;
+        text-decoration: none;
+    }
+
+    .pagination-btn1.disabled {
+        background-color: var(--gray-light);
+        color: var(--gray);
+        cursor: not-allowed;
+    }
+
+.pagination-info1 {
+    font-weight: 500;
+    color: var(--gray-dark);
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .search-filter-form .form-row {
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .search-input-group {
+        flex-direction: column;
+    }
+
+    .role-select-group {
+        flex-direction: column;
+    }
+
+    .users-table th:nth-child(2),
+    .users-table td:nth-child(2) {
+        display: none;
+    }
+}

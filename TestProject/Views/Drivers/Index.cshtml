@@ -1,0 +1,218 @@
+﻿@model IEnumerable<TestProject.Models.ViewModels.DriverViewModel>
+@{
+    ViewData["Title"] = "Шофьори";
+}
+
+<div class="container">
+    <div class="page-header">
+        <h1>Шофьори</h1>
+
+        @if (User.IsInRole("Driver"))
+        {
+            <a asp-controller="Trips" asp-action="Create" asp-route-returnUrl="@Context.Request.Path" class="create-trip-btn">
+                <i class="fas fa-plus-circle"></i> Създай ново пътешествие
+            </a>
+        }
+        else
+        {
+            <a href="/Identity/Account/Manage" class="create-trip-btn">
+                <i class="fas fa-id-card"></i> Стани Шофьор
+            </a>
+        }
+    </div>
+
+    @if (!Model.Any())
+    {
+        <div class="empty-state">
+            <i class="fas fa-users"></i>
+            <p>Няма шофьори в този момент.</p>
+        </div>
+    }
+    else
+    {
+        <div class="drivers-grid">
+            @foreach (var item in Model)
+            {
+                <div class="driver-card" style="border-radius: 10px;">
+                    <a asp-controller="Trips" asp-action="Index" asp-route-driverId="@item.Driver.Id" asp-route-returnUrl="@Context.Request.Path">
+                        <div class="driver-image-container">
+                            <img src="@(string.IsNullOrEmpty(item.Driver.ImagePath) ? "/images/drivers/default-image-Driver.jpg" : item.Driver.ImagePath)"
+                                 alt="Снимка на шофьора" class="driver-image"
+                                 onerror="this.onerror=null;this.src='/images/drivers/default-image-Driver.jpg';" />
+                        </div>
+                    </a>
+                    <div class="driver-content">
+                        <div class="driver-header">
+                            <h3 class="driver-name" style="margin: 12px 0px">@item.Driver.FirstName @item.Driver.LastName</h3>
+                            <div class="driver-rating">
+                                @if (item.AverageRating > 0)
+                                {
+                                    <div class="rating-stars">
+                                        @for (int i = 1; i <= 5; i++)
+                                        {
+                                            if (i <= Math.Floor(item.AverageRating))
+                                            {
+                                                <i class="fas fa-star"></i>
+                                            }
+                                            else if (i - 0.5 <= item.AverageRating)
+                                            {
+                                                <i class="fas fa-star-half-alt"></i>
+                                            }
+                                            else
+                                            {
+                                                <i class="far fa-star"></i>
+                                            }
+                                        }
+                                    </div>
+                                    <span class="rating-value">@item.AverageRating.ToString("0.0")</span>
+                                }
+                                else
+                                {
+                                    <span class="no-rating">Няма оценки</span>
+                                }
+                            </div>
+                        </div>
+
+                        <div class="driver-details">
+                            <div class="driver-detail-item">
+                                <span class="driver-detail-label">Шофьор от</span>
+                                <span class="driver-detail-value">@(item.Driver.DateOfDriverAcceptance?.ToString("dd-MM-yyyy") ?? "Неизвестно")</span>
+                            </div>
+                            <div class="driver-detail-item">
+                                <span class="driver-detail-label">Брой пътувания</span>
+                                <span class="driver-detail-value">@item.TripCount</span>
+                            </div>
+                        </div>
+
+                        <a asp-controller="Trips" asp-action="Index" asp-route-driverId="@item.Driver.Id" asp-route-returnUrl="@Context.Request.Path" class="btn btn-primary driver-trips-btn" style="margin-top: 20px; margin-bottom: 8px">
+                            <i class="fas fa-route"></i> Виж пътувания
+                        </a>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+</div>
+
+<style>
+    .drivers-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 24px;
+        margin-bottom: 30px;
+    }
+
+    .driver-card {
+        background-color: var(--white);
+        border-radius: var(--radius);
+        box-shadow: var(--shadow);
+        overflow: hidden;
+        transition: transform 0.2s, box-shadow 0.2s;
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+    }
+
+        .driver-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+
+    .driver-image-container {
+        position: relative;
+        height: 200px;
+        overflow: hidden;
+    }
+
+    .driver-image {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.3s;
+    }
+
+    .driver-card:hover .driver-image {
+        transform: scale(1.05);
+    }
+
+    .driver-content {
+        padding: 15px;
+        display: flex;
+        flex-direction: column;
+        flex: 1;
+    }
+
+    .driver-header {
+        display: flex;
+        flex-direction: column;
+        margin-bottom: 15px;
+    }
+
+    .driver-name {
+        font-size: 1.3rem;
+        font-weight: 600;
+        color: var(--primary-dark);
+        margin: 0 0 5px 0;
+    }
+
+    .driver-rating {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .rating-stars {
+        color: #ffc107;
+    }
+
+    .rating-value {
+        font-weight: 500;
+    }
+
+    .no-rating {
+        color: var(--gray);
+        font-style: italic;
+        font-size: 0.9rem;
+    }
+
+    .driver-details {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+        margin-bottom: 15px;
+        flex: 1;
+    }
+
+    .driver-detail-item {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .driver-detail-label {
+        font-size: 0.8rem;
+        color: var(--gray-dark);
+    }
+
+    .driver-detail-value {
+        font-weight: 500;
+    }
+
+    .driver-trips-btn {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        margin-top: auto;
+    }
+
+  /*   media (max-width: 768px) {
+        .drivers-grid
+
+    {
+        grid-template-columns: 1fr;
+    }
+
+    } */
+</style>
+

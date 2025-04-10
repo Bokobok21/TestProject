@@ -1,0 +1,41 @@
+﻿@model IEnumerable<TestProject.Models.Request>
+@using Microsoft.AspNetCore.Identity
+
+@{
+    ViewData["Title"] = "Чакащи заявки";
+
+}
+
+
+<h1>@ViewData["Title"]</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>User</th>
+            <th>Trip</th>
+            <th>Status</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var request in Model)
+        {
+            <tr>
+                <td>@request.User.UserName</td>
+                <td>
+                    <a asp-controller="Trips" asp-action="Details" asp-route-id="@request.TripId">@request.Trip.StartPosition - @request.Trip.Destination</a>
+                </td>
+                <td>@request.StatusRequest</td>
+                <td>
+                    <form asp-controller="Requests" asp-action="ApproveRequest" asp-route-requestId="@request.Id" method="post" style="display:inline;">
+                        <button type="submit" class="btn btn-success">Approve</button>
+                    </form>
+                    <form asp-controller="Requests" asp-action="DenyRequest" asp-route-requestId="@request.Id" method="post" style="display:inline;">
+                        <button type="submit" class="btn btn-danger">Deny</button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

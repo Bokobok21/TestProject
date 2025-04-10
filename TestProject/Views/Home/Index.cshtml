@@ -1,8 +1,93 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Начална страница";
 }
+@using TestProject.Extentions;
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+<style>
+    * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    }
+
+    body {
+    font-family: Arial, sans-serif;
+    background: url('/images/site/Home-Index.jpg') no-repeat center center fixed;
+    background-size: cover;
+    color: white;
+    text-align: center;
+    height: 100vh;
+    overflow: hidden;
+    }
+
+    .overlay {
+    background: rgba(0, 0, 0, 0.6);
+    position: relative; /* Changed from absolute */
+    width: 100%;
+    margin-top: 30px;
+    height: 75vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    border-radius: 20px;
+    }
+
+    nav {
+        font-family: var(--bs-body-font-family);
+    }
+
+
+    h1 {
+    font-size: 3rem;
+    margin-bottom: 10px;
+    }
+
+    p {
+    font-size: 1.5rem;
+    max-width: 600px;
+    margin-bottom: 20px;
+    }
+
+    .btn1 {
+    background-color: #007BFF;
+    color: white;
+    padding: 15px 30px;
+    text-decoration: none;
+    font-size: 1.2rem;
+    border-radius: 10px;
+    margin: 10px;
+    transition: 0.3s;
+    display: inline-block;
+    }
+
+    .btn:hover {
+    background-color: #0056b3;
+    }
+
+    .buttons {
+    margin-top: 20px;
+    }
+</style>
+
+<body>
+
+    @{
+        string path = "/Identity/Account/Manage";
+        if(User.IsInRole("Driver"))
+        {
+            path = "/DriverTrips/MyDriverTrips/" + User.Id();
+        }
+    }
+
+    <div class="overlay">
+        <h1>Споделено Пътуване</h1>
+        <p>Намери хора, с които да пътуваш заедно и раздели разходите! Бързо, лесно и удобно.</p>
+        <div class="buttons">
+            <a asp-controller="Trips" asp-action="Index" class="btn1">Намери пътуване</a>
+            <a href="@path" class="btn1">Създай пътуване</a>
+        </div>
+    </div>
+
+</body>

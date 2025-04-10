@@ -1,0 +1,102 @@
+﻿@using TestProject.Extentions
+@{
+    ViewData["Title"] = "Табло на Потребител";
+}
+
+<div class="dashboard-container">
+    <div class="dashboard-header">
+        <h1>Табло на Потребител</h1>
+        <p class="dashboard-subtitle">Управлявайте вашите пътувания и заявки</p>
+    </div>
+
+    @{  
+       string style1 = "";  
+       if (!User.IsInRole("Driver"))  
+       {  
+           style1 = "height: 240px;";  
+       }  
+    }
+
+    <div class="dashboard-grid">
+        <!-- My Requests Card -->
+        <div class="dashboard-card" onclick="submitForm('myRequestsForm')" style="@style1">
+            <div class="card-icon">
+                <i class="fas fa-paper-plane"></i>
+            </div>
+            <div class="card-content">
+                <h3>Моите заявки</h3>
+                <p>Преглед и управление на вашите заявки</p>
+            </div>
+            <div class="card-arrow">
+                <i class="fas fa-chevron-right"></i>
+            </div>
+            <form id="myRequestsForm" asp-controller="PassengerRequests" asp-action="MyRequests" method="get">
+                <input type="hidden" name="UserId" value="@User.Id()" />
+            </form>
+        </div>
+
+        <!-- Entered Trips Card -->
+        <div class="dashboard-card" onclick="submitForm('myTripsForm')" style="@style1">
+            <div class="card-icon">
+                <i class="fas fa-suitcase"></i>
+            </div>
+            <div class="card-content">
+                <h3>Моите пътешествия</h3>
+                <p>Преглед на пътуванията, в които участвате</p>
+            </div>
+            <div class="card-arrow">
+                <i class="fas fa-chevron-right"></i>
+            </div>
+            <form id="myTripsForm" asp-controller="PassengerTrips" asp-action="MyTrips" method="get">
+                <input type="hidden" name="UserId" value="@User.Id()" />
+            </form>
+        </div>
+
+
+
+        @if (User.IsInRole("Driver"))
+        {
+            <!-- My Driver Trips Card -->
+            <div class="dashboard-card" onclick="submitForm('myDriverTripsForm')">
+                <div class="card-icon">
+                    <i class="fas fa-car"></i>
+                </div>
+                <div class="card-content">
+                    <h3>Моите пътувания</h3>
+                    <p>Управление на пътуванията, които шофирате</p>
+                </div>
+                <div class="card-arrow">
+                    <i class="fas fa-chevron-right"></i>
+                </div>
+                <form id="myDriverTripsForm" asp-controller="DriverTrips" asp-action="MyDriverTrips" method="get">
+                    <input type="hidden" name="UserId" value="@User.Id()" />
+                </form>
+            </div>
+
+            <!-- Pending Requests Card -->
+            <div class="dashboard-card" onclick="submitForm('pendingRequestsForm')">
+                <div class="card-icon">
+                    <i class="fas fa-clipboard-list"></i>
+                </div>
+                <div class="card-content">
+                    <h3>Чакащи заявки</h3>
+                    <p>Преглед на заявки от пътници за вашите пътувания</p>
+                </div>
+                <div class="card-arrow">
+                    <i class="fas fa-chevron-right"></i>
+                </div>
+                <form id="pendingRequestsForm" asp-controller="DriverRequests" asp-action="PendingRequests" method="get">
+                    <input type="hidden" name="UserId" value="@User.Id()" />
+                </form>
+            </div>
+
+        }
+    </div>
+</div>
+
+<script>
+    function submitForm(formId) {
+        document.getElementById(formId).submit();
+    }
+</script>
+

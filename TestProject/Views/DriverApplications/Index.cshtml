@@ -1,0 +1,97 @@
+﻿@model IEnumerable<TestProject.Models.RequestDriver>
+@{
+    ViewData["Title"] = "Заявки за Шофьори";
+}
+
+<div class="admin-panel">
+    <div class="page-header">
+        <h1><i class="fas fa-id-card"></i> Заявки за Шофьори</h1>
+
+        <a href="/Admin" class="btn btn-secondary">
+            <i class="fas fa-arrow-left"></i> Админ панел
+        </a>
+    </div>
+
+
+    @if (!Model.Any())
+    {
+        <div class="empty-state">
+            <i class="fas fa-clipboard-check"></i>
+            <p>Няма заявки в този момент.</p>
+        </div>
+    }
+    else
+    {
+        <div class="driver-applications-container">
+            <div class="applications-table-container">
+                <table class="applications-table">
+                    <thead>
+                        <tr>
+                            <th>Заявител</th>
+                            <th>Контакт</th>
+                            <th>Дата на зявката</th>
+                            <th>Опции</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var request in Model)
+                        {
+                            <tr>
+                                <td class="applicant-cell">
+                                    <div class="applicant-info">
+                                        <div class="applicant-avatar">
+                                            <i class="fas fa-user-circle"></i>
+                                        </div>
+                                        <div class="applicant-details">
+                                            <span class="applicant-name">@request.User.FirstName @request.User.LastName</span>
+                                            <span class="applicant-username">@request.User.UserName</span>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="contact-info">
+                                        <div class="contact-item">
+                                            <i class="fas fa-envelope"></i>
+                                            <span>@request.User.Email</span>
+                                        </div>
+                                        @if (!string.IsNullOrEmpty(request.User.PhoneNumber))
+                                        {
+                                            <div class="contact-item">
+                                                <i class="fas fa-phone"></i>
+                                                <span>@request.User.PhoneNumber</span>
+                                            </div>
+                                        }
+                                    </div>
+                                </td>
+                                <td>
+                                    <span class="application-date">
+                                        <i class="far fa-calendar-alt"></i>
+                                        @request.Date.ToString("dd-MM-yyyy")
+                                    </span>
+                                </td>
+                                <td class="actions-cell">
+                                    <div class="application-actions">
+                                        <form asp-action="Approve" asp-route-id="@request.Id" method="post" class="action-form">
+                                            @Html.AntiForgeryToken()
+                                            <button type="submit" class="btn btn-success action-btn" style="background-color: #00bfae">
+                                                <i class="fas fa-check"></i> Приеми
+                                            </button>
+                                        </form>
+                                        <form asp-action="Deny" asp-route-id="@request.Id" method="post" class="action-form">
+                                            @Html.AntiForgeryToken()
+                                            <button type="submit" class="btn btn-danger action-btn" style="background-color: #ef5350"
+                                                    onclick="return confirm('Сигурен ли си, че искаш да откажеж заявката?')">
+                                                <i class="fas fa-times"></i> Откажи
+                                            </button>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    }
+</div>
+

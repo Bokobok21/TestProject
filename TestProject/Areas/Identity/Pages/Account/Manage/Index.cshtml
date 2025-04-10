@@ -1,0 +1,227 @@
+﻿@page
+@using TestProject.Extentions
+@using TestProject.Models
+@model IndexModel
+@{
+    ViewData["Title"] = "Профил";
+    ViewData["ActivePage"] = ManageNavPages.Index;
+}
+
+<h3>Профил - @Model.CurrentUser.UserName</h3>
+
+@if (!string.IsNullOrEmpty(Model.StatusMessage))
+{
+    var statusClass = Model.StatusMessage.Contains("Error") ? "error" : "success";
+    <div class="status-message @statusClass" role="alert">
+        <i class="fas @(statusClass == "error" ? "fa-exclamation-circle" : "fa-check-circle")"></i>
+        @Model.StatusMessage
+    </div>
+}
+
+<div class="profile-section">
+    <form id="profile-form" method="post" enctype="multipart/form-data">
+        <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
+
+
+        @if (User.IsInRole("Driver"))
+        {
+            <div class="driver-profile-card">
+                <div class="driver-profile-header">
+                    <div class="driver-badge">
+                        <i class="fas fa-id-badge"></i> Шофьор
+                    </div>
+                    <div class="driver-since">
+                        <i class="fas fa-calendar-check"></i> От @Model.CurrentUser.DateOfDriverAcceptance?.ToString("dd.MM.yyyy")
+                    </div>
+                </div>
+
+                <div class="driver-profile-content">
+                    <div class="driver-profile-image">
+                        <div class="profile-image-container">
+                            <img src="@Model.CurrentUser.ImagePath" alt="Profile Picture" class="profile-image" onerror="this.onerror=null;this.src='/images/drivers/default-image-Driver.jpg';" />
+                            <div class="profile-image-overlay">
+                                <i class="fas fa-camera"></i>
+                                <span>Промени</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="driver-profile-info">
+                        <div class="driver-stats">
+                            <a asp-controller="DriverTrips" asp-action="MyDriverTrips" style="text-decoration: none;">
+                                <div class="stat-item" style="padding: 0px; padding-top: 15px;">
+                                <div class="stat-icon">
+                                    <i class="fas fa-route"></i>
+                                </div>
+                                <div class="stat-content">
+                                    @* <span class="stat-value">@(new Random().Next(5, 50))</span> *@
+                                    <span class="stat-value">@ViewData["TripCount"]</span>
+                                    <span class="stat-label">Пътувания</span>
+                                </div>
+                            </div></a>
+                            <div class="stat-item" style="padding: 0px; padding-top: 15px;">
+                                <div class="stat-icon">
+                                    <i class="fas fa-users"></i>
+                                </div>
+                                <div class="stat-content">
+                                    @* <span class="stat-value">@(new Random().Next(10, 100))</span> *@
+                                    <span class="stat-value">@ViewData["TripParticipantCount"]</span>
+                                    <span class="stat-label">Пътника</span>
+                                </div>
+                            </div>
+                            <div class="stat-item" style="padding: 0px; padding-top: 15px;">
+                                <div class="stat-icon">
+                                    <i class="fas fa-star"></i>
+                                </div>
+                                <div class="stat-content">
+                                    @* <span class="stat-value">@(Math.Round(4 + new Random().NextDouble(), 1))</span> *@
+                                    <span class="stat-value">@ViewData["Rating"]</span>
+                                    <span class="stat-label">Рейтинг</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="driver-image-upload">
+                            <div class="form-group">
+                                <label class="profile-detail-label">Смени профилната си снимка</label>
+                                <div class="custom-file-upload">
+                                    <input asp-for="Input.ImageFile" type="file" class="form-control" accept="image/*" id="profile-image-upload" />
+                                    <label for="profile-image-upload">
+                                        <i class="fas fa-cloud-upload-alt"></i> Изберете снимка
+                                    </label>
+                                </div>
+                                <span asp-validation-for="Input.ImageFile" class="text-danger"></span>
+
+                                <div id="image-preview-container" class="image-preview-container mt-3" style="display: none;">
+                                    <div style="position: relative; display: inline-block;">
+                                        <img id="image-preview" src="#" alt="Preview" class="image-preview" />
+                                        <button type="button" id="remove-image" class="remove-image-btn">
+                                            <i class="fas fa-times"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="driver-profile-footer">
+                    <div class="driver-actions">
+                        <a asp-controller="DriverApplications" asp-action="EditRole" asp-route-id="@Model.CurrentUser.Id" class="btn btn-outline-danger" onclick="return confirm('Сигурен ли си, че искаш да спреш?')">
+                            <i class="fas fa-trash"></i> Спри да бъдеш шофьор 
+                        </a>
+                            
+                        <button id="update-profile-button" type="submit" class="btn btn-primary">
+                            <i class="fas fa-save"></i> Запази промените
+                        </button>
+                    </div>
+                </div>
+            </div>
+        }
+        else if (!Model.HasDriverRequest)
+        {
+            <div class="tourist-profile-section">
+                <div class="become-driver-card">
+                    <div class="become-driver-icon">
+                        <i class="fas fa-car-alt"></i>
+                    </div>
+                    <div class="become-driver-content">
+                        <h4>Искате да станете шофьор?</h4>
+                        <p>Присъединете се към нашата общност от шофьори и започнете да споделяте пътувания с други пътници.</p>
+                        <div class="become-driver-benefits">
+                            <div class="benefit-item">
+                                <i class="fas fa-money-bill-wave"></i> Спестявайте от разходите за пътуване
+                            </div>
+                            <div class="benefit-item">
+                                <i class="fas fa-users"></i> Срещайте нови хора
+                            </div>
+                            <div class="benefit-item">
+                                <i class="fas fa-leaf"></i> Допринесете за по-чиста околна среда
+                            </div>
+                        </div>
+                        <a asp-page="/Account/ApplyToBeDriver" class="btn btn-primary btn-lg" >
+                            <i class="fas fa-car"></i> Заяви да станеш шофьор
+                        </a>
+                    </div>
+                </div>
+            </div>
+        }
+        else if (Model.HasDriverRequest)
+        {
+            <style>
+                .account-content{
+                    padding-bottom: 0px;
+                }
+            </style>
+
+            <div class="pending-request-section" style="padding-top: 15px; margin-bottom: 43px;">
+                <div class="pending-request-card">
+                    <div class="pending-request-icon">
+                        <i class="fas fa-hourglass-half"></i>
+                    </div>
+                    <div class="pending-request-content">
+                        <h4>Заявката ви е в процес на разглеждане</h4>
+                        <p>
+                            Благодарим ви за интереса да станете шофьор в нашата платформа. Вашата заявка се разглежда от нашия екип.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        }
+    </form>
+    @{
+        string style1 = "none";
+        if (Model.HasDriverRequest)
+        {
+            style1 = "block";
+        }
+        var requestDriverId = Model.CurrentUser.RequestDrivers?.Where(u => u.StatusRequest == RequestStatus.Pending).FirstOrDefault()?.Id;
+    }
+    <form asp-controller="DriverApplications" asp-action="Deny" asp-route-id="@requestDriverId" asp-route-returnUrl="@HttpContext.Request.Path" method="post" style="display: @style1; height: -20px;">
+        <button type="submit" class="btn action-delete" onclick="return confirm('Сигурен ли си, че искаш да я изтриеш?')" style="color: #721c24; height: 50px;"><i class="fas fa-trash"></i> Отмени заявката</button>
+    </form>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+
+    <script>
+        // Image preview functionality
+        const imageUpload = document.getElementById('profile-image-upload');
+        const imagePreviewContainer = document.getElementById('image-preview-container');
+        const imagePreview = document.getElementById('image-preview');
+        const removeImageBtn = document.getElementById('remove-image');
+        const profileImageOverlay = document.querySelector('.profile-image-overlay');
+
+        if (profileImageOverlay) {
+            profileImageOverlay.addEventListener('click', function() {
+                if (imageUpload) {
+                    imageUpload.click();
+                }
+            });
+        }
+
+        if (imageUpload) {
+            imageUpload.addEventListener('change', function() {
+                if (this.files && this.files[0]) {
+                    const file = this.files[0];
+
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        imagePreview.src = e.target.result;
+                        imagePreviewContainer.style.display = 'block';
+                    }
+                    reader.readAsDataURL(file);
+                }
+            });
+
+            if (removeImageBtn) {
+                removeImageBtn.addEventListener('click', function() {
+                    imageUpload.value = '';
+                    imagePreviewContainer.style.display = 'none';
+                });
+            }
+        }
+    </script>
+}
+

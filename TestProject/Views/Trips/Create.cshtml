@@ -1,0 +1,346 @@
+﻿@model TestProject.Models.ViewModels.TripViewModel
+
+@{
+    ViewData["Title"] = "Създай пътуване";
+}
+
+<div class="container">
+    <div class="page-header">
+        <h1>Създай пътуване</h1>
+        <a href="@(ViewBag.ReturnUrl ?? "/DriverTrips/MyDriverTrips")" class="btn btn-secondary">
+            <i class="fas fa-arrow-left"></i> Върни се обратно
+        </a>
+    </div>
+
+    <div class="create-form-container">
+        <div class="create-form-card">
+            <form asp-action="Create" enctype="multipart/form-data">
+                <input type="hidden" name="returnUrl" value="@ViewBag.ReturnUrl" />
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                <div class="form-sections">
+                    <!-- Trip Details Section -->
+                    <div class="form-section">
+                        <h2 class="section-title">
+                            <i class="fas fa-map-marked-alt"></i> Детайли за пътуването
+                        </h2>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label asp-for="StartPosition" class="control-label">
+                                    <i class="fas fa-play-circle"></i> Начална Позиция
+                                </label>
+                                <input asp-for="StartPosition" class="form-control" placeholder="Въведете начална позиция" />
+                                <span asp-validation-for="StartPosition" class="text-danger"></span>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label asp-for="Destination" class="control-label">
+                                    <i class="fas fa-flag-checkered"></i> Дестинация
+                                </label>
+                                <input asp-for="Destination" class="form-control" placeholder="Въведете дестинация" />
+                                <span asp-validation-for="Destination" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label asp-for="DepartureTime" class="control-label">
+                                <i class="fas fa-hourglass-start"></i> Час на заминаване
+                            </label>
+                            <input asp-for="DepartureTime" class="form-control" type="datetime-local" id="departureTime" />
+                            <span asp-validation-for="DepartureTime" class="text-danger"></span>
+                            <div class="datetime-error" id="departureTimeError">Часът на заминаване не може да бъде в миналото</div>
+                        </div>
+
+                        <div class="form-group">
+                            <label asp-for="ReturnTime" class="control-label">
+                                <i class="fas fa-hourglass-end"></i> Час на връщане
+                            </label>
+                            <input asp-for="ReturnTime" class="form-control" type="datetime-local" id="returnTime" />
+                            <span asp-validation-for="ReturnTime" class="text-danger"></span>
+                            <div class="datetime-error" id="returnTimeError">Часът на връщане трябва да бъде след часа на заминаване</div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label asp-for="Price" class="control-label">
+                                    <i class="fas fa-tag"></i> Цена (лв)
+                                </label>
+                                <input asp-for="Price" class="form-control" type="number" step="1" min="0" max="10000" placeholder="0" />
+                                <span asp-validation-for="Price" class="text-danger"></span>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label asp-for="TotalSeats" class="control-label">
+                                    <i class="fas fa-users"></i> Общо места
+                                </label>
+                                <input asp-for="TotalSeats" class="form-control" type="number" min="1" placeholder="1" />
+                                <span asp-validation-for="TotalSeats" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-section">
+                        <h2 class="section-title">
+                            <i class="fas fa-car"></i> Детайли за автомобила
+                        </h2>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label asp-for="CarModel" class="control-label">
+                                    <i class="fas fa-car-side"></i> Модел на автомобила
+                                </label>
+                                <input asp-for="CarModel" class="form-control" placeholder="Въведете модел" />
+                                <span asp-validation-for="CarModel" class="text-danger"></span>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label asp-for="PlateNumber" class="control-label">
+                                    <i class="fas fa-id-card"></i> Регистрационен номер
+                                </label>
+                                <input asp-for="PlateNumber" class="form-control" placeholder="Въведете рег. номер" />
+                                <span asp-validation-for="PlateNumber" class="text-danger"></span>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label asp-for="ImageFile" class="control-label">
+                                <i class="fas fa-image"></i> Изображение
+                            </label>
+                            <div class="custom-file-upload">
+                                <input asp-for="ImageFile" type="file" class="form-control" accept="image/*" id="imageUpload" />
+                                <label for="imageUpload" class="file-upload-label">
+                                    <i class="fas fa-cloud-upload-alt"></i> Изберете файл
+                                </label>
+                                <span id="file-chosen">Не е избран файл</span>
+                            </div>
+                            <span asp-validation-for="ImageFile" class="text-danger"></span>
+                            <div id="image-preview-container" class="image-preview-container" style="display: none;">
+                                <img id="image-preview" src="#" alt="Preview" class="image-preview" />
+                                <button type="button" id="remove-image" class="remove-image-btn">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-section">
+                        <h2 class="section-title">
+                            <i class="fas fa-sync"></i> Настройки за повторение
+                        </h2>
+                        
+                        <div class="form-group toggle-switch">
+                            <label asp-for="IsRecurring" class="switch-label">
+                                Повтарящо се пътуване
+                                <div class="switch">
+                                    <input asp-for="IsRecurring" />
+                                    <span class="slider round"></span>
+                                </div>
+                            </label>
+                        </div>
+
+                        <div id="recurrenceFields" class="recurrence-fields" style="display: none;">
+                            <p class="recurrence-title">Повтаря се на:</p>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label>Минути</label>
+                                    <input asp-for="RecurrenceIntervalMinutes" class="form-control" type="number" min="0" placeholder="0" />
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label>Часове</label>
+                                    <input asp-for="RecurrenceIntervalHours" class="form-control" type="number" min="0" placeholder="0" />
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label>Дни</label>
+                                    <input asp-for="RecurrenceIntervalDays" class="form-control" type="number" min="0" placeholder="0" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+             
+                <div class="form-actions">
+                    <a href="javascript:history.back()" class="btn btn-secondary" style="margin-right: 270px;">
+                        <i class="fas fa-arrow-left"></i> Върни се обратно
+                    </a>
+                    <button type="submit" class="btn btn-primary btn-lg">
+                        <i class="fas fa-save"></i> Запази пътуването
+                    </button>
+                </div>
+            </form>
+        </div>
+        
+        <!-- Preview Card -->
+        <div class="trip-preview-container">
+            <h3 class="preview-title">
+                <i class="fas fa-eye"></i> Преглед
+            </h3>
+            <div class="trip-card" id="preview-card">
+                <div class="trip-image-container">
+                    <img src="/placeholder.svg?height=200&width=350" alt="Trip Preview" class="trip-image" id="preview-image" />
+                    <div class="trip-status-badge status-upcoming">Предстоящо</div>
+                </div>
+                <div class="trip-content" style="overflow-y: unset; height: auto">
+                    <div class="trip-header">
+                        <div>
+                            <h3 class="trip-route" id="preview-route" style="padding-bottom: 10px;">Начална позиция → Дестинация</h3>
+                            <div class="trip-driver">
+                                <i class="fas fa-user"></i> Вашето име
+                            </div>
+                        </div>
+                        <div class="trip-price" id="preview-price">0 лв</div>
+                    </div>
+                    
+                    <div class="trip-details" style="gap: 0px;">
+                        <div class="trip-detail-item">
+                            <span class="trip-detail-label">Тръгване</span>
+                            <span class="trip-detail-value" id="preview-departure" style="padding-right: 20px">-</span>
+                        </div>
+                        <div class="trip-detail-item">
+                            <span class="trip-detail-label">Връщане</span>
+                            <span class="trip-detail-value" id="preview-return" style="padding-right: 20px">-</span>
+                        </div>
+                        <div class="trip-detail-item">
+                            <span class="trip-detail-label">Общо места</span>
+                            <span class="trip-detail-value" id="preview-seats" style="padding-right: 20px">0</span>
+                        </div>
+                        <div class="trip-detail-item">
+                            <span class="trip-detail-label">Свободни места</span>
+                            <span class="trip-detail-value" id="preview-free-seats" style="padding-right: 20px">0</span>
+                        </div>
+                    </div>
+                    
+                    <div class="trip-car-info" style=" display: flex; justify-content: center; margin-top: -2px;">
+                        <i class="fas fa-car"></i>
+                        <div>
+                            <span class="trip-car-model" id="preview-car-model">Модел на автомобила</span>
+                            <span class="trip-plate" id="preview-plate">Рег. номер</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script>
+        // Toggle recurrence fields
+        document.getElementById("IsRecurring").addEventListener("change", function() {
+            document.getElementById("recurrenceFields").style.display = this.checked ? "block" : "none";
+        });
+
+        // File upload preview
+        const actualFileInput = document.getElementById('imageUpload');
+        const fileChosen = document.getElementById('file-chosen');
+        const imagePreviewContainer = document.getElementById('image-preview-container');
+        const imagePreview = document.getElementById('image-preview');
+        const removeImageBtn = document.getElementById('remove-image');
+        const submitButton = document.querySelector('button[type="submit"]');
+
+        actualFileInput.addEventListener('change', function() {
+            if (this.files && this.files[0]) {
+                const file = this.files[0];
+                fileChosen.textContent = file.name;
+
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    imagePreview.src = e.target.result;
+                    imagePreviewContainer.style.display = 'block';
+
+                    // Update the preview card image
+                    document.getElementById('preview-image').src = e.target.result;
+                }
+                reader.readAsDataURL(file);
+            } else {
+                fileChosen.textContent = 'Не е избран файл';
+                imagePreviewContainer.style.display = 'none';
+            }
+        });
+
+        removeImageBtn.addEventListener('click', function() {
+            actualFileInput.value = '';
+            fileChosen.textContent = 'Не е избран файл';
+            imagePreviewContainer.style.display = 'none';
+            document.getElementById('preview-image').src = '/placeholder.svg?height=200&width=350';
+        });
+
+        // Live preview updates
+        function updatePreview() {
+            const startPosition = document.querySelector('[name="StartPosition"]').value || 'Начална позиция';
+            const destination = document.querySelector('[name="Destination"]').value || 'Дестинация';
+            const price = document.querySelector('[name="Price"]').value || '0';
+            const totalSeats = document.querySelector('[name="TotalSeats"]').value || '0';
+            const carModel = document.querySelector('[name="CarModel"]').value || 'Модел на автомобила';
+            const plateNumber = document.querySelector('[name="PlateNumber"]').value || 'Рег. номер';
+
+            let departureTime = '-';
+            const departureInput = document.querySelector('[name="DepartureTime"]').value;
+            if (departureInput) {
+                const date = new Date(departureInput);
+                departureTime = date.toLocaleString('bg-BG');
+            }
+
+            let returnTime = '-';
+            const returnInput = document.querySelector('[name="ReturnTime"]').value;
+            if (returnInput) {
+                const date = new Date(returnInput);
+                returnTime = date.toLocaleString('bg-BG');
+            }
+
+            document.getElementById('preview-route').textContent = `${startPosition} → ${destination}`;
+            document.getElementById('preview-price').textContent = `${price} лв`;
+            document.getElementById('preview-departure').textContent = departureTime;
+            document.getElementById('preview-return').textContent = returnTime;
+            document.getElementById('preview-seats').textContent = totalSeats;
+            document.getElementById('preview-free-seats').textContent = totalSeats;
+            document.getElementById('preview-car-model').textContent = carModel;
+            document.getElementById('preview-plate').textContent = plateNumber;
+        }
+
+        // Add event listeners to all form inputs
+        const formInputs = document.querySelectorAll('input[type="text"], input[type="number"], input[type="datetime-local"]');
+        formInputs.forEach(input => {
+            input.addEventListener('input', updatePreview);
+        });
+
+        // Initial preview update
+        document.addEventListener('DOMContentLoaded', updatePreview);
+
+        // Parse user trips from ViewBag
+        const userTrips = @Html.Raw(ViewBag.UserTrips ?? "[]");
+
+        // Initialize trip calendar
+        document.addEventListener('DOMContentLoaded', function() {
+            const tripCalendar = new TripCalendar({
+                departureInputId: 'departureTime',
+                returnInputId: 'returnTime',
+                departureErrorId: 'departureTimeError',
+                returnErrorId: 'returnTimeError',
+                userTrips: userTrips,
+                onTimeChange: updatePreview
+            });
+
+            // Form submission validation
+            document.querySelector('form').addEventListener('submit', function(e) {
+                if (!tripCalendar.validateTimes()) {
+                    e.preventDefault();
+                    return false;
+                }
+            });
+        });
+
+
+
+
+
+    </script>
+
+}
+

@@ -1,0 +1,195 @@
+﻿/* Driver Applications Styles */
+.driver-applications-container {
+    margin-bottom: 30px;
+}
+
+.applications-table-container {
+    overflow-x: auto;
+    background-color: var(--white);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+}
+
+.applications-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+    .applications-table th {
+        background-color: var(--primary-light);
+        color: var(--primary-dark);
+        text-align: left;
+        padding: 15px;
+        font-weight: 600;
+        border-bottom: 2px solid var(--primary);
+    }
+
+    .applications-table td {
+        padding: 15px;
+        border-bottom: 1px solid var(--gray-light);
+        vertical-align: middle;
+    }
+
+    .applications-table tr:last-child td {
+        border-bottom: none;
+    }
+
+    .applications-table tr:hover {
+        background-color: rgba(0, 0, 0, 0.02);
+    }
+
+/* Applicant Cell */
+.applicant-cell {
+    min-width: 200px;
+}
+
+.applicant-info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.applicant-avatar {
+    width: 40px;
+    height: 40px;
+    background-color: var(--primary-light);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--primary);
+    font-size: 1.5rem;
+}
+
+.applicant-details {
+    display: flex;
+    flex-direction: column;
+}
+
+.applicant-name {
+    font-weight: 500;
+    color: var(--gray-dark);
+}
+
+.applicant-username {
+    font-size: 0.85rem;
+    color: var(--gray);
+}
+
+/* Contact Info */
+.contact-info {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.contact-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.9rem;
+}
+
+    .contact-item i {
+        color: var(--primary);
+        width: 16px;
+    }
+
+/* Application Date */
+.application-date {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--gray-dark);
+}
+
+    .application-date i {
+        color: var(--primary);
+    }
+
+/* Actions Cell */
+.actions-cell {
+    min-width: 220px;
+}
+
+.application-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.action-form {
+    flex: 1;
+}
+
+.action-btn {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    padding: 8px 15px;
+    border-radius: var(--radius);
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+.btn-success {
+    background-color: #43a047;
+    color: white;
+    border: none;
+}
+
+    .btn-success:hover {
+        background-color: #388e3c;
+    }
+
+.btn-danger {
+    background-color: #e53935;
+    color: white;
+    border: none;
+}
+
+    .btn-danger:hover {
+        background-color: #d32f2f;
+    }
+
+/* Empty State */
+.empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 50px 20px;
+    background-color: var(--white);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    text-align: center;
+}
+
+    .empty-state i {
+        font-size: 3rem;
+        color: var(--gray);
+        margin-bottom: 15px;
+    }
+
+    .empty-state p {
+        font-size: 1.1rem;
+        color: var(--gray-dark);
+    }
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .application-actions {
+        flex-direction: column;
+    }
+
+    .applicant-info {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 5px;
+    }
+
+    .applicant-avatar {
+        margin-bottom: 5px;
+    }
+}

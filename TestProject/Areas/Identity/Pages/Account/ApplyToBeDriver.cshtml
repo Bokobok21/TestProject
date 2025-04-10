@@ -1,0 +1,206 @@
+﻿@page
+@model TestProject.Areas.Identity.Pages.Account.ApplyToBeDriverModel
+@{
+    ViewData["Title"] = "Заяви да станеш шофьор";
+}
+
+<link rel="stylesheet" href="~/css/account-management.css" />
+
+<div class="driver-application-container">
+    <div class="driver-application-header">
+        <div class="driver-application-icon">
+            <i class="fas fa-car-alt"></i>
+        </div>
+        <h3>Стани шофьор</h3>
+        <p>Присъедини се към нашата общност от шофьори и започни да споделяш пътувания</p>
+    </div>
+
+    <div class="driver-application-form">
+        <div class="driver-benefits">
+            <h4>Предимства на шофьорите</h4>
+            <div class="benefits-grid">
+                <div class="benefit-item">
+                    <div class="benefit-icon">
+                        <i class="fas fa-money-bill-wave"></i>
+                    </div>
+                    <div class="benefit-content">
+                        <h5>Спестявай пари</h5>
+                        <p>Споделяй разходите за пътуване с други пътници</p>
+                    </div>
+                </div>
+                <div class="benefit-item">
+                    <div class="benefit-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div class="benefit-content">
+                        <h5>Срещай нови хора</h5>
+                        <p>Разширявай социалния си кръг по време на пътуванията</p>
+                    </div>
+                </div>
+                <div class="benefit-item">
+                    <div class="benefit-icon">
+                        <i class="fas fa-leaf"></i>
+                    </div>
+                    <div class="benefit-content">
+                        <h5>Екологично решение</h5>
+                        <p>Намали въглеродния си отпечатък чрез споделено пътуване</p>
+                    </div>
+                </div>
+                <div class="benefit-item">
+                    <div class="benefit-icon">
+                        <i class="fas fa-calendar-check"></i>
+                    </div>
+                    <div class="benefit-content">
+                        <h5>Гъвкав график</h5>
+                        <p>Създавай пътувания според твоя график</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="application-divider">
+            <span>Подай заявка сега</span>
+        </div>
+
+        <form method="post" enctype="multipart/form-data">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="driver-application-section">
+                <h4>Профилна снимка</h4>
+                <p class="section-description">Качете ясна снимка на лицето си, която ще бъде видима за пътниците. Добрата профилна снимка увеличава доверието.</p>
+
+                <div class="image-upload-area">
+                    <div class="image-upload-container" id="image-upload-area">
+                        <div class="image-upload-icon">
+                            <i class="fas fa-cloud-upload-alt"></i>
+                        </div>
+                        <div class="image-upload-text">
+                            <span class="upload-title">Качете профилна снимка</span>
+                            <span class="upload-subtitle">Кликнете тук или плъзнете файла</span>
+                            <span class="upload-formats">Поддържани формати: JPG, PNG (макс. 5MB)</span>
+                        </div>
+                        <input asp-for="Input.ImageFile" type="file" class="form-control d-none" accept="image/*" id="driver-image-upload" />
+                    </div>
+
+                    <div id="image-preview-container" class="image-preview-container">
+                        <div class="preview-wrapper">
+                            <img id="image-preview" src="#" alt="Preview" class="image-preview" />
+                            <button type="button" id="remove-image" class="remove-image-btn">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                        <div class="preview-caption">Профилна снимка</div>
+                    </div>
+                </div>
+
+                <span asp-validation-for="Input.ImageFile" class="text-danger"></span>
+            </div>
+
+            <div class="driver-application-note">
+                <div class="note-icon">
+                    <i class="fas fa-info-circle"></i>
+                </div>
+                <div class="note-content">
+                    <h5>Какво следва?</h5>
+                    <p>След като подадете заявката си, нашият екип ще я прегледа възможно най-скоро.</p>
+                </div>
+            </div>
+
+            <div class="driver-application-actions">
+                <a href="javascript:history.back()" class="btn btn-outline-secondary">
+                    <i class="fas fa-arrow-left"></i> Върни се обратно
+                </a>
+                <button type="submit" class="btn btn-primary btn-lg">
+                    <i class="fas fa-paper-plane"></i> Изпрати заявка
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+
+    <script>
+        // Image upload functionality
+        const imageUploadArea = document.getElementById('image-upload-area');
+        const imageUpload = document.getElementById('driver-image-upload');
+        const imagePreviewContainer = document.getElementById('image-preview-container');
+        const imagePreview = document.getElementById('image-preview');
+        const removeImageBtn = document.getElementById('remove-image');
+
+        imageUploadArea.addEventListener('click', function() {
+            imageUpload.click();
+        });
+
+        imageUpload.addEventListener('change', function() {
+            if (this.files && this.files[0]) {
+                const file = this.files[0];
+
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    imagePreview.src = e.target.result;
+                    imagePreviewContainer.style.display = 'block';
+                    imageUploadArea.style.display = 'none';
+                }
+                reader.readAsDataURL(file);
+            }
+        });
+
+        removeImageBtn.addEventListener('click', function() {
+            imageUpload.value = '';
+            imagePreviewContainer.style.display = 'none';
+            imageUploadArea.style.display = 'flex';
+        });
+
+        // Drag and drop functionality
+        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+            imageUploadArea.addEventListener(eventName, preventDefaults, false);
+        });
+
+        function preventDefaults(e) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+
+        ['dragenter', 'dragover'].forEach(eventName => {
+            imageUploadArea.addEventListener(eventName, highlight, false);
+        });
+
+        ['dragleave', 'drop'].forEach(eventName => {
+            imageUploadArea.addEventListener(eventName, unhighlight, false);
+        });
+
+        function highlight() {
+            imageUploadArea.classList.add('highlight');
+        }
+
+        function unhighlight() {
+            imageUploadArea.classList.remove('highlight');
+        }
+
+        imageUploadArea.addEventListener('drop', handleDrop, false);
+
+        function handleDrop(e) {
+            const dt = e.dataTransfer;
+            const files = dt.files;
+
+            if (files && files[0]) {
+                imageUpload.files = files;
+
+                const file = files[0];
+                const reader = new FileReader();
+
+                reader.onload = function(e) {
+                    imagePreview.src = e.target.result;
+                    imagePreviewContainer.style.display = 'block';
+                    imageUploadArea.style.display = 'none';
+                }
+
+                reader.readAsDataURL(file);
+            }
+        }
+    </script>
+
+}
+

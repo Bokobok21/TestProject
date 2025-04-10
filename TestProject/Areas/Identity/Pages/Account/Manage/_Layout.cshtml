@@ -1,0 +1,36 @@
+﻿@{
+    if (ViewData.TryGetValue("ParentLayout", out var parentLayout) && parentLayout != null)
+    {
+        Layout = parentLayout.ToString();
+    }
+    else
+    {
+        Layout = "/Areas/Identity/Pages/_Layout.cshtml";
+    }
+}
+
+<link rel="stylesheet" href="~/css/account-management.css" />
+
+<div class="account-container">
+    <div class="account-header">
+        <h1>Моят акаунт</h1>
+    </div>
+
+    <div class="row">
+        <div class="col-md-3">
+            <div class="account-nav">
+                <partial name="_ManageNav" />
+            </div>
+        </div>
+        <div class="col-md-9">
+            <div class="account-content">
+                @RenderBody()
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @RenderSection("Scripts", required: false)
+}
+

@@ -1,0 +1,41 @@
+﻿@{
+    ViewData["Title"] = "Моите Пътувания";
+}
+
+@* 
+<style>
+    .container {
+        padding: 20px 20px 20px 20px;
+    }
+
+</style> *@
+
+<div class="admin-panel" >
+ 
+
+    <div class="page-header" @* style="padding: 20px;" *@>
+        <h1>Моите Пътувания</h1>
+
+
+        <a asp-controller="Trips" asp-action="Create" asp-route-returnUrl="@Context.Request.Path" class="create-trip-btn" style="margin-left: 340px;">
+            <i class="fas fa-plus-circle"></i> Създай ново пътуване
+        </a>
+
+        <a href="/UserPanel" class="btn btn-secondary">
+            <i class="fas fa-arrow-left"></i> Потребителски панел
+        </a>
+    </div>
+
+
+    @if (!(Model as IEnumerable<object>)?.Any() ?? true)
+    {
+        <div class="empty-state">
+            <i class="fas fa-clipboard-check"></i>
+            <p>Няма пътувания в този момент.</p>
+        </div>
+    }
+    else
+    {
+        <partial name="_TripTablePartial" model="Model" />
+    } 
+</div>

@@ -1,0 +1,469 @@
+﻿@model TestProject.Models.ViewModels.TripViewModel
+
+@{
+    ViewData["Title"] = "Редактиране на пътуване";
+}
+
+<div class="container">
+    <div class="page-header">
+        <h1>Редактиране на пътуване</h1>
+        <a href="javascript:history.back()" class="btn btn-secondary">
+            <i class="fas fa-arrow-left"></i> Върни се обратно
+        </a>
+    </div>
+
+    <div class="create-form-container">
+        <div class="create-form-card">
+            <form asp-action="Edit" enctype="multipart/form-data">
+                <input type="hidden" name="returnUrl" value="@ViewBag.ReturnUrl" />
+                <input type="hidden" name="returnUrlOriginal" value="@ViewBag.ReturnUrlOriginal" />
+                <input type="hidden" asp-for="Id" />
+                <div asp-validation-summary="All" class="text-danger"></div>
+
+                <div class="form-sections">
+                    <div class="form-section">
+                        <h2 class="section-title">
+                            <i class="fas fa-map-marked-alt"></i> Детайли за пътуването
+                        </h2>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label asp-for="StartPosition" class="control-label">
+                                    <i class="fas fa-play-circle"></i> Начална Позиция
+                                </label>
+                                <input asp-for="StartPosition" class="form-control" placeholder="Въведете начална позиция" />
+                                <span asp-validation-for="StartPosition" class="text-danger"></span>
+                            </div>
+
+                            <div class="form-group">
+                                <label asp-for="Destination" class="control-label">
+                                    <i class="fas fa-flag-checkered"></i> Дестинация
+                                </label>
+                                <input asp-for="Destination" class="form-control" placeholder="Въведете дестинация" />
+                                <span asp-validation-for="Destination" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label asp-for="DepartureTime" class="control-label">
+                                <i class="fas fa-hourglass-start"></i> Час на заминаване
+                            </label>
+                            <input asp-for="DepartureTime" class="form-control" type="datetime-local" id="departureTime" />
+                            <span asp-validation-for="DepartureTime" class="text-danger"></span>
+                            <div class="datetime-error" id="departureTimeError">Часът на заминаване не може да бъде в миналото</div>
+                        </div>
+
+                        <div class="form-group">
+                            <label asp-for="ReturnTime" class="control-label">
+                                <i class="fas fa-hourglass-end"></i> Час на връщане
+                            </label>
+                            <input asp-for="ReturnTime" class="form-control" type="datetime-local" id="returnTime" />
+                            <span asp-validation-for="ReturnTime" class="text-danger"></span>
+                            <div class="datetime-error" id="returnTimeError">Часът на връщане трябва да бъде след часа на заминаване</div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label asp-for="Price" class="control-label">
+                                    <i class="fas fa-tag"></i> Цена (лв)
+                                </label>
+                                <input asp-for="Price" class="form-control" type="number" step="1" min="0" placeholder="0" />
+                                <span asp-validation-for="Price" class="text-danger"></span>
+                            </div>
+
+                            <div class="form-group">
+                                <label asp-for="TotalSeats" class="control-label">
+                                    <i class="fas fa-users"></i> Общо места
+                                </label>
+                                <input asp-for="TotalSeats" class="form-control" type="number" min="1" placeholder="1" />
+                                <span asp-validation-for="TotalSeats" class="text-danger"></span>
+                                <input type="hidden" id="originalFreeSeats" value="@Model.FreeSeats" />
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label asp-for="StatusTrip" class="control-label">
+                                <i class="fas fa-info-circle"></i> Статус на пътуването
+                            </label>
+                            <select asp-for="StatusTrip" class="form-control" asp-items="Html.GetEnumSelectList<TestProject.Models.TripStatus>()">
+                            </select>
+                            <span asp-validation-for="StatusTrip" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <!-- Vehicle Details Section -->
+                    <div class="form-section">
+                        <h2 class="section-title">
+                            <i class="fas fa-car"></i> Детайли за автомобила
+                        </h2>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label asp-for="CarModel" class="control-label">
+                                    <i class="fas fa-car-side"></i> Модел на автомобила
+                                </label>
+                                <input asp-for="CarModel" class="form-control" placeholder="Въведете модел" />
+                                <span asp-validation-for="CarModel" class="text-danger"></span>
+                            </div>
+
+                            <div class="form-group">
+                                <label asp-for="PlateNumber" class="control-label">
+                                    <i class="fas fa-id-card"></i> Регистрационен номер
+                                </label>
+                                <input asp-for="PlateNumber" class="form-control" placeholder="Въведете рег. номер" />
+                                <span asp-validation-for="PlateNumber" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label asp-for="ImageFile" class="control-label">
+                                <i class="fas fa-image"></i> Изображение
+                            </label>
+                            <div class="custom-file-upload">
+                                <input asp-for="ImageFile" type="file" class="form-control" accept="image/*" id="imageUpload" />
+                                <label for="imageUpload" class="file-upload-label">
+                                    <i class="fas fa-cloud-upload-alt"></i> Изберете файл
+                                </label>
+                                <span id="file-chosen">Не е избран файл</span>
+                            </div>
+                            <span asp-validation-for="ImageFile" class="text-danger"></span>
+
+                            @if (!string.IsNullOrEmpty(Model.ImagePath))
+                            {
+                                <div class="current-image-container">
+                                    <p class="current-image-label">Текущо изображение:</p>
+                                    <img src="@Model.ImagePath" alt="Current Trip Image" class="current-image" />
+                                </div>
+                            }
+
+                            <p>Ново изображение:</p>
+                            <div id="image-preview-container" class="image-preview-container" style="display: none;">
+                                <img id="image-preview" src="#" alt="Preview" class="image-preview" />
+                                <button type="button" id="remove-image" class="remove-image-btn">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <!-- Recurrence Section -->
+                    <div class="form-section">
+                        <h2 class="section-title">
+                            <i class="fas fa-sync"></i> Настройки за повторение
+                        </h2>
+
+                        <div class="form-group toggle-switch">
+                            <label asp-for="IsRecurring" class="switch-label">
+                                Повтарящо се пътуване
+                                <div class="switch">
+                                    <input asp-for="IsRecurring" />
+                                    <span class="slider round"></span>
+                                </div>
+                            </label>
+                        </div>
+
+                      
+                            @{ string style1 = Model.IsRecurring ? "block" : "none"; }
+                           
+
+
+                        <div id="recurrenceFields" class="recurrence-fields" style="display: @style1;">
+                            <p class="recurrence-title">Повтаря се на:</p>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label>Минути</label>
+                                    <input asp-for="RecurrenceIntervalMinutes" class="form-control" type="number" min="0" placeholder="0" />
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Часове</label>
+                                    <input asp-for="RecurrenceIntervalHours" class="form-control" type="number" min="0" placeholder="0" />
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Дни</label>
+                                    <input asp-for="RecurrenceIntervalDays" class="form-control" type="number" min="0" placeholder="0" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <a href="javascript:history.back()" class="btn btn-secondary" style="margin-right: 270px;">
+                        <i class="fas fa-arrow-left"></i> Върни се обратно
+                    </a>
+                    <button type="submit" class="btn btn-primary btn-lg" id="submitButton" onclick="return confirmSubmit()" asp-route-returnUrl="@ViewBag.ReturnUrl">
+                        <i class="fas fa-save"></i> Запази промените
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Preview Card -->
+        <div class="trip-preview-container">
+            <h3 class="preview-title">
+                <i class="fas fa-eye"></i> Преглед
+            </h3>
+            <div class="trip-card" id="preview-card">
+                <div class="trip-image-container">
+                    <img src="@(string.IsNullOrEmpty(Model.ImagePath) ? "/placeholder.svg?height=200&width=350" : Model.ImagePath)" alt="Trip Preview" class="trip-image" id="preview-image" />
+                    <div class="trip-status-badge" id="preview-status-badge">
+                        @Model.StatusTrip
+                    </div>
+                </div>
+                <div class="trip-content" style="overflow-y: unset; height: auto">
+                    <div class="trip-header">
+                        <div>
+                            <h3 class="trip-route" id="preview-route">@Model.StartPosition → @Model.Destination</h3>
+                            <div class="trip-driver">
+                                <i class="fas fa-user"></i> Вашето име
+                            </div>
+                        </div>
+                        <div class="trip-price" id="preview-price">@Model.Price лв</div>
+                    </div>
+
+                    <div class="trip-details" style="gap: 0px;">
+                        <div class="trip-detail-item">
+                            <span class="trip-detail-label">Тръгване</span>
+                            <span class="trip-detail-value" id="preview-departure" style="padding-right: 20px">@Model.DepartureTime.ToString("dd-MM-yyyy HH:mm")</span>
+                        </div>
+                        <div class="trip-detail-item">
+                            <span class="trip-detail-label">Връщане</span>
+                            <span class="trip-detail-value" id="preview-return" style="padding-right: 20px">@Model.ReturnTime.ToString("dd-MM-yyyy HH:mm")</span>
+                        </div>
+                        <div class="trip-detail-item">
+                            <span class="trip-detail-label">Общо места</span>
+                            <span class="trip-detail-value" id="preview-seats" style="padding-right: 20px">@Model.TotalSeats</span>
+                        </div>
+                        <div class="trip-detail-item">
+                            <span class="trip-detail-label">Свободни места</span>
+                            <span class="trip-detail-value" id="preview-free-seats" style="padding-right: 20px">@Model.FreeSeats</span>
+                        </div>
+                    </div>
+
+                    <div id="seats-warning" class="seats-warning" style="display: none;">
+                        <div class="warning-icon"><i class="fas fa-exclamation-triangle"></i></div>
+                        <div class="warning-message">Заявките за присъствие ще бъдат изтрити! Сигурни ли сте?</div>
+                    </div>
+
+                    <div class="trip-car-info" style=" display: flex; justify-content: center; margin-top: -2px;">
+                        <i class="fas fa-car"></i>
+                        <div>
+                            <span class="trip-car-model" id="preview-car-model">@Model.CarModel</span>
+                            <span class="trip-plate" id="preview-plate">@Model.PlateNumber</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script>
+        // Toggle recurrence fields
+        document.getElementById("IsRecurring").addEventListener("change", function() {
+            document.getElementById("recurrenceFields").style.display = this.checked ? "block" : "none";
+        });
+
+        // File upload preview
+        const actualFileInput = document.getElementById('imageUpload');
+        const fileChosen = document.getElementById('file-chosen');
+        const imagePreviewContainer = document.getElementById('image-preview-container');
+        const imagePreview = document.getElementById('image-preview');
+        const removeImageBtn = document.getElementById('remove-image');
+        const submitButton = document.querySelector('button[type="submit"]');
+
+        actualFileInput.addEventListener('change', function() {
+            if (this.files && this.files[0]) {
+                const file = this.files[0];
+                fileChosen.textContent = file.name;
+
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    imagePreview.src = e.target.result;
+                    imagePreviewContainer.style.display = 'block';
+
+                    // Update the preview card image
+                    document.getElementById('preview-image').src = e.target.result;
+                }
+                reader.readAsDataURL(file);
+            } else {
+                fileChosen.textContent = 'Не е избран файл';
+                imagePreviewContainer.style.display = 'none';
+            }
+        });
+
+        removeImageBtn.addEventListener('click', function() {
+            actualFileInput.value = '';
+            fileChosen.textContent = 'Не е избран файл';
+            imagePreviewContainer.style.display = 'none';
+
+            // Reset preview image to current image or placeholder
+            const currentImage = '@(string.IsNullOrEmpty(Model.ImagePath) ? "/placeholder.svg?height=200&width=350" : Model.ImagePath)';
+            document.getElementById('preview-image').src = currentImage;
+        });
+
+        // Live preview updates
+        function updatePreview() {
+            const startPosition = document.querySelector('[name="StartPosition"]').value || '@Model.StartPosition';
+            const destination = document.querySelector('[name="Destination"]').value || '@Model.Destination';
+            const price = document.querySelector('[name="Price"]').value || '@Model.Price';
+            const totalSeats = document.querySelector('[name="TotalSeats"]').value || '@Model.TotalSeats';
+            const carModel = document.querySelector('[name="CarModel"]').value || '@Model.CarModel';
+            const plateNumber = document.querySelector('[name="PlateNumber"]').value || '@Model.PlateNumber';
+
+            // Check if free seats would become negative
+            const originalFreeSeats = parseInt(document.getElementById('originalFreeSeats').value);
+            const originalTotalSeats = parseInt('@Model.TotalSeats');
+            const newTotalSeats = parseInt(totalSeats);
+            const change = newTotalSeats - originalTotalSeats;
+            const newFreeSeats = originalFreeSeats + change;
+
+            // Show warning if free seats would become negative
+            const seatsWarning = document.getElementById('seats-warning');
+            if (newFreeSeats < 0) {
+                seatsWarning.style.display = 'flex';
+                document.getElementById('preview-free-seats').innerHTML = `<span style="color: var(--danger);">${newFreeSeats}</span>`;
+            } else {
+                seatsWarning.style.display = 'none';
+                const textColor = newFreeSeats === 0 ? 'var(--danger)' : 'var(--secondary)';
+                document.getElementById('preview-free-seats').innerHTML = `<span style="color: ${textColor};">${newFreeSeats}</span>`;
+            }
+
+            let departureTime = '@Model.DepartureTime.ToString("dd-MM-yyyy HH:mm")';
+            const departureInput = document.querySelector('[name="DepartureTime"]').value;
+            if (departureInput) {
+                const date = new Date(departureInput);
+                departureTime = date.toLocaleString('bg-BG');
+            }
+
+            let returnTime = '@Model.ReturnTime.ToString("dd-MM-yyyy HH:mm")';
+            const returnInput = document.querySelector('[name="ReturnTime"]').value;
+            if (returnInput) {
+                const date = new Date(returnInput);
+                returnTime = date.toLocaleString('bg-BG');
+            }
+
+            // Update status badge class based on selected status
+            const statusSelect = document.querySelector('[name="StatusTrip"]');
+            const statusBadge = document.getElementById('preview-status-badge');
+            const statusText = statusSelect.options[statusSelect.selectedIndex].text;
+            statusBadge.textContent = statusText;
+
+            // Determine status class
+            let statusClass = "status-default";
+            const statusLower = statusText.toLowerCase();
+
+            if (statusLower.includes('предстоящо') || statusLower.includes('upcoming')) {
+                statusClass = "status-upcoming";
+            } else if (statusLower.includes('завършено') || statusLower.includes('finished')) {
+                statusClass = "status-completed";
+            } else if (statusLower.includes('в процес') || statusLower.includes('ongoing')) {
+                statusClass = "status-in-progress";
+            } else if (statusLower.includes('резервирано') || statusLower.includes('booked')) {
+                statusClass = "status-full";
+            }
+
+            // Remove all status classes and add the current one
+            statusBadge.className = 'trip-status-badge ' + statusClass;
+
+            document.getElementById('preview-route').textContent = `${startPosition} → ${destination}`;
+            document.getElementById('preview-price').textContent = `${price} лв`;
+            document.getElementById('preview-departure').textContent = departureTime;
+            document.getElementById('preview-return').textContent = returnTime;
+            document.getElementById('preview-seats').textContent = totalSeats;
+            document.getElementById('preview-car-model').textContent = carModel;
+            document.getElementById('preview-plate').textContent = plateNumber;
+        }
+
+        // Add event listeners to all form inputs
+        const formInputs = document.querySelectorAll('input[type="text"], input[type="number"], input[type="datetime-local"], select');
+        formInputs.forEach(input => {
+            input.addEventListener('input', updatePreview);
+        });
+
+        // Initial preview update
+        document.addEventListener('DOMContentLoaded', updatePreview);
+
+        // Confirm form submission if seats warning is visible
+        function confirmSubmit() {
+            const seatsWarning = document.getElementById('seats-warning');
+            if (seatsWarning.style.display === 'flex') {
+                return confirm('Заявките за присъствие ще бъдат изтрити! Сигурни ли сте?');
+            }
+            return true;
+        }
+
+        // Parse user trips from ViewBag
+        const userTrips = @Html.Raw(ViewBag.UserTrips ?? "[]");
+        const currentTripId = @Model.Id;
+
+        // For edit page, we need to check if the trip is already in progress or completed
+        const statusSelect = document.querySelector('[name="StatusTrip"]');
+        let currentStatus = statusSelect.value;
+        let isUpcomingOrBooked = currentStatus === '@((int)TestProject.Models.TripStatus.Upcoming)' || currentStatus === '@((int)TestProject.Models.TripStatus.Booked)';
+
+        // Initialize trip calendar
+        document.addEventListener('DOMContentLoaded', function() {
+            // Create a div for the calendar
+            const calendarContainer = document.createElement('div');
+            calendarContainer.id = 'trip-calendar-container';
+
+            // Insert it after the return time input
+            const returnTimeGroup = document.getElementById('returnTime').closest('.form-group');
+            returnTimeGroup.parentNode.insertBefore(calendarContainer, returnTimeGroup.nextSibling);
+
+            // Initialize the calendar
+            const tripCalendar = new TripCalendar({
+                departureInputId: 'departureTime',
+                returnInputId: 'returnTime',
+                departureErrorId: 'departureTimeError',
+                returnErrorId: 'returnTimeError',
+                userTrips: userTrips,
+                currentTripId: currentTripId,
+                onTimeChange: updatePreview
+            });
+
+            // Function to toggle date input fields based on status
+            function toggleDateInputs() {
+                if (isUpcomingOrBooked) {
+                    tripCalendar.enable();
+                    tripCalendar.validateTimes();
+                } else {
+                    tripCalendar.disable();
+                    document.getElementById('departureTimeError').classList.remove('visible');
+                    document.getElementById('returnTimeError').classList.remove('visible');
+                    submitButton.disabled = false;
+                }
+            }
+
+            // Initial toggle of date inputs based on status
+            toggleDateInputs();
+
+            // Status change handler
+            statusSelect.addEventListener('change', function() {
+                currentStatus = this.value;
+                isUpcomingOrBooked = currentStatus === '@((int)TestProject.Models.TripStatus.Upcoming)'  || currentStatus === '@((int)TestProject.Models.TripStatus.Booked)';
+                toggleDateInputs();
+            });
+
+            // Form submission validation
+            document.querySelector('form').addEventListener('submit', function(e) {
+                if (isUpcomingOrBooked && !tripCalendar.validateTimes()) {
+                    e.preventDefault();
+                    return false;
+                }
+
+                return confirmSubmit();
+            });
+        });
+    </script>
+}
+
